@@ -6,6 +6,8 @@
     <title>شركة نايف للأغذية - نظام مراقبة الأسعار</title>
     <link rel="icon" href="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" type="image/jpeg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
             --primary-green: #00FF9D;
@@ -523,7 +525,7 @@
             color: white;
             padding: 10.5px 17.5px;
             border-radius: 8.5px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             font-size: 0.8rem;
             font-weight: 600;
@@ -536,7 +538,7 @@
 
         .signature-card:hover { 
             transform: scale(1.05); 
-            box-shadow: 0 12px 35px rgba(0,0,0,0.3); 
+            box-shadow: 0 12px 35px rgba(0,0,0,0.4); 
         }
 
         @keyframes float { 
@@ -575,6 +577,79 @@
             font-weight: 500; 
         }
 
+        /* كارت فكرة البرنامج */
+        .idea-card {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #4A90E2, #2C6FB7);
+            color: white;
+            padding: 10.5px 17.5px;
+            border-radius: 8.5px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 1000;
+            animation: floatRight 6s ease-in-out infinite;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid rgba(255,255,255,0.2);
+            text-align: center;
+            max-width: 200px;
+        }
+
+        .idea-card:hover { 
+            transform: scale(1.05); 
+            box-shadow: 0 12px 35px rgba(0,0,0,0.4); 
+        }
+
+        @keyframes floatRight { 
+            0% { transform: translateY(0px) translateX(0px); } 
+            50% { transform: translateY(-15px) translateX(-5px); } 
+            100% { transform: translateY(0px) translateX(0px); } 
+        }
+
+        .idea-card::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(135deg, #00FF9D, #4A90E2);
+            border-radius: 14px;
+            z-index: -1;
+            animation: borderGlowRight 3s linear infinite;
+            background-size: 400%;
+        }
+
+        @keyframes borderGlowRight { 
+            0% { background-position: 0% 50%; } 
+            50% { background-position: 100% 50%; } 
+            100% { background-position: 0% 50%; } 
+        }
+
+        .idea-card .name { 
+            font-size: 0.95rem; 
+            font-weight: 700; 
+            margin-bottom: 5px; 
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            color: #FF6E00;
+        }
+
+        .idea-card .title { 
+            font-size: 0.7rem; 
+            opacity: 0.9; 
+            font-weight: 500;
+            color: #00FF9D;
+        }
+
+        .idea-card .program-idea {
+            font-size: 0.75rem;
+            margin-top: 5px;
+            font-weight: 500;
+            color: white;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+        }
+
         @media (max-width: 768px) { 
             .signature-card { 
                 position: relative; 
@@ -586,11 +661,24 @@
             } 
             .signature-card:hover { 
                 transform: none; 
+            }
+            
+            .idea-card { 
+                position: relative; 
+                bottom: auto; 
+                right: auto; 
+                margin: 20px auto 0; 
+                width: fit-content; 
+                max-width: 90%;
+                animation: none; 
+            } 
+            .idea-card:hover { 
+                transform: none; 
             } 
         }
 
         @media print {
-            .signature-card, .floating-cards {
+            .signature-card, .floating-cards, .idea-card {
                 display: none;
             }
             
@@ -755,6 +843,32 @@
         @keyframes bounce {
             from { transform: translateY(0); }
             to { transform: translateY(-3px); }
+        }
+        
+        /* PDF Template Styles */
+        .pdf-template {
+            position: fixed;
+            left: -10000px;
+            top: -10000px;
+            width: 794px;
+            height: 1123px;
+            background: white;
+            padding: 10px;
+            box-sizing: border-box;
+            z-index: -1000;
+            font-size: 12px;
+            font-family: 'Times New Roman', serif;
+            direction: rtl;
+        }
+        
+        .pdf-header {
+            padding: 5px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .pdf-header-row {
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -1076,6 +1190,7 @@
                 <div class="form-group">
                     <button class="btn" onclick="generateReport()">إنشاء التقرير</button>
                     <button class="btn btn-secondary" onclick="printReport()">طباعة التقرير</button>
+                    <button class="btn" onclick="saveReportAsPDF()">حفظ كـ PDF</button>
                 </div>
             </div>
             
@@ -1112,6 +1227,41 @@
     <div class="signature-card">
         <div class="name">Yasser Elkhateeb</div>
         <div class="title">مطور البرنامج 67011143</div>
+    </div>
+    
+    <!-- Program Idea Card -->
+    <div class="idea-card">
+        <div class="name">Ahmed Abdelkarem</div>
+         <div class="program-idea">فكرة البرنامج</div>
+    </div>
+    
+    <!-- PDF Template -->
+    <div id="pdf-template" class="pdf-template">
+        <div class="pdf-header">
+            <div class="pdf-header-row">
+                <div style="text-align: center; margin-bottom: 10px;">
+                    <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" alt="شعار الشركة" 
+                         style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #4a90e2; margin-bottom: 5px; margin: 0 auto 5px; display: block;">
+                    <h2 style="color: #4a90e2; margin: 0; font-size: 18px;">
+                        شركة نايف للأغذية
+                    </h2>
+                    <h3 style="color: #4a90e2; margin: 5px 0 8px 0; font-size: 16px;">نظام مراقبة أسعار الشراء</h3>
+                </div>
+                <div style="margin-bottom: 8px; text-align: center;">
+                    <div style="font-size: 15px; font-weight: bold;">
+                        تقرير: <span id="pdf-report-title"></span>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 11px;">
+                    <div>الفترة: من <span id="pdf-start-date"></span> إلى <span id="pdf-end-date"></span></div>
+                    <div>تاريخ الطباعة: <span id="pdf-print-date"></span></div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="pdf-content">
+            <!-- سيتم ملؤها بواسطة JavaScript -->
+        </div>
     </div>
 
     <script>
@@ -2703,6 +2853,152 @@
         // طباعة التقرير
         function printReport() {
             window.print();
+        }
+        
+        // حفظ التقرير كـ PDF
+        async function saveReportAsPDF() {
+            if (!window.jspdf) {
+                alert('مكتبة PDF غير محملة. يرجى تحديث الصفحة.');
+                return;
+            }
+            
+            try {
+                const reportType = document.getElementById('reportType').value;
+                const dateFrom = document.getElementById('reportDate').value;
+                const dateTo = document.getElementById('reportDateTo').value;
+                const filterValue = document.getElementById('reportFilter').value;
+                
+                // إعداد محتوى PDF
+                const pdfContent = document.getElementById('pdf-content');
+                pdfContent.innerHTML = '';
+                
+                // إعداد عناوين PDF
+                const reportTitle = document.getElementById('reportTitle').textContent;
+                document.getElementById('pdf-report-title').textContent = reportTitle;
+                
+                document.getElementById('pdf-start-date').textContent = dateFrom ? formatDateForPDF(dateFrom) : 'البداية';
+                document.getElementById('pdf-end-date').textContent = dateTo ? formatDateForPDF(dateTo) : 'النهاية';
+                
+                const now = new Date();
+                const printDate = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()} ${now.getHours()}:${now.getMinutes()}`;
+                document.getElementById('pdf-print-date').textContent = printDate;
+                
+                // نسخ محتوى التقرير إلى قالب PDF
+                const reportHTML = document.getElementById('reportContent').innerHTML;
+                
+                // تعديل المحتوى ليتناسب مع PDF
+                let pdfHTML = reportHTML;
+                
+                // استبدال الجداول لتتناسب مع PDF
+                pdfHTML = pdfHTML.replace(/class="report-table"/g, 'style="font-size: 10px; border-collapse: collapse; width: 100%;"');
+                pdfHTML = pdfHTML.replace(/class="invoice-details-table"/g, 'style="font-size: 10px; border-collapse: collapse; width: 100%; margin: 10px 0;"');
+                pdfHTML = pdfHTML.replace(/class="card"/g, 'style="margin-bottom: 15px; border: 1px solid #ccc; padding: 10px;"');
+                pdfHTML = pdfHTML.replace(/class="card-title"/g, 'style="font-size: 12px; color: #4a90e2;"');
+                pdfHTML = pdfHTML.replace(/class="amount"/g, 'style="font-family: Courier New; font-weight: bold;"');
+                
+                pdfContent.innerHTML = pdfHTML;
+                
+                const element = document.getElementById('pdf-template');
+                
+                // إظهار العنصر مؤقتاً لالتقاط الصورة
+                const originalDisplay = element.style.display;
+                const originalPosition = element.style.position;
+                const originalLeft = element.style.left;
+                const originalTop = element.style.top;
+                const originalWidth = element.style.width;
+                const originalHeight = element.style.height;
+                const originalZIndex = element.style.zIndex;
+                
+                element.style.display = 'block';
+                element.style.position = 'fixed';
+                element.style.left = '0';
+                element.style.top = '0';
+                element.style.width = '794px';
+                element.style.height = '1123px';
+                element.style.zIndex = '10000';
+                element.style.background = 'white';
+                element.style.padding = '5px';
+                
+                // استخدام html2canvas لالتقاط الصورة
+                const canvas = await html2canvas(element, {
+                    scale: 2,
+                    useCORS: true,
+                    logging: false,
+                    backgroundColor: '#FFFFFF',
+                    width: 794,
+                    height: 1123,
+                    windowWidth: 794,
+                    windowHeight: 1123
+                });
+                
+                // إعادة العنصر إلى وضعه الأصلي
+                element.style.display = originalDisplay;
+                element.style.position = originalPosition;
+                element.style.left = originalLeft;
+                element.style.top = originalTop;
+                element.style.width = originalWidth;
+                element.style.height = originalHeight;
+                element.style.zIndex = originalZIndex;
+                
+                const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                const pdf = new window.jspdf.jsPDF('p', 'pt', 'a4');
+                
+                const imgWidth = pdf.internal.pageSize.getWidth();
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                // إضافة الصورة إلى PDF
+                pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
+                
+                // تنظيف اسم الملف
+                const reportTypeText = getReportTypeText(reportType);
+                const filterText = filterValue !== 'all' ? getFilterText(reportType, filterValue) : '';
+                const dateText = dateFrom || dateTo ? `_${dateFrom || ''}_${dateTo || ''}` : '';
+                const fileName = `تقرير_${reportTypeText}_${filterText}${dateText}.pdf`.replace(/\s+/g, '_');
+                
+                pdf.save(fileName);
+                
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('حدث خطأ أثناء إنشاء ملف PDF: ' + error.message);
+            }
+        }
+        
+        // الحصول على نص نوع التقرير
+        function getReportTypeText(reportType) {
+            const types = {
+                'productsReport': 'الأصناف',
+                'suppliersReport': 'الموردين',
+                'priceChanges': 'تغيرات_الأسعار',
+                'purchaseHistory': 'سجل_المشتريات',
+                'invoiceDetails': 'تفاصيل_الفواتير'
+            };
+            return types[reportType] || reportType;
+        }
+        
+        // الحصول على نص التصفية
+        function getFilterText(reportType, filterValue) {
+            if(reportType === 'productsReport') {
+                const product = appData.products.find(p => p.id == filterValue);
+                return product ? product.name.replace(/[^\w\u0600-\u06FF\s]/g, '') : filterValue;
+            } else if(reportType === 'suppliersReport') {
+                const supplier = appData.suppliers.find(s => s.id == filterValue);
+                return supplier ? supplier.name.replace(/[^\w\u0600-\u06FF\s]/g, '') : filterValue;
+            }
+            return filterValue;
+        }
+        
+        // تنسيق التاريخ لـ PDF
+        function formatDateForPDF(dateString) {
+            if (!dateString) return '';
+            try {
+                const date = new Date(dateString);
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const year = date.getFullYear();
+                return `${day}-${month}-${year}`;
+            } catch {
+                return dateString;
+            }
         }
         
         // تنسيق التاريخ
