@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>شركة نايف للأغذية - نظام مراقبة الأسعار</title>
+    <title>شركة نايف للأغذية - نظام مراقبة الأسعار 2026</title>
     <link rel="icon" href="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" type="image/jpeg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -171,6 +171,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         
         .card-title {
@@ -201,6 +203,14 @@
         .btn-small {
             padding: 6px 12px;
             font-size: 0.9rem;
+        }
+        
+        .btn-backup {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+        
+        .btn-restore {
+            background: linear-gradient(135deg, #ffc107, #fd7e14);
         }
         
         /* Form Styles */
@@ -377,49 +387,6 @@
             color: #666;
         }
         
-        /* Floating Cards */
-        .floating-cards {
-            position: fixed;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            z-index: 999;
-        }
-        
-        .floating-card {
-            background: linear-gradient(135deg, var(--primary-orange), var(--light-blue));
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            width: 180px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-            animation: floatCard 6s ease-in-out infinite;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .floating-card:hover {
-            transform: scale(1.05) translateY(-5px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
-        }
-        
-        @keyframes floatCard {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-        
-        .floating-card:nth-child(2) {
-            animation-delay: 1s;
-        }
-        
-        .floating-card:nth-child(3) {
-            animation-delay: 2s;
-        }
-        
         /* Report Tables */
         .report-table-container {
             overflow-x: auto;
@@ -493,15 +460,6 @@
                 flex-direction: column;
             }
             
-            .floating-cards {
-                position: static;
-                transform: none;
-                flex-direction: row;
-                justify-content: center;
-                flex-wrap: wrap;
-                margin-top: 30px;
-            }
-            
             .stats-container {
                 grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             }
@@ -516,138 +474,106 @@
             }
         }
         
-        /* توقيع المطور */
+        /* توقيع المطور - معدل */
         .signature-card {
             position: fixed;
             bottom: 20px;
             left: 20px;
-            background: linear-gradient(135deg, #FF6E00, #2196F3);
-            color: white;
-            padding: 10.5px 17.5px;
-            border-radius: 8.5px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            background: transparent;
+            color: #333;
+            padding: 8px 14px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             font-weight: 600;
             z-index: 1000;
             animation: float 6s ease-in-out infinite;
             transition: all 0.3s ease;
             cursor: pointer;
-            border: 2px solid rgba(255,255,255,0.2);
+            border: 2px solid #dc3545;
+            transform: scale(0.75);
+            transform-origin: bottom left;
         }
 
         .signature-card:hover { 
-            transform: scale(1.05); 
-            box-shadow: 0 12px 35px rgba(0,0,0,0.4); 
+            transform: scale(0.8); 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2); 
         }
 
         @keyframes float { 
-            0% { transform: translateY(0px); } 
-            50% { transform: translateY(-15px); } 
-            100% { transform: translateY(0px); } 
-        }
-
-        .signature-card::before {
-            content: '';
-            position: absolute;
-            top: -2px; left: -2px; right: -2px; bottom: -2px;
-            background: linear-gradient(135deg, #80EF80, #2196F3);
-            border-radius: 14px;
-            z-index: -1;
-            animation: borderGlow 3s linear infinite;
-            background-size: 400%;
-        }
-
-        @keyframes borderGlow { 
-            0% { background-position: 0% 50%; } 
-            50% { background-position: 100% 50%; } 
-            100% { background-position: 0% 50%; } 
+            0% { transform: translateY(0px) scale(0.75); } 
+            50% { transform: translateY(-12px) scale(0.75); } 
+            100% { transform: translateY(0px) scale(0.75); } 
         }
 
         .signature-card .name { 
-            font-size: 0.95rem; 
+            font-size: 0.85rem; 
             font-weight: 700; 
-            margin-bottom: 5px; 
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3); 
+            margin-bottom: 3px; 
         }
 
         .signature-card .title { 
-            font-size: 0.7rem; 
-            opacity: 0.9; 
-            font-weight: 500; 
+            font-size: 0.65rem; 
+            opacity: 0.8; 
+            font-weight: 500;
         }
 
-        /* كارت فكرة البرنامج */
+        .signature-card a {
+            color: #dc3545;
+            text-decoration: none;
+        }
+        .signature-card a:hover {
+            text-decoration: underline;
+        }
+
+        /* كارت فكرة البرنامج - معدل */
         .idea-card {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background: linear-gradient(135deg, #4A90E2, #2C6FB7);
-            color: white;
-            padding: 10.5px 17.5px;
-            border-radius: 8.5px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            background: transparent;
+            color: #333;
+            padding: 8px 14px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             font-weight: 600;
             z-index: 1000;
             animation: floatRight 6s ease-in-out infinite;
             transition: all 0.3s ease;
             cursor: pointer;
-            border: 2px solid rgba(255,255,255,0.2);
+            border: 2px solid #dc3545;
+            transform: scale(0.75);
+            transform-origin: bottom right;
             text-align: center;
-            max-width: 200px;
+            max-width: 180px;
         }
 
         .idea-card:hover { 
-            transform: scale(1.05); 
-            box-shadow: 0 12px 35px rgba(0,0,0,0.4); 
+            transform: scale(0.8); 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2); 
         }
 
         @keyframes floatRight { 
-            0% { transform: translateY(0px) translateX(0px); } 
-            50% { transform: translateY(-15px) translateX(-5px); } 
-            100% { transform: translateY(0px) translateX(0px); } 
-        }
-
-        .idea-card::before {
-            content: '';
-            position: absolute;
-            top: -2px; left: -2px; right: -2px; bottom: -2px;
-            background: linear-gradient(135deg, #00FF9D, #4A90E2);
-            border-radius: 14px;
-            z-index: -1;
-            animation: borderGlowRight 3s linear infinite;
-            background-size: 400%;
-        }
-
-        @keyframes borderGlowRight { 
-            0% { background-position: 0% 50%; } 
-            50% { background-position: 100% 50%; } 
-            100% { background-position: 0% 50%; } 
+            0% { transform: translateY(0px) translateX(0px) scale(0.75); } 
+            50% { transform: translateY(-12px) translateX(-5px) scale(0.75); } 
+            100% { transform: translateY(0px) translateX(0px) scale(0.75); } 
         }
 
         .idea-card .name { 
-            font-size: 0.95rem; 
+            font-size: 0.85rem; 
             font-weight: 700; 
-            margin-bottom: 5px; 
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-            color: #FF6E00;
-        }
-
-        .idea-card .title { 
-            font-size: 0.7rem; 
-            opacity: 0.9; 
-            font-weight: 500;
-            color: #00FF9D;
+            margin-bottom: 3px; 
+            color: #dc3545;
         }
 
         .idea-card .program-idea {
-            font-size: 0.75rem;
-            margin-top: 5px;
+            font-size: 0.7rem;
+            margin-top: 4px;
             font-weight: 500;
-            color: white;
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+            color: #333;
         }
 
         @media (max-width: 768px) { 
@@ -658,10 +584,13 @@
                 margin: 20px auto 0; 
                 width: fit-content; 
                 animation: none; 
+                transform: none;
+                transform-origin: initial;
             } 
             .signature-card:hover { 
                 transform: none; 
             }
+            .signature-card:hover { transform: scale(1.05); }
             
             .idea-card { 
                 position: relative; 
@@ -671,14 +600,17 @@
                 width: fit-content; 
                 max-width: 90%;
                 animation: none; 
+                transform: none;
+                transform-origin: initial;
             } 
             .idea-card:hover { 
                 transform: none; 
             } 
+            .idea-card:hover { transform: scale(1.05); }
         }
 
         @media print {
-            .signature-card, .floating-cards, .idea-card {
+            .signature-card, .idea-card {
                 display: none;
             }
             
@@ -870,6 +802,42 @@
         .pdf-header-row {
             margin-bottom: 10px;
         }
+
+        /* Backup warning banner */
+        .backup-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: 1px solid #ffeaa7;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .backup-warning .btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .backup-warning .btn:hover {
+            background: #c82333;
+        }
+        .backup-warning .btn-success {
+            background: #28a745;
+        }
+        .backup-warning .btn-success:hover {
+            background: #218838;
+        }
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
@@ -884,7 +852,7 @@
             </div>
             <div class="header-info">
                 <div class="date-display" id="currentDate"></div>
-                <div class="system-title">نظام مراقبة أسعار الشراء - 2025</div>
+                <div class="system-title">نظام مراقبة أسعار الشراء - 2026</div>
             </div>
         </header>
         
@@ -896,6 +864,7 @@
                 <li><a href="#" class="nav-link" data-target="suppliers">الموردين</a></li>
                 <li><a href="#" class="nav-link" data-target="products">الأصناف</a></li>
                 <li><a href="#" class="nav-link" data-target="reports">التقارير</a></li>
+                <li><a href="#" class="nav-link" data-target="backup">النسخ الاحتياطي</a></li>
             </ul>
         </nav>
         
@@ -1155,7 +1124,7 @@
         
         <!-- Reports -->
         <section id="reports" class="main-content">
-            <h2 class="page-title">التقارير والإحصائيات - 2025</h2>
+            <h2 class="page-title">التقارير والإحصائيات - 2026</h2>
             
             <div class="card">
                 <div class="card-header">
@@ -1205,34 +1174,50 @@
                 </div>
             </div>
         </section>
+
+        <!-- Backup -->
+        <section id="backup" class="main-content">
+            <h2 class="page-title">النسخ الاحتياطي والاستعادة</h2>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">إدارة النسخ الاحتياطي</h3>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <button class="btn btn-backup" onclick="createBackup()"><i class="fas fa-download"></i> تحميل نسخة احتياطية (JSON)</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="restoreFileInput">اختر ملف JSON لاستعادته</label>
+                        <input type="file" id="restoreFileInput" accept=".json" style="padding: 8px;">
+                        <button class="btn btn-restore" onclick="restoreBackup()" style="margin-top: 8px;"><i class="fas fa-upload"></i> استعادة النسخة</button>
+                    </div>
+                </div>
+                <div id="backupStatus" style="margin-top: 15px;"></div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">معلومات النسخة الاحتياطية</h3>
+                </div>
+                <div id="backupInfo">
+                    <p><strong>آخر نسخة احتياطية:</strong> <span id="lastBackupTime">لم يتم عمل نسخة احتياطية بعد</span></p>
+                    <p><strong>حالة النسخ الاحتياطي:</strong> <span id="backupStatusText">غير متاح</span></p>
+                </div>
+            </div>
+        </section>
     </div>
     
-    <!-- Floating Statistics Cards -->
-    <div class="floating-cards">
-        <div class="floating-card">
-            <div style="font-size: 1.2rem; font-weight: bold;">الموردين النشطين</div>
-            <div style="font-size: 1.5rem; margin-top: 5px;" id="floatingActiveSuppliers">5</div>
-        </div>
-        <div class="floating-card">
-            <div style="font-size: 1.2rem; font-weight: bold;">أعلى سعر زيادة</div>
-            <div style="font-size: 1.5rem; margin-top: 5px;" id="floatingHighestIncrease">15%</div>
-        </div>
-        <div class="floating-card">
-            <div style="font-size: 1.2rem; font-weight: bold;">آخر تحديث</div>
-            <div style="font-size: 1rem; margin-top: 5px;" id="floatingLastUpdate">اليوم</div>
-        </div>
-    </div>
-    
-    <!-- Developer Signature -->
+    <!-- Developer Signature (معدل) -->
     <div class="signature-card">
-        <div class="name">Yasser Elkhateeb</div>
+        <div class="name"><a href="https://github.com/YasserElkhateeb" target="_blank">Yasser Elkhateeb</a></div>
         <div class="title">مطور البرنامج 67011143</div>
     </div>
     
-    <!-- Program Idea Card -->
+    <!-- Program Idea Card (معدل) -->
     <div class="idea-card">
         <div class="name">Ahmed Abdelkarem</div>
-         <div class="program-idea">فكرة البرنامج</div>
+        <div class="program-idea">فكرة البرنامج</div>
     </div>
     
     <!-- PDF Template -->
@@ -1261,6 +1246,15 @@
         
         <div id="pdf-content">
             <!-- سيتم ملؤها بواسطة JavaScript -->
+        </div>
+    </div>
+
+    <!-- Backup warning banner (يظهر عند الحاجة) -->
+    <div id="backupWarningBanner" class="backup-warning hidden" style="position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); z-index: 9999; width: 90%; max-width: 600px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
+        <span><i class="fas fa-exclamation-triangle"></i> <strong>تنبيه:</strong> لم يتم عمل نسخة احتياطية منذ أكثر من 12 ساعة. يُرجى عمل نسخة احتياطية فوراً.</span>
+        <div>
+            <button class="btn btn-success" onclick="createBackup(); hideBackupWarning();" style="margin-left: 8px;">عمل نسخة الآن</button>
+            <button class="btn btn-secondary" onclick="hideBackupWarning();">تجاهل</button>
         </div>
     </div>
 
@@ -1305,6 +1299,12 @@
             
             // تحديث الإحصائيات
             updateStatistics();
+            
+            // التحقق من النسخة الاحتياطية
+            checkBackupStatus();
+            
+            // فحص كل 30 دقيقة
+            setInterval(checkBackupStatus, 30 * 60 * 1000);
         });
         
         // تحديث التاريخ الحالي
@@ -1316,15 +1316,26 @@
             document.getElementById('currentDate').textContent = `${day} ${month} ${year}`;
         }
         
-        // تهيئة البيانات من LocalStorage أو إنشاء بيانات تجريبية
+        // تهيئة البيانات من LocalStorage أو إنشاء بيانات فارغة
         function initializeData() {
-            const savedData = localStorage.getItem('purchaseTrackingData2025');
+            const savedData = localStorage.getItem('purchaseTrackingData2026');
             
             if(savedData) {
                 appData = JSON.parse(savedData);
             } else {
-                // إنشاء بيانات تجريبية
-                createSampleData();
+                // بدء بدون بيانات تجريبية - فارغة
+                appData = {
+                    suppliers: [],
+                    products: [],
+                    invoices: [],
+                    currentInvoiceItems: [],
+                    editingSupplierId: null,
+                    editingProductId: null,
+                    nextSupplierId: 1,
+                    nextProductId: 1,
+                    nextInvoiceId: 1
+                };
+                saveData();
             }
             
             // تحديث القوائم المنسدلة
@@ -1333,63 +1344,14 @@
             populateProductsList();
             updateRecentPurchases();
             updateReportFilters();
-        }
-        
-        // إنشاء بيانات تجريبية
-        function createSampleData() {
-            // إضافة موردين تجريبيين
-            appData.suppliers = [
-                {id: 1, name: "مورد الخضروات الطازجة", phone: "123456789", email: "veg@example.com", address: "الكويت - حولي"},
-                {id: 2, name: "مورد المواد الجافة", phone: "987654321", email: "dry@example.com", address: "الكويت - الشويخ"},
-                {id: 3, name: "مورد المنتجات المجمدة", phone: "555555555", email: "frozen@example.com", address: "الكويت - السالمية"}
-            ];
-            appData.nextSupplierId = 4;
-            
-            // إضافة أصناف تجريبية
-            appData.products = [
-                {id: 1, name: "طماطم", supplierId: 1, unit: "كيلو", category: "خضروات"},
-                {id: 2, name: "بصل", supplierId: 1, unit: "كيلو", category: "خضروات"},
-                {id: 3, name: "أرز بسمتي", supplierId: 2, unit: "كيلو", category: "مواد جافة"},
-                {id: 4, name: "سكر", supplierId: 2, unit: "كيلو", category: "مواد جافة"},
-                {id: 5, name: "دجاج مجمد", supplierId: 3, unit: "كيلو", category: "مجمدات"}
-            ];
-            appData.nextProductId = 6;
-            
-            // إضافة فواتير تجريبية
-            appData.invoices = [
-                {
-                    id: 1,
-                    invoiceNumber: "INV-2025-001",
-                    date: "2025-01-10",
-                    supplierId: 1,
-                    items: [
-                        {productId: 1, productName: "طماطم", unit: "كيلو", quantity: 50, price: 0.750, total: 37.500},
-                        {productId: 2, productName: "بصل", unit: "كيلو", quantity: 30, price: 0.350, total: 10.500}
-                    ],
-                    total: 48.000
-                },
-                {
-                    id: 2,
-                    invoiceNumber: "INV-2025-002",
-                    date: "2025-01-15",
-                    supplierId: 2,
-                    items: [
-                        {productId: 3, productName: "أرز بسمتي", unit: "كيلو", quantity: 100, price: 0.950, total: 95.000},
-                        {productId: 4, productName: "سكر", unit: "كيلو", quantity: 50, price: 0.450, total: 22.500}
-                    ],
-                    total: 117.500
-                }
-            ];
-            appData.nextInvoiceId = 3;
-            
-            // حفظ البيانات
-            saveData();
+            updateBackupInfo();
         }
         
         // حفظ البيانات في LocalStorage
         function saveData() {
-            localStorage.setItem('purchaseTrackingData2025', JSON.stringify(appData));
+            localStorage.setItem('purchaseTrackingData2026', JSON.stringify(appData));
             updateStatistics();
+            updateBackupInfo();
         }
         
         // إعداد مستمعي الأحداث
@@ -2422,11 +2384,6 @@
                 : 0;
             
             document.getElementById('avgPriceChange').textContent = `${avgChange}%`;
-            
-            // تحديث الكروت المتحركة
-            document.getElementById('floatingActiveSuppliers').textContent = appData.suppliers.length;
-            document.getElementById('floatingHighestIncrease').textContent = `${avgChange}%`;
-            document.getElementById('floatingLastUpdate').textContent = new Date().toLocaleTimeString('ar-SA', {hour: '2-digit', minute:'2-digit'});
         }
         
         // تحديث المشتريات الحديثة
@@ -2495,7 +2452,7 @@
             reportContainer.innerHTML = "";
             
             if(reportType === 'productsReport') {
-                document.getElementById('reportTitle').textContent = "تقرير الأصناف - 2025";
+                document.getElementById('reportTitle').textContent = "تقرير الأصناف - 2026";
                 
                 // جمع جميع عمليات الشراء للمنتجات
                 let allPurchases = [];
@@ -2574,7 +2531,7 @@
                 reportContainer.innerHTML = tableHTML;
                 
             } else if(reportType === 'suppliersReport') {
-                document.getElementById('reportTitle').textContent = "تقرير الموردين - 2025";
+                document.getElementById('reportTitle').textContent = "تقرير الموردين - 2026";
                 
                 // جمع جميع عمليات الشراء للموردين
                 let allPurchases = [];
@@ -2654,7 +2611,7 @@
                 reportContainer.innerHTML = tableHTML;
                 
             } else if(reportType === 'priceChanges') {
-                document.getElementById('reportTitle').textContent = "تقرير تغيرات الأسعار - 2025";
+                document.getElementById('reportTitle').textContent = "تقرير تغيرات الأسعار - 2026";
                 
                 // تحليل تغيرات الأسعار لكل منتج
                 let analysisHTML = `
@@ -2717,7 +2674,7 @@
                 reportContainer.innerHTML = analysisHTML;
                 
             } else if(reportType === 'purchaseHistory') {
-                document.getElementById('reportTitle').textContent = "سجل المشتريات - 2025";
+                document.getElementById('reportTitle').textContent = "سجل المشتريات - 2026";
                 
                 // نسخة من الفواتير للترتيب
                 let invoices = [...appData.invoices];
@@ -2770,7 +2727,7 @@
                 reportContainer.innerHTML = tableHTML;
                 
             } else if(reportType === 'invoiceDetails') {
-                document.getElementById('reportTitle').textContent = "تفاصيل الفواتير - 2025";
+                document.getElementById('reportTitle').textContent = "تفاصيل الفواتير - 2026";
                 
                 // نسخة من الفواتير للترتيب
                 let invoices = [...appData.invoices];
@@ -3008,6 +2965,126 @@
             const month = date.toLocaleString('ar-SA', { month: 'long' });
             const year = date.getFullYear();
             return `${day} ${month} ${year}`;
+        }
+        
+        // ---------- وظائف النسخ الاحتياطي ----------
+        function createBackup() {
+            const dataStr = JSON.stringify(appData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const now = new Date();
+            const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+            a.download = `backup_${dateStr}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            // تسجيل وقت النسخة الاحتياطية
+            localStorage.setItem('lastBackupTime', new Date().toISOString());
+            updateBackupInfo();
+            hideBackupWarning();
+            showBackupStatus('تم إنشاء النسخة الاحتياطية بنجاح.', 'success');
+        }
+        
+        function restoreBackup() {
+            const fileInput = document.getElementById('restoreFileInput');
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert('الرجاء اختيار ملف JSON للاستعادة.');
+                return;
+            }
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (!data.suppliers || !data.products || !data.invoices) {
+                        throw new Error('ملف غير صحيح: البيانات غير مكتملة.');
+                    }
+                    if (!confirm('سيتم استبدال جميع البيانات الحالية بالبيانات الموجودة في الملف. هل أنت متأكد؟')) {
+                        return;
+                    }
+                    appData = data;
+                    saveData();
+                    // تحديث جميع القوائم
+                    updateSupplierDropdown();
+                    populateSuppliersList();
+                    populateProductsList();
+                    updateRecentPurchases();
+                    updateReportFilters();
+                    updateStatistics();
+                    updateBackupInfo();
+                    // إعادة تعيين الفاتورة الحالية
+                    resetInvoiceForm();
+                    showBackupStatus('تم استعادة النسخة الاحتياطية بنجاح.', 'success');
+                    // تسجيل وقت الاستعادة كوقت نسخة احتياطية
+                    localStorage.setItem('lastBackupTime', new Date().toISOString());
+                    hideBackupWarning();
+                } catch (err) {
+                    alert('خطأ في قراءة الملف: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+        
+        function updateBackupInfo() {
+            const lastTime = localStorage.getItem('lastBackupTime');
+            const span = document.getElementById('lastBackupTime');
+            const statusSpan = document.getElementById('backupStatusText');
+            if (lastTime) {
+                const date = new Date(lastTime);
+                span.textContent = date.toLocaleString('ar-SA');
+                const hours = (new Date() - date) / (1000 * 60 * 60);
+                if (hours < 12) {
+                    statusSpan.textContent = '✔ محدث (أقل من 12 ساعة)';
+                    statusSpan.style.color = 'green';
+                } else {
+                    statusSpan.textContent = '⚠️ منتهي (أكثر من 12 ساعة)';
+                    statusSpan.style.color = 'orange';
+                }
+            } else {
+                span.textContent = 'لم يتم عمل نسخة احتياطية بعد';
+                statusSpan.textContent = '❌ غير متاح';
+                statusSpan.style.color = 'red';
+            }
+        }
+        
+        function showBackupStatus(message, type) {
+            const div = document.getElementById('backupStatus');
+            div.innerHTML = `<div class="${type === 'success' ? 'success-message' : 'warning-message'}">${message}</div>`;
+            setTimeout(() => { div.innerHTML = ''; }, 5000);
+        }
+        
+        // ---------- التحقق من النسخة الاحتياطية ----------
+        function checkBackupStatus() {
+            const lastTime = localStorage.getItem('lastBackupTime');
+            if (!lastTime) {
+                showBackupWarning();
+                return;
+            }
+            const now = new Date();
+            const last = new Date(lastTime);
+            const hoursDiff = (now - last) / (1000 * 60 * 60);
+            if (hoursDiff >= 12) {
+                showBackupWarning();
+            } else {
+                hideBackupWarning();
+            }
+            updateBackupInfo();
+        }
+        
+        let warningVisible = false;
+        function showBackupWarning() {
+            if (warningVisible) return;
+            const banner = document.getElementById('backupWarningBanner');
+            banner.classList.remove('hidden');
+            warningVisible = true;
+        }
+        
+        function hideBackupWarning() {
+            const banner = document.getElementById('backupWarningBanner');
+            banner.classList.add('hidden');
+            warningVisible = false;
         }
     </script>
 </body>
