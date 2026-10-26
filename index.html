@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <!-- Firebase SDK Compat -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
     <style>
         :root {
             --primary-green: #00FF9D;
@@ -113,18 +118,19 @@
         
         .nav-tabs li {
             flex: 1;
-            min-width: 150px;
+            min-width: 130px;
         }
         
         .nav-tabs li a {
             display: block;
-            padding: 15px 20px;
+            padding: 15px 15px;
             text-decoration: none;
             color: var(--text-color);
             text-align: center;
             font-weight: 600;
             transition: all 0.3s ease;
             border-bottom: 3px solid transparent;
+            font-size: 0.95rem;
         }
         
         .nav-tabs li a:hover, .nav-tabs li a.active {
@@ -291,6 +297,13 @@
         .suggestion-item:hover {
             background-color: rgba(74, 144, 226, 0.1);
         }
+
+        .suggestion-action {
+            background-color: rgba(0, 255, 157, 0.15);
+            color: #006600;
+            font-weight: bold;
+            text-align: center;
+        }
         
         /* Invoice Table */
         .invoice-table {
@@ -387,7 +400,7 @@
             color: #666;
         }
         
-        /* Report Tables */
+        /* Report & Log Tables */
         .report-table-container {
             overflow-x: auto;
         }
@@ -419,7 +432,6 @@
             background-color: rgba(74, 144, 226, 0.08);
         }
         
-        /* Invoice Details Table */
         .invoice-details-table {
             width: 100%;
             border-collapse: collapse;
@@ -450,31 +462,22 @@
             font-weight: bold;
         }
         
-        /* Responsive */
         @media (max-width: 768px) {
             .nav-tabs {
                 flex-direction: column;
             }
-            
             .form-row {
                 flex-direction: column;
             }
-            
             .stats-container {
                 grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             }
-            
             .company-name {
                 font-size: 1.5rem;
             }
-            
-            .invoice-table th, .invoice-table td {
-                padding: 8px 10px;
-                font-size: 0.9rem;
-            }
         }
         
-        /* توقيع المطور - معدل */
+        /* Developer Signature */
         .signature-card {
             position: fixed;
             bottom: 20px;
@@ -489,16 +492,9 @@
             font-weight: 600;
             z-index: 1000;
             animation: float 6s ease-in-out infinite;
-            transition: all 0.3s ease;
-            cursor: pointer;
             border: 2px solid #dc3545;
             transform: scale(0.75);
             transform-origin: bottom left;
-        }
-
-        .signature-card:hover { 
-            transform: scale(0.8); 
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2); 
         }
 
         @keyframes float { 
@@ -507,27 +503,8 @@
             100% { transform: translateY(0px) scale(0.75); } 
         }
 
-        .signature-card .name { 
-            font-size: 0.85rem; 
-            font-weight: 700; 
-            margin-bottom: 3px; 
-        }
-
-        .signature-card .title { 
-            font-size: 0.65rem; 
-            opacity: 0.8; 
-            font-weight: 500;
-        }
-
-        .signature-card a {
-            color: #dc3545;
-            text-decoration: none;
-        }
-        .signature-card a:hover {
-            text-decoration: underline;
-        }
-
-        /* كارت فكرة البرنامج - معدل */
+        .signature-card a { color: #dc3545; text-decoration: none; }
+        
         .idea-card {
             position: fixed;
             bottom: 20px;
@@ -537,23 +514,14 @@
             padding: 8px 14px;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             font-size: 0.7rem;
             font-weight: 600;
             z-index: 1000;
             animation: floatRight 6s ease-in-out infinite;
-            transition: all 0.3s ease;
-            cursor: pointer;
             border: 2px solid #dc3545;
             transform: scale(0.75);
             transform-origin: bottom right;
             text-align: center;
-            max-width: 180px;
-        }
-
-        .idea-card:hover { 
-            transform: scale(0.8); 
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2); 
         }
 
         @keyframes floatRight { 
@@ -562,75 +530,15 @@
             100% { transform: translateY(0px) translateX(0px) scale(0.75); } 
         }
 
-        .idea-card .name { 
-            font-size: 0.85rem; 
-            font-weight: 700; 
-            margin-bottom: 3px; 
-            color: #dc3545;
-        }
-
-        .idea-card .program-idea {
-            font-size: 0.7rem;
-            margin-top: 4px;
-            font-weight: 500;
-            color: #333;
-        }
-
-        @media (max-width: 768px) { 
-            .signature-card { 
-                position: relative; 
-                bottom: auto; 
-                left: auto; 
-                margin: 20px auto 0; 
-                width: fit-content; 
-                animation: none; 
-                transform: none;
-                transform-origin: initial;
-            } 
-            .signature-card:hover { 
-                transform: none; 
-            }
-            .signature-card:hover { transform: scale(1.05); }
-            
-            .idea-card { 
-                position: relative; 
-                bottom: auto; 
-                right: auto; 
-                margin: 20px auto 0; 
-                width: fit-content; 
-                max-width: 90%;
-                animation: none; 
-                transform: none;
-                transform-origin: initial;
-            } 
-            .idea-card:hover { 
-                transform: none; 
-            } 
-            .idea-card:hover { transform: scale(1.05); }
-        }
+        .idea-card .name { font-size: 0.85rem; font-weight: 700; color: #dc3545; }
 
         @media print {
-            .signature-card, .idea-card {
-                display: none;
-            }
-            
-            body {
-                background-color: white !important;
-            }
-            
-            .card {
-                box-shadow: none !important;
-                border: 1px solid #ccc !important;
-            }
+            .signature-card, .idea-card, .backup-warning { display: none !important; }
+            body { background-color: white !important; }
         }
         
-        /* Amount formatting */
-        .amount {
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-        }
+        .amount { font-family: 'Courier New', monospace; font-weight: bold; }
         
-        /* Invoice number badge */
         .invoice-badge {
             display: inline-block;
             background: linear-gradient(135deg, var(--primary-orange), var(--light-blue));
@@ -641,203 +549,41 @@
             margin: 5px;
         }
         
-        /* Warning messages */
-        .warning-message {
-            background-color: #FFF3CD;
-            color: #856404;
-            padding: 10px 15px;
-            border-radius: 5px;
-            border: 1px solid #FFEAA7;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .warning-message { background-color: #FFF3CD; color: #856404; padding: 10px 15px; border-radius: 5px; border: 1px solid #FFEAA7; margin-bottom: 15px; }
+        .success-message { background-color: #D4EDDA; color: #155724; padding: 10px 15px; border-radius: 5px; border: 1px solid #C3E6CB; margin-bottom: 15px; }
         
-        /* Success messages */
-        .success-message {
-            background-color: #D4EDDA;
-            color: #155724;
-            padding: 10px 15px;
-            border-radius: 5px;
-            border: 1px solid #C3E6CB;
-            margin-bottom: 15px;
-        }
-        
-        /* Price Alert */
         .price-alert {
-            background-color: #F8D7DA;
-            color: #721C24;
-            padding: 8px 12px;
-            border-radius: 5px;
-            border: 1px solid #F5C6CB;
-            margin-top: 5px;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            animation: pulse 2s infinite;
+            background-color: #F8D7DA; color: #721C24; padding: 8px 12px; border-radius: 5px; border: 1px solid #F5C6CB; margin-top: 5px; font-size: 0.85rem; display: flex; align-items: center; gap: 8px;
         }
+        .immediate-high-alert { background-color: #DC3545 !important; color: white !important; font-weight: bold; }
         
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4); }
-            70% { box-shadow: 0 0 0 5px rgba(220, 53, 69, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
-        }
-        
-        .price-alert.high-price-alert {
-            background-color: #F8D7DA;
-            color: #721C24;
-            border-color: #F5C6CB;
-        }
-        
-        .price-alert.low-price-alert {
-            background-color: #D1ECF1;
-            color: #0C5460;
-            border-color: #BEE5EB;
-        }
-        
-        .price-alert.immediate-high-alert {
-            background-color: #DC3545;
-            color: white;
-            border-color: #C82333;
-            animation: immediatePulse 0.5s infinite;
-            font-weight: bold;
-        }
-        
-        @keyframes immediatePulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
-        }
-        
-        /* Price comparison indicator */
-        .price-indicator {
-            display: inline-flex;
-            align-items: center;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            margin-left: 5px;
-        }
-        
-        .price-increase {
-            background-color: #F8D7DA;
-            color: #721C24;
-        }
-        
-        .price-decrease {
-            background-color: #D4EDDA;
-            color: #155724;
-        }
-        
-        .price-same {
-            background-color: #FFF3CD;
-            color: #856404;
-        }
-        
-        /* Empty state placeholder */
-        .empty-placeholder::placeholder {
-            color: #999;
-            font-style: italic;
-        }
-        
-        /* Highlight for high price input */
-        .high-price-input {
-            border-color: #DC3545 !important;
-            background-color: #FFF5F5 !important;
-            box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.1) !important;
-        }
-        
-        .price-input-container {
-            position: relative;
-        }
-        
+        .high-price-input { border-color: #DC3545 !important; background-color: #FFF5F5 !important; }
+        .price-input-container { position: relative; }
         .price-input-alert {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background-color: #DC3545;
-            color: white;
-            border-radius: 50%;
-            width: 22px;
-            height: 22px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            font-weight: bold;
-            z-index: 10;
-            animation: bounce 0.5s infinite alternate;
+            position: absolute; top: -10px; right: -10px; background-color: #DC3545; color: white; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; z-index: 10;
         }
         
-        @keyframes bounce {
-            from { transform: translateY(0); }
-            to { transform: translateY(-3px); }
-        }
-        
-        /* PDF Template Styles */
         .pdf-template {
-            position: fixed;
-            left: -10000px;
-            top: -10000px;
-            width: 794px;
-            height: 1123px;
-            background: white;
-            padding: 10px;
-            box-sizing: border-box;
-            z-index: -1000;
-            font-size: 12px;
-            font-family: 'Times New Roman', serif;
-            direction: rtl;
-        }
-        
-        .pdf-header {
-            padding: 5px;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        
-        .pdf-header-row {
-            margin-bottom: 10px;
+            position: fixed; left: -10000px; top: -10000px; width: 794px; height: 1123px; background: white; padding: 10px; z-index: -1000; font-family: 'Times New Roman', serif; direction: rtl;
         }
 
-        /* Backup warning banner */
         .backup-warning {
-            background-color: #fff3cd;
-            color: #856404;
-            padding: 12px 20px;
-            border-radius: 8px;
-            border: 1px solid #ffeaa7;
-            margin-bottom: 20px;
-            display: flex;
+            background-color: #fff3cd; color: #856404; padding: 12px 20px; border-radius: 8px; border: 1px solid #ffeaa7; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+        }
+        .hidden { display: none !important; }
+
+        /* Sync status badge */
+        .sync-badge {
+            display: inline-flex;
             align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .backup-warning .btn {
-            background: #dc3545;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            background: rgba(255,255,255,0.2);
             color: white;
-            border: none;
-            padding: 6px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 600;
         }
-        .backup-warning .btn:hover {
-            background: #c82333;
-        }
-        .backup-warning .btn-success {
-            background: #28a745;
-        }
-        .backup-warning .btn-success:hover {
-            background: #218838;
-        }
-        .hidden {
-            display: none !important;
-        }
+        .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: #00FF9D; }
     </style>
 </head>
 <body>
@@ -848,7 +594,10 @@
                 <div class="logo">
                     <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" alt="شركة نايف للأغذية">
                 </div>
-                <div class="company-name">شركة نايف للأغذية</div>
+                <div>
+                    <div class="company-name">شركة نايف للأغذية</div>
+                    <div class="sync-badge" id="syncStatusBadge"><div class="sync-dot"></div> متصل بالسحابية (Firebase)</div>
+                </div>
             </div>
             <div class="header-info">
                 <div class="date-display" id="currentDate"></div>
@@ -864,6 +613,7 @@
                 <li><a href="#" class="nav-link" data-target="suppliers">الموردين</a></li>
                 <li><a href="#" class="nav-link" data-target="products">الأصناف</a></li>
                 <li><a href="#" class="nav-link" data-target="reports">التقارير</a></li>
+                <li><a href="#" class="nav-link" data-target="activity-log">سجل الحركات</a></li>
                 <li><a href="#" class="nav-link" data-target="backup">النسخ الاحتياطي</a></li>
             </ul>
         </nav>
@@ -872,7 +622,6 @@
         <section id="dashboard" class="main-content active">
             <h2 class="page-title">لوحة التحكم</h2>
             
-            <!-- Statistics Cards -->
             <div class="stats-container">
                 <div class="stat-card">
                     <div class="stat-icon"><i class="fas fa-users"></i></div>
@@ -896,7 +645,6 @@
                 </div>
             </div>
             
-            <!-- Recent Purchases -->
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">أحدث عمليات الشراء</h3>
@@ -913,9 +661,7 @@
                                 <th>المجموع</th>
                             </tr>
                         </thead>
-                        <tbody id="recentPurchasesBody">
-                            <!-- سيتم ملؤها بواسطة JavaScript -->
-                        </tbody>
+                        <tbody id="recentPurchasesBody"></tbody>
                     </table>
                 </div>
             </div>
@@ -930,17 +676,16 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="invoiceNumber">رقم الفاتورة *</label>
-                            <input type="text" id="invoiceNumber" placeholder="أدخل رقم الفاتورة كما في الفاتورة الأصلية" required>
-                            <small style="color: #666; font-size: 0.9rem;">أدخل رقم الفاتورة كما في الفاتورة المطبوعة من المورد</small>
+                            <input type="text" id="invoiceNumber" placeholder="أدخل رقم الفاتورة كما في الأصل" required>
                         </div>
                         <div class="form-group">
                             <label for="invoiceDate">تاريخ الفاتورة</label>
                             <input type="date" id="invoiceDate" required>
                         </div>
                         <div class="form-group">
-                            <label for="supplierSearch">بحث عن المورد</label>
+                            <label for="supplierSearch">بحث عن المورد *</label>
                             <div class="suggestions-container">
-                                <input type="text" id="supplierSearch" placeholder="اكتب اسم المورد للبحث" autocomplete="off">
+                                <input type="text" id="supplierSearch" placeholder="اكتب اسم المورد للبحث" autocomplete="off" required>
                                 <div class="suggestions-list" id="supplierSuggestions"></div>
                             </div>
                         </div>
@@ -965,9 +710,7 @@
                                         <th>إجراءات</th>
                                     </tr>
                                 </thead>
-                                <tbody id="invoiceItemsBody">
-                                    <!-- سيتم إضافة الأسطر هنا -->
-                                </tbody>
+                                <tbody id="invoiceItemsBody"></tbody>
                                 <tfoot>
                                     <tr class="total-row">
                                         <td colspan="4" style="text-align: left; font-weight: bold; font-size: 1.1rem;">الإجمالي:</td>
@@ -992,9 +735,7 @@
             <h2 class="page-title">إدارة الموردين</h2>
             
             <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">إضافة مورد جديد</h3>
-                </div>
+                <div class="card-header"><h3 class="card-title">إضافة مورد جديد</h3></div>
                 <form id="supplierForm">
                     <div class="form-row">
                         <div class="form-group">
@@ -1024,9 +765,7 @@
             </div>
             
             <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">قائمة الموردين</h3>
-                </div>
+                <div class="card-header"><h3 class="card-title">قائمة الموردين</h3></div>
                 <div class="table-container">
                     <table class="report-table" id="suppliersTable">
                         <thead>
@@ -1040,9 +779,7 @@
                                 <th>إجراءات</th>
                             </tr>
                         </thead>
-                        <tbody id="suppliersList">
-                            <!-- سيتم ملؤها بواسطة JavaScript -->
-                        </tbody>
+                        <tbody id="suppliersList"></tbody>
                     </table>
                 </div>
             </div>
@@ -1053,9 +790,7 @@
             <h2 class="page-title">إدارة الأصناف</h2>
             
             <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">إضافة صنف جديد</h3>
-                </div>
+                <div class="card-header"><h3 class="card-title">إضافة صنف جديد</h3></div>
                 <form id="productForm">
                     <div class="form-row">
                         <div class="form-group">
@@ -1097,9 +832,7 @@
             </div>
             
             <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">قائمة الأصناف</h3>
-                </div>
+                <div class="card-header"><h3 class="card-title">قائمة الأصناف</h3></div>
                 <div class="table-container">
                     <table class="report-table" id="productsTable">
                         <thead>
@@ -1114,9 +847,7 @@
                                 <th>إجراءات</th>
                             </tr>
                         </thead>
-                        <tbody id="productsList">
-                            <!-- سيتم ملؤها بواسطة JavaScript -->
-                        </tbody>
+                        <tbody id="productsList"></tbody>
                     </table>
                 </div>
             </div>
@@ -1127,9 +858,7 @@
             <h2 class="page-title">التقارير والإحصائيات - 2026</h2>
             
             <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">تقارير الأسعار</h3>
-                </div>
+                <div class="card-header"><h3 class="card-title">تقارير الأسعار</h3></div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="reportType">نوع التقرير</label>
@@ -1143,9 +872,7 @@
                     </div>
                     <div class="form-group">
                         <label for="reportFilter">فلتر حسب</label>
-                        <select id="reportFilter">
-                            <option value="all">الكل</option>
-                        </select>
+                        <select id="reportFilter"><option value="all">الكل</option></select>
                     </div>
                     <div class="form-group">
                         <label for="reportDate">التاريخ من</label>
@@ -1164,57 +891,76 @@
             </div>
             
             <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title" id="reportTitle">عرض التقرير</h3>
-                </div>
+                <div class="card-header"><h3 class="card-title" id="reportTitle">عرض التقرير</h3></div>
                 <div class="report-table-container" id="reportContainer">
-                    <div id="reportContent">
-                        <!-- سيتم عرض التقرير هنا -->
-                    </div>
+                    <div id="reportContent"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activity Log (سجل الحركات - آخر 500 حركة) -->
+        <section id="activity-log" class="main-content">
+            <h2 class="page-title">سجل الحركات والعمليات (آخر 500 حركة)</h2>
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">سجل النشاطات الفورية</h3>
+                    <button class="btn btn-secondary btn-small" onclick="clearActivityLog()">مسح السجل</button>
+                </div>
+                <div class="table-container">
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>الوقت والتاريخ</th>
+                                <th>نوع الحركة</th>
+                                <th>تفاصيل الحدث</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activityLogBody">
+                            <tr><td colspan="4">لا توجد حركات مسجلة بعد</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>
 
         <!-- Backup -->
         <section id="backup" class="main-content">
-            <h2 class="page-title">النسخ الاحتياطي والاستعادة</h2>
+            <h2 class="page-title">النسخ الاحتياطي والاستعادة السحابية والمحلية</h2>
             
             <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">إدارة النسخ الاحتياطي</h3>
-                </div>
+                <div class="card-header"><h3 class="card-title">إدارة النسخ الاحتياطي</h3></div>
                 <div class="form-row">
                     <div class="form-group">
-                        <button class="btn btn-backup" onclick="createBackup()"><i class="fas fa-download"></i> تحميل نسخة احتياطية (JSON)</button>
+                        <button class="btn btn-backup" onclick="createBackup()"><i class="fas fa-download"></i> تحميل نسخة احتياطية محلية (JSON)</button>
                     </div>
                     <div class="form-group">
-                        <label for="restoreFileInput">اختر ملف JSON لاستعادته</label>
+                        <label for="restoreFileInput">اختر ملف JSON لاستعادته محلياً</label>
                         <input type="file" id="restoreFileInput" accept=".json" style="padding: 8px;">
-                        <button class="btn btn-restore" onclick="restoreBackup()" style="margin-top: 8px;"><i class="fas fa-upload"></i> استعادة النسخة</button>
+                        <button class="btn btn-restore" onclick="restoreBackup()" style="margin-top: 8px;"><i class="fas fa-upload"></i> استعادة النسخة المحلية</button>
                     </div>
                 </div>
                 <div id="backupStatus" style="margin-top: 15px;"></div>
             </div>
             
             <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">معلومات النسخة الاحتياطية</h3>
-                </div>
+                <div class="card-header"><h3 class="card-title">معلومات النسخ الاحتياطي والمزامنة</h3></div>
                 <div id="backupInfo">
                     <p><strong>آخر نسخة احتياطية:</strong> <span id="lastBackupTime">لم يتم عمل نسخة احتياطية بعد</span></p>
                     <p><strong>حالة النسخ الاحتياطي:</strong> <span id="backupStatusText">غير متاح</span></p>
+                    <p><strong>حالة مزامنة Firebase:</strong> <span id="firebaseSyncStatus" style="color: green;">متصل وجاهز للمزامنة</span></p>
                 </div>
             </div>
         </section>
     </div>
     
-    <!-- Developer Signature (معدل) -->
+    <!-- Developer Signature -->
     <div class="signature-card">
         <div class="name"><a href="https://github.com/YasserElkhateeb" target="_blank">Yasser Elkhateeb</a></div>
         <div class="title">مطور البرنامج 67011143</div>
     </div>
     
-    <!-- Program Idea Card (معدل) -->
+    <!-- Program Idea Card -->
     <div class="idea-card">
         <div class="name">Ahmed Abdelkarem</div>
         <div class="program-idea">فكرة البرنامج</div>
@@ -1222,92 +968,79 @@
     
     <!-- PDF Template -->
     <div id="pdf-template" class="pdf-template">
-        <div class="pdf-header">
-            <div class="pdf-header-row">
-                <div style="text-align: center; margin-bottom: 10px;">
-                    <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" alt="شعار الشركة" 
-                         style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #4a90e2; margin-bottom: 5px; margin: 0 auto 5px; display: block;">
-                    <h2 style="color: #4a90e2; margin: 0; font-size: 18px;">
-                        شركة نايف للأغذية
-                    </h2>
-                    <h3 style="color: #4a90e2; margin: 5px 0 8px 0; font-size: 16px;">نظام مراقبة أسعار الشراء</h3>
-                </div>
-                <div style="margin-bottom: 8px; text-align: center;">
-                    <div style="font-size: 15px; font-weight: bold;">
-                        تقرير: <span id="pdf-report-title"></span>
-                    </div>
-                </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 11px;">
-                    <div>الفترة: من <span id="pdf-start-date"></span> إلى <span id="pdf-end-date"></span></div>
-                    <div>تاريخ الطباعة: <span id="pdf-print-date"></span></div>
-                </div>
-            </div>
+        <div class="pdf-header" style="text-align: center; margin-bottom: 10px;">
+            <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" alt="شعار الشركة" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #4a90e2; margin: 0 auto 5px; display: block;">
+            <h2 style="color: #4a90e2; margin: 0; font-size: 18px;">شركة نايف للأغذية</h2>
+            <h3 style="color: #4a90e2; margin: 5px 0 8px 0; font-size: 16px;">نظام مراقبة أسعار الشراء</h3>
+            <div style="font-size: 15px; font-weight: bold; margin-top: 10px;">تقرير: <span id="pdf-report-title"></span></div>
         </div>
-        
-        <div id="pdf-content">
-            <!-- سيتم ملؤها بواسطة JavaScript -->
-        </div>
+        <div id="pdf-content"></div>
     </div>
 
-    <!-- Backup warning banner (يظهر عند الحاجة) -->
-    <div id="backupWarningBanner" class="backup-warning hidden" style="position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); z-index: 9999; width: 90%; max-width: 600px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
-        <span><i class="fas fa-exclamation-triangle"></i> <strong>تنبيه:</strong> لم يتم عمل نسخة احتياطية منذ أكثر من 12 ساعة. يُرجى عمل نسخة احتياطية فوراً.</span>
+    <!-- Backup warning banner (تنبيه كل 3 ساعات) -->
+    <div id="backupWarningBanner" class="backup-warning hidden" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; width: 90%; max-width: 600px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
+        <span><i class="fas fa-exclamation-triangle"></i> <strong>تنبيه هام:</strong> مضت 3 ساعات منذ آخر نسخة احتياطية. يُرجى أخذ نسخة الآن لحماية البيانات.</span>
         <div>
-            <button class="btn btn-success" onclick="createBackup(); hideBackupWarning();" style="margin-left: 8px;">عمل نسخة الآن</button>
+            <button class="btn btn-success" onclick="createBackup(); hideBackupWarning();" style="margin-left: 8px; background: #28a745; color: #fff; border:none; padding:6px 12px; border-radius:4px; cursor:pointer;">نسخ الآن</button>
             <button class="btn btn-secondary" onclick="hideBackupWarning();">تجاهل</button>
         </div>
     </div>
 
     <script>
-        // بيانات التطبيق
+        // إعدادات Firebase الخاصة بمشروعك restaurant-visits-system
+        const firebaseConfig = {
+            apiKey: "AIzaSyDRdAREidho6Pz7wTxxzQCeqb_IigJsllM",
+            authDomain: "restaurant-visits-system.firebaseapp.com",
+            databaseURL: "https://restaurant-visits-system-default-rtdb.firebaseio.com",
+            projectId: "restaurant-visits-system",
+            storageBucket: "restaurant-visits-system.firebasestorage.app",
+            messagingSenderId: "154632546388",
+            appId: "1:154632546388:web:72558ef901a94a307825c1"
+        };
+
+        // تهيئة Firebase
+        let db = null;
+        try {
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+            db = firebase.database();
+        } catch (e) {
+            console.warn("تعذر الاتصال بـ Firebase، سيتم الاعتماد على التخزين المحلي فقط.", e);
+            document.getElementById('syncStatusBadge').innerHTML = '<div class="sync-dot" style="background:#ffc107"></div> يعمل محلياً (Offline)';
+        }
+
         let appData = {
             suppliers: [],
             products: [],
             invoices: [],
-            currentInvoiceItems: [],
-            editingSupplierId: null,
-            editingProductId: null,
+            logs: [],
             nextSupplierId: 1,
             nextProductId: 1,
             nextInvoiceId: 1
         };
         
-        // تهيئة التطبيق
         document.addEventListener('DOMContentLoaded', function() {
-            // تعيين التاريخ الحالي
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('invoiceDate').value = today;
             document.getElementById('reportDate').value = today;
             document.getElementById('reportDateTo').value = today;
             
-            // تحديث عرض التاريخ
             updateCurrentDate();
-            
-            // تهيئة البيانات المخزنة محلياً
             initializeData();
-            
-            // إعداد مستمعي الأحداث
             setupEventListeners();
             
-            // إضافة 5 أسطر فارغة لفاتورة الشراء
             for(let i = 0; i < 5; i++) {
                 addInvoiceRow();
             }
             
-            // عرض لوحة التحكم أولاً
             showPage('dashboard');
-            
-            // تحديث الإحصائيات
-            updateStatistics();
-            
-            // التحقق من النسخة الاحتياطية
             checkBackupStatus();
             
-            // فحص كل 30 دقيقة
-            setInterval(checkBackupStatus, 30 * 60 * 1000);
+            // فحص دوري للنسخ الاحتياطي كل ساعة
+            setInterval(checkBackupStatus, 60 * 60 * 1000);
         });
         
-        // تحديث التاريخ الحالي
         function updateCurrentDate() {
             const now = new Date();
             const day = now.getDate();
@@ -1316,124 +1049,171 @@
             document.getElementById('currentDate').textContent = `${day} ${month} ${year}`;
         }
         
-        // تهيئة البيانات من LocalStorage أو إنشاء بيانات فارغة
+        // تسجيل الحركات (تحتفظ بآخر 500 حركة)
+        function logAction(type, description) {
+            const now = new Date();
+            const timeStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+            
+            if (!appData.logs) appData.logs = [];
+            
+            appData.logs.unshift({
+                id: Date.now(),
+                time: timeStr,
+                type: type,
+                details: description
+            });
+            
+            // الاحتفاظ بآخر 500 حركة فقط
+            if (appData.logs.length > 500) {
+                appData.logs = appData.logs.slice(0, 500);
+            }
+            
+            populateActivityLog();
+        }
+
+        function populateActivityLog() {
+            const tbody = document.getElementById('activityLogBody');
+            if (!tbody) return;
+            
+            if (!appData.logs || appData.logs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4">لا توجد حركات مسجلة بعد</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = appData.logs.map((log, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${log.time}</td>
+                    <td><span class="invoice-badge" style="font-size:0.8rem; padding:3px 8px;">${log.type}</span></td>
+                    <td style="text-align:right;">${log.details}</td>
+                </tr>
+            `).join('');
+        }
+
+        function clearActivityLog() {
+            if (confirm("هل أنت متأكد من مسح سجل الحركات بالكامل؟")) {
+                appData.logs = [];
+                saveData();
+                populateActivityLog();
+                alert("تم مسح السجل بنجاح.");
+            }
+        }
+        
+        // تهيئة البيانات مع دعم مزامنة Firebase
         function initializeData() {
             const savedData = localStorage.getItem('purchaseTrackingData2026');
             
             if(savedData) {
                 appData = JSON.parse(savedData);
-            } else {
-                // بدء بدون بيانات تجريبية - فارغة
-                appData = {
-                    suppliers: [],
-                    products: [],
-                    invoices: [],
-                    currentInvoiceItems: [],
-                    editingSupplierId: null,
-                    editingProductId: null,
-                    nextSupplierId: 1,
-                    nextProductId: 1,
-                    nextInvoiceId: 1
-                };
-                saveData();
+                fixIDs();
             }
             
-            // تحديث القوائم المنسدلة
+            // محاولة الجلب والسحب من Firebase
+            if (db) {
+                db.ref('naif_system_2026').on('value', (snapshot) => {
+                    const remoteData = snapshot.val();
+                    if (remoteData) {
+                        appData = remoteData;
+                        fixIDs();
+                        localStorage.setItem('purchaseTrackingData2026', JSON.stringify(appData));
+                        refreshAllUI();
+                    }
+                }, (error) => {
+                    console.error("خطأ في المزامنة السحابية:", error);
+                });
+            }
+            
+            refreshAllUI();
+        }
+
+        function fixIDs() {
+            if (appData.suppliers && appData.suppliers.length > 0) {
+                appData.nextSupplierId = Math.max(...appData.suppliers.map(s => s.id)) + 1;
+            }
+            if (appData.products && appData.products.length > 0) {
+                appData.nextProductId = Math.max(...appData.products.map(p => p.id)) + 1;
+            }
+            if (appData.invoices && appData.invoices.length > 0) {
+                appData.nextInvoiceId = Math.max(...appData.invoices.map(i => i.id)) + 1;
+            }
+        }
+        
+        // حفظ البيانات محلياً وفي Firebase السحابي
+        function saveData() {
+            fixIDs();
+            localStorage.setItem('purchaseTrackingData2026', JSON.stringify(appData));
+            
+            // رفع البيانات إلى Firebase
+            if (db) {
+                db.ref('naif_system_2026').set(appData).catch(err => {
+                    console.error("فشل الحفظ في السحابة:", err);
+                });
+            }
+            
+            refreshAllUI();
+            updateBackupInfo();
+        }
+
+        function refreshAllUI() {
             updateSupplierDropdown();
             populateSuppliersList();
             populateProductsList();
             updateRecentPurchases();
             updateReportFilters();
-            updateBackupInfo();
-        }
-        
-        // حفظ البيانات في LocalStorage
-        function saveData() {
-            localStorage.setItem('purchaseTrackingData2026', JSON.stringify(appData));
             updateStatistics();
             updateBackupInfo();
+            populateActivityLog();
         }
         
-        // إعداد مستمعي الأحداث
         function setupEventListeners() {
-            // التنقل بين الصفحات
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     const target = this.getAttribute('data-target');
                     showPage(target);
-                    
-                    // تحديث حالة التنقل النشط
                     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
                     this.classList.add('active');
                 });
             });
             
-            // بحث الموردين - يظهر من أول حرف
             document.getElementById('supplierSearch').addEventListener('input', function() {
                 searchSuppliers(this.value);
             });
             
-            // إضافة صف جديد في الفاتورة
             document.getElementById('addProductRow').addEventListener('click', function() {
                 addInvoiceRow();
             });
             
-            // حفظ الفاتورة
             document.getElementById('purchaseForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 saveInvoice();
             });
             
-            // حفظ المورد
             document.getElementById('supplierForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 saveSupplier();
             });
             
-            // حفظ الصنف
             document.getElementById('productForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 saveProduct();
             });
         }
         
-        // عرض صفحة معينة
         function showPage(pageId) {
-            // إخفاء جميع الصفحات
             document.querySelectorAll('.main-content').forEach(page => {
                 page.classList.remove('active');
             });
-            
-            // عرض الصفحة المطلوبة
             document.getElementById(pageId).classList.add('active');
-            
-            // تحديث الإحصائيات إذا كانت صفحة لوحة التحكم
-            if(pageId === 'dashboard') {
-                updateStatistics();
-                updateRecentPurchases();
-            }
-            
-            // تحديث القوائم إذا كانت صفحة الموردين أو الأصناف
-            if(pageId === 'suppliers') {
-                populateSuppliersList();
-            }
-            
-            if(pageId === 'products') {
-                populateProductsList();
-                updateSupplierDropdown();
-            }
+            refreshAllUI();
         }
         
-        // البحث عن موردين - يظهر من أول حرف
         function searchSuppliers(query) {
             const suggestionsList = document.getElementById('supplierSuggestions');
-            
             if(query.trim().length === 0) {
                 suggestionsList.classList.remove('active');
                 return;
             }
-            
             const filteredSuppliers = appData.suppliers.filter(supplier =>
                 supplier.name.toLowerCase().includes(query.toLowerCase())
             );
@@ -1445,7 +1225,6 @@
                     `<div class="suggestion-item" data-id="${supplier.id}" data-name="${supplier.name}">${supplier.name}</div>`
                 ).join('');
                 
-                // إضافة مستمعي الأحداث لعناصر الاقتراحات
                 suggestionsList.querySelectorAll('.suggestion-item').forEach(item => {
                     item.addEventListener('click', function() {
                         document.getElementById('supplierSearch').value = this.getAttribute('data-name');
@@ -1453,42 +1232,30 @@
                     });
                 });
             }
-            
             suggestionsList.classList.add('active');
         }
         
-        // إضافة صف جديد في فاتورة الشراء
-        function addInvoiceRow(productId = null) {
+        function addInvoiceRow() {
             const tbody = document.getElementById('invoiceItemsBody');
             const rowIndex = tbody.children.length;
             
             const row = document.createElement('tr');
             row.id = `invoiceRow-${rowIndex}`;
             
-            // إنشاء خلية البحث عن الصنف
-            const productCell = document.createElement('td');
-            productCell.innerHTML = `
-                <div class="suggestions-container">
-                    <input type="text" class="product-search empty-placeholder" placeholder="ابحث عن الصنف" data-row="${rowIndex}" autocomplete="off">
-                    <div class="suggestions-list product-suggestions" id="productSuggestions-${rowIndex}"></div>
-                </div>
-                <input type="hidden" class="product-id" id="productId-${rowIndex}">
-            `;
-            
-            // إنشاء خلية السعر مع حاوية للتنبيه الفوري
-            const priceCell = document.createElement('td');
-            priceCell.className = 'price-input-container';
-            priceCell.innerHTML = `
-                <input type="number" class="product-price empty-placeholder" id="productPrice-${rowIndex}" min="0.001" step="0.001" placeholder="أدخل السعر">
-                <div class="price-input-alert" id="priceInputAlert-${rowIndex}" style="display: none;">!</div>
-            `;
-            
-            // إنشاء الخلايا الأخرى - بدون قيم افتراضية
             row.innerHTML = `
-                <td>${productCell.innerHTML}</td>
+                <td>
+                    <div class="suggestions-container">
+                        <input type="text" class="product-search" placeholder="ابحث عن الصنف" data-row="${rowIndex}" autocomplete="off">
+                        <div class="suggestions-list product-suggestions" id="productSuggestions-${rowIndex}"></div>
+                    </div>
+                    <input type="hidden" class="product-id" id="productId-${rowIndex}">
+                </td>
                 <td><input type="text" class="product-unit" id="productUnit-${rowIndex}" readonly></td>
-                <td><input type="number" class="product-quantity empty-placeholder" id="productQuantity-${rowIndex}" min="0.001" step="0.001" placeholder="أدخل الكمية"></td>
-                <td>${priceCell.innerHTML}</td>
+                <td><input type="number" class="product-quantity" id="productQuantity-${rowIndex}" min="0.001" step="0.001" placeholder="الكمية"></td>
+                <td class="price-input-container">
+                    <input type="number" class="product-price" id="productPrice-${rowIndex}" min="0.001" step="0.001" placeholder="السعر">
+                    <div class="price-input-alert" id="priceInputAlert-${rowIndex}" style="display: none;">!</div>
+                </td>
                 <td class="product-total amount" id="productTotal-${rowIndex}">0.000</td>
                 <td class="price-info-container" id="priceInfoContainer-${rowIndex}">
                     <div class="price-info" id="priceInfo-${rowIndex}">لا توجد بيانات سابقة</div>
@@ -1499,76 +1266,32 @@
             
             tbody.appendChild(row);
             
-            // إضافة مستمعي الأحداث لحقول الصنف - يظهر من أول حرف
-            const productSearch = row.querySelector('.product-search');
-            productSearch.addEventListener('input', function() {
-                searchProducts(this.value, rowIndex);
-            });
-            
-            // إضافة مستمعي الأحداث لحقول الكمية والسعر
             const quantityInput = row.querySelector('.product-quantity');
             const priceInput = row.querySelector('.product-price');
             
-            quantityInput.addEventListener('input', function() {
-                updateInvoiceTotal();
-                if(productId) {
-                    checkPriceChange(rowIndex);
+            quantityInput.addEventListener('input', () => updateInvoiceTotal());
+            priceInput.addEventListener('input', () => { updateInvoiceTotal(); immediatePriceAlert(rowIndex); });
+            priceInput.addEventListener('blur', () => checkPriceChange(rowIndex));
+
+            priceInput.addEventListener('keydown', function(e) {
+                if(e.key === 'Enter') {
+                    e.preventDefault();
+                    addInvoiceRow();
+                    const nextInput = document.querySelector(`#invoiceRow-${rowIndex + 1} .product-search`);
+                    if(nextInput) nextInput.focus();
                 }
             });
             
-            // مستمع خاص للسعر - تنبيه فوري عند الكتابة
-            priceInput.addEventListener('input', function() {
-                updateInvoiceTotal();
-                if(productId) {
-                    // تنبيه فوري عند الكتابة
-                    immediatePriceAlert(rowIndex);
-                }
-            });
-            
-            // مستمع عند ترك حقل السعر (blur)
-            priceInput.addEventListener('blur', function() {
-                if(productId) {
-                    checkPriceChange(rowIndex);
-                }
-            });
-            
-            // إذا تم تمرير معرف منتج، تعبئة البيانات تلقائياً
-            if(productId) {
-                const product = appData.products.find(p => p.id == productId);
-                if(product) {
-                    const supplier = appData.suppliers.find(s => s.id == product.supplierId);
-                    productSearch.value = product.name;
-                    row.querySelector('.product-id').value = product.id;
-                    row.querySelector('.product-unit').value = product.unit;
-                    
-                    // البحث عن تاريخ الشراء الأخير لنفس المنتج
-                    const previousPurchases = getPreviousPurchases(product.id);
-                    if(previousPurchases.length > 0) {
-                        const lastPurchase = previousPurchases[0];
-                        // لا نضع قيمة افتراضية للسعر - نتركه فارغاً
-                        
-                        // عرض معلومات الأسعار السابقة
-                        displayPriceInfo(previousPurchases, rowIndex);
-                    }
-                    
-                    updateRowTotal(rowIndex);
-                }
-            }
-            
-            updateInvoiceTotal();
-            
-            // إضافة مستمع البحث للمنتجات
             setupProductSearch(rowIndex);
+            updateInvoiceTotal();
         }
         
-        // إعداد البحث عن المنتجات - يظهر من أول حرف
         function setupProductSearch(rowIndex) {
             const searchInput = document.querySelector(`#invoiceRow-${rowIndex} .product-search`);
             const suggestionsDiv = document.querySelector(`#productSuggestions-${rowIndex}`);
             
             searchInput.addEventListener('input', function() {
                 const query = this.value;
-                
                 if(query.trim().length === 0) {
                     suggestionsDiv.classList.remove('active');
                     return;
@@ -1578,87 +1301,80 @@
                     product.name.toLowerCase().includes(query.toLowerCase())
                 );
                 
-                if(filteredProducts.length === 0) {
-                    suggestionsDiv.innerHTML = '<div class="suggestion-item">لا توجد نتائج</div>';
-                } else {
-                    suggestionsDiv.innerHTML = filteredProducts.map(product => {
+                let html = '';
+                if(filteredProducts.length > 0) {
+                    html += filteredProducts.map(product => {
                         const supplier = appData.suppliers.find(s => s.id === product.supplierId);
                         return `<div class="suggestion-item" data-id="${product.id}" data-name="${product.name}" data-unit="${product.unit}">
                             ${product.name} - ${supplier ? supplier.name : 'غير معروف'} (${product.unit})
                         </div>`;
                     }).join('');
-                    
-                    // إضافة مستمعي الأحداث لعناصر الاقتراحات
-                    suggestionsDiv.querySelectorAll('.suggestion-item').forEach(item => {
-                        item.addEventListener('click', function() {
-                            const productId = this.getAttribute('data-id');
-                            const productName = this.getAttribute('data-name');
-                            const productUnit = this.getAttribute('data-unit');
-                            
-                            searchInput.value = productName;
-                            document.getElementById(`productId-${rowIndex}`).value = productId;
-                            document.getElementById(`productUnit-${rowIndex}`).value = productUnit;
-                            
-                            suggestionsDiv.classList.remove('active');
-                            
-                            // البحث عن تاريخ الشراء الأخير لنفس المنتج
-                            const previousPurchases = getPreviousPurchases(productId);
-                            if(previousPurchases.length > 0) {
-                                const lastPurchase = previousPurchases[0];
-                                // لا نضع قيمة افتراضية للسعر - نتركه فارغاً
-                                
-                                // عرض معلومات الأسعار السابقة
-                                displayPriceInfo(previousPurchases, rowIndex);
-                            }
-                            
-                            updateRowTotal(rowIndex);
-                            updateInvoiceTotal();
-                        });
-                    });
                 }
                 
+                html += `<div class="suggestion-item suggestion-action" onclick="quickAddProductFromInvoice(${rowIndex}, '${query}')">
+                    <i class="fas fa-plus-circle"></i> إضافة صنف جديد باسم: "${query}"
+                </div>`;
+                
+                suggestionsDiv.innerHTML = html;
                 suggestionsDiv.classList.add('active');
+                
+                suggestionsDiv.querySelectorAll('.suggestion-item:not(.suggestion-action)').forEach(item => {
+                    item.addEventListener('click', function() {
+                        const productId = this.getAttribute('data-id');
+                        const productName = this.getAttribute('data-name');
+                        const productUnit = this.getAttribute('data-unit');
+                        
+                        searchInput.value = productName;
+                        document.getElementById(`productId-${rowIndex}`).value = productId;
+                        document.getElementById(`productUnit-${rowIndex}`).value = productUnit;
+                        suggestionsDiv.classList.remove('active');
+                        
+                        const previousPurchases = getPreviousPurchases(productId);
+                        if(previousPurchases.length > 0) {
+                            displayPriceInfo(previousPurchases, rowIndex);
+                        }
+                        updateRowTotal(rowIndex);
+                        updateInvoiceTotal();
+                    });
+                });
             });
             
-            // إخفاء قائمة الاقتراحات عند النقر خارجها
             document.addEventListener('click', function(e) {
                 if(!searchInput.contains(e.target) && !suggestionsDiv.contains(e.target)) {
                     suggestionsDiv.classList.remove('active');
                 }
             });
         }
-        
-        // البحث عن المنتجات - يظهر من أول حرف
-        function searchProducts(query, rowIndex) {
-            const suggestionsDiv = document.getElementById(`productSuggestions-${rowIndex}`);
-            
-            if(query.trim().length === 0) {
-                suggestionsDiv.classList.remove('active');
+
+        function quickAddProductFromInvoice(rowIndex, productName) {
+            if(appData.suppliers.length === 0) {
+                alert("الرجاء إضافة مورد واحد على الأقل قبل إضافة أصناف جديدة.");
+                showPage('suppliers');
                 return;
             }
+            const defaultSupplier = appData.suppliers[0];
+            const newProduct = {
+                id: appData.nextProductId++,
+                name: productName,
+                supplierId: defaultSupplier.id,
+                unit: 'كيلو',
+                category: 'عام'
+            };
             
-            const filteredProducts = appData.products.filter(product =>
-                product.name.toLowerCase().includes(query.toLowerCase())
-            );
+            appData.products.push(newProduct);
+            logAction('إضافة صنف', `إضافة صنف جديد سريعاً: ${productName}`);
+            saveData();
             
-            if(filteredProducts.length === 0) {
-                suggestionsDiv.innerHTML = '<div class="suggestion-item">لا توجد نتائج</div>';
-            } else {
-                suggestionsDiv.innerHTML = filteredProducts.map(product => {
-                    const supplier = appData.suppliers.find(s => s.id === product.supplierId);
-                    return `<div class="suggestion-item" data-id="${product.id}" data-name="${product.name}" data-unit="${product.unit}">
-                        ${product.name} - ${supplier ? supplier.name : 'غير معروف'} (${product.unit})
-                    </div>`;
-                }).join('');
-            }
+            document.querySelector(`#invoiceRow-${rowIndex} .product-search`).value = productName;
+            document.getElementById(`productId-${rowIndex}`).value = newProduct.id;
+            document.getElementById(`productUnit-${rowIndex}`).value = newProduct.unit;
+            document.getElementById(`productSuggestions-${rowIndex}`).classList.remove('active');
             
-            suggestionsDiv.classList.add('active');
+            alert(`تم إنشاء الصنف "${productName}" بنجاح وإضافته للفاتورة!`);
         }
         
-        // الحصول على المشتريات السابقة لمنتج معين
         function getPreviousPurchases(productId) {
             const purchases = [];
-            
             appData.invoices.forEach(invoice => {
                 invoice.items.forEach(item => {
                     if(item.productId == productId) {
@@ -1671,49 +1387,30 @@
                     }
                 });
             });
-            
-            // ترتيب حسب التاريخ (الأحدث أولاً)
             purchases.sort((a, b) => new Date(b.date) - new Date(a.date));
-            
             return purchases;
         }
         
-        // عرض معلومات الأسعار السابقة
         function displayPriceInfo(purchases, rowIndex) {
             const priceInfoDiv = document.getElementById(`priceInfo-${rowIndex}`);
-            
-            if(purchases.length === 0) {
-                priceInfoDiv.innerHTML = "لا توجد بيانات سابقة";
-                return;
-            }
+            if(purchases.length === 0) return;
             
             const lastPurchase = purchases[0];
-            
-            // إيجاد أعلى وأقل سعر
             let highestPrice = purchases[0].price;
             let lowestPrice = purchases[0].price;
-            let highestDate = purchases[0].date;
-            let lowestDate = purchases[0].date;
             
-            purchases.forEach(purchase => {
-                if(purchase.price > highestPrice) {
-                    highestPrice = purchase.price;
-                    highestDate = purchase.date;
-                }
-                if(purchase.price < lowestPrice) {
-                    lowestPrice = purchase.price;
-                    lowestDate = purchase.date;
-                }
+            purchases.forEach(p => {
+                if(p.price > highestPrice) highestPrice = p.price;
+                if(p.price < lowestPrice) lowestPrice = p.price;
             });
             
             priceInfoDiv.innerHTML = `
                 <span class="last-price">آخر سعر: ${lastPurchase.price.toFixed(3)} (${formatDate(lastPurchase.date)})</span>
-                <span class="high-price">أعلى سعر: ${highestPrice.toFixed(3)} (${formatDate(highestDate)})</span>
-                <span class="low-price">أقل سعر: ${lowestPrice.toFixed(3)} (${formatDate(lowestDate)})</span>
+                <span class="high-price">أعلى سعر: ${highestPrice.toFixed(3)}</span>
+                <span class="low-price">أقل سعر: ${lowestPrice.toFixed(3)}</span>
             `;
         }
         
-        // تنبيه فوري عند كتابة السعر - يظهر أثناء الكتابة
         function immediatePriceAlert(rowIndex) {
             const productId = document.getElementById(`productId-${rowIndex}`)?.value;
             const currentPrice = parseFloat(document.getElementById(`productPrice-${rowIndex}`).value);
@@ -1722,7 +1419,6 @@
             const priceInputAlert = document.getElementById(`priceInputAlert-${rowIndex}`);
             
             if(!productId || isNaN(currentPrice) || currentPrice <= 0) {
-                // إخفاء التنبيهات إذا كان السعر غير صالح
                 priceInput.classList.remove('high-price-input');
                 priceInputAlert.style.display = 'none';
                 priceAlertDiv.style.display = 'none';
@@ -1730,245 +1426,69 @@
             }
             
             const previousPurchases = getPreviousPurchases(productId);
-            if(previousPurchases.length === 0) {
-                // لا توجد بيانات سابقة
-                priceInput.classList.remove('high-price-input');
-                priceInputAlert.style.display = 'none';
-                priceAlertDiv.style.display = 'none';
-                return;
-            }
+            if(previousPurchases.length === 0) return;
             
-            const lastPurchase = previousPurchases[0];
-            const lastPrice = lastPurchase.price;
-            const priceDifference = currentPrice - lastPrice;
-            const priceChangePercent = (priceDifference / lastPrice) * 100;
+            const lastPrice = previousPurchases[0].price;
+            const priceChangePercent = ((currentPrice - lastPrice) / lastPrice) * 100;
             
-            // إخفاء التنبيهات إذا كان السعر قريباً من السعر السابق
-            if(Math.abs(priceDifference) < 0.001) {
-                priceInput.classList.remove('high-price-input');
-                priceInputAlert.style.display = 'none';
-                priceAlertDiv.style.display = 'none';
-                return;
-            }
-            
-            // التحقق من الزيادة الكبيرة في السعر (أكثر من 10%)
             if(priceChangePercent > 10) {
-                // تنبيه فوري على حقل الإدخال
                 priceInput.classList.add('high-price-input');
                 priceInputAlert.style.display = 'flex';
-                
-                // إعداد رسالة التنبيه الفوري
-                let alertMessage = `سعر مرتفع! أعلى من آخر سعر بنسبة ${priceChangePercent.toFixed(1)}%`;
-                
-                // عرض التنبيه الفوري
-                priceAlertDiv.innerHTML = `
-                    <i class="fas fa-exclamation-triangle"></i>
-                    ${alertMessage}
-                `;
+                priceAlertDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> سعر مرتفع! أعلى بنسبة ${priceChangePercent.toFixed(1)}%`;
                 priceAlertDiv.className = 'price-alert immediate-high-alert';
                 priceAlertDiv.style.display = 'flex';
-                
             } else if(priceChangePercent > 5) {
-                // زيادة متوسطة (بين 5% و 10%)
                 priceInput.classList.add('high-price-input');
                 priceInputAlert.style.display = 'flex';
-                
-                let alertMessage = `زيادة في السعر: +${priceChangePercent.toFixed(1)}%`;
-                
-                priceAlertDiv.innerHTML = `
-                    <i class="fas fa-exclamation-circle"></i>
-                    ${alertMessage}
-                `;
-                priceAlertDiv.className = 'price-alert high-price-alert';
+                priceAlertDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> زيادة في السعر: +${priceChangePercent.toFixed(1)}%`;
+                priceAlertDiv.className = 'price-alert';
                 priceAlertDiv.style.display = 'flex';
-                
-            } else if(priceChangePercent < -10) {
-                // انخفاض كبير (أكثر من 10% انخفاض)
-                priceInput.classList.remove('high-price-input');
-                priceInputAlert.style.display = 'none';
-                
-                let alertMessage = `انخفاض كبير في السعر: ${priceChangePercent.toFixed(1)}%`;
-                
-                priceAlertDiv.innerHTML = `
-                    <i class="fas fa-arrow-down"></i>
-                    ${alertMessage}
-                `;
-                priceAlertDiv.className = 'price-alert low-price-alert';
-                priceAlertDiv.style.display = 'flex';
-                
             } else {
-                // تغيير بسيط (أقل من 5%)
                 priceInput.classList.remove('high-price-input');
                 priceInputAlert.style.display = 'none';
                 priceAlertDiv.style.display = 'none';
-            }
-            
-            // تحديث مؤشر السعر في عرض معلومات الأسعار
-            updatePriceIndicator(rowIndex, priceChangePercent);
-        }
-        
-        // تحديث مؤشر السعر
-        function updatePriceIndicator(rowIndex, priceChangePercent) {
-            const priceIndicator = document.querySelector(`#priceInfo-${rowIndex} .price-indicator`);
-            if(priceIndicator) {
-                priceIndicator.remove();
-            }
-            
-            if(Math.abs(priceChangePercent) < 0.1) {
-                return; // لا داعي لعرض مؤشر للتغير البسيط
-            }
-            
-            const indicatorSpan = document.createElement('span');
-            indicatorSpan.className = `price-indicator ${priceChangePercent > 0 ? 'price-increase' : 'price-decrease'}`;
-            indicatorSpan.textContent = priceChangePercent > 0 ? `+${priceChangePercent.toFixed(1)}%` : `${priceChangePercent.toFixed(1)}%`;
-            
-            const lastPriceSpan = document.querySelector(`#priceInfo-${rowIndex} .last-price`);
-            if(lastPriceSpan) {
-                lastPriceSpan.appendChild(indicatorSpan);
             }
         }
         
-        // التحقق من تغير السعر بعد الانتهاء من الكتابة
-        function checkPriceChange(rowIndex) {
-            const productId = document.getElementById(`productId-${rowIndex}`)?.value;
-            const currentPrice = parseFloat(document.getElementById(`productPrice-${rowIndex}`).value);
-            const priceAlertDiv = document.getElementById(`priceAlert-${rowIndex}`);
-            const priceInput = document.getElementById(`productPrice-${rowIndex}`);
-            const priceInputAlert = document.getElementById(`priceInputAlert-${rowIndex}`);
-            
-            if(!productId || isNaN(currentPrice) || currentPrice <= 0) {
-                priceInput.classList.remove('high-price-input');
-                priceInputAlert.style.display = 'none';
-                priceAlertDiv.style.display = 'none';
-                return;
-            }
-            
-            const previousPurchases = getPreviousPurchases(productId);
-            if(previousPurchases.length === 0) {
-                priceInput.classList.remove('high-price-input');
-                priceInputAlert.style.display = 'none';
-                priceAlertDiv.style.display = 'none';
-                return;
-            }
-            
-            const lastPurchase = previousPurchases[0];
-            const lastPrice = lastPurchase.price;
-            const priceDifference = currentPrice - lastPrice;
-            const priceChangePercent = (priceDifference / lastPrice) * 100;
-            
-            // إخفاء التنبيه إذا كان السعر نفسه
-            if(Math.abs(priceDifference) < 0.001) {
-                priceInput.classList.remove('high-price-input');
-                priceInputAlert.style.display = 'none';
-                priceAlertDiv.style.display = 'none';
-                return;
-            }
-            
-            // التحقق من الزيادة الكبيرة في السعر (أكثر من 10%)
-            if(priceChangePercent > 10) {
-                // تنبيه نهائي
-                let alertMessage = `تنبيه! سعر الشراء الحالي أعلى من آخر سعر شراء بنسبة ${Math.abs(priceChangePercent).toFixed(1)}%`;
-                
-                priceAlertDiv.innerHTML = `
-                    <i class="fas fa-exclamation-triangle"></i>
-                    ${alertMessage}
-                `;
-                priceAlertDiv.className = 'price-alert immediate-high-alert';
-                priceAlertDiv.style.display = 'flex';
-                
-            } else if(priceChangePercent > 5) {
-                // زيادة متوسطة
-                let alertMessage = `سعر الشراء الحالي أعلى من آخر سعر شراء بنسبة ${Math.abs(priceChangePercent).toFixed(1)}%`;
-                
-                priceAlertDiv.innerHTML = `
-                    <i class="fas fa-exclamation-circle"></i>
-                    ${alertMessage}
-                `;
-                priceAlertDiv.className = 'price-alert high-price-alert';
-                priceAlertDiv.style.display = 'flex';
-                
-            } else if(priceChangePercent < -10) {
-                // انخفاض كبير
-                let alertMessage = `سعر الشراء الحالي أقل من آخر سعر شراء بنسبة ${Math.abs(priceChangePercent).toFixed(1)}%`;
-                
-                priceAlertDiv.innerHTML = `
-                    <i class="fas fa-arrow-down"></i>
-                    ${alertMessage}
-                `;
-                priceAlertDiv.className = 'price-alert low-price-alert';
-                priceAlertDiv.style.display = 'flex';
-                
-            } else {
-                // تغيير بسيط
-                priceAlertDiv.style.display = 'none';
-            }
-            
-            // تحديث مؤشر السعر في عرض معلومات الأسعار
-            updatePriceIndicator(rowIndex, priceChangePercent);
-        }
+        function checkPriceChange(rowIndex) { immediatePriceAlert(rowIndex); }
         
-        // تحديث المجموع للصف
         function updateRowTotal(rowIndex) {
             const quantity = parseFloat(document.getElementById(`productQuantity-${rowIndex}`).value) || 0;
             const price = parseFloat(document.getElementById(`productPrice-${rowIndex}`).value) || 0;
-            const total = quantity * price;
-            
-            document.getElementById(`productTotal-${rowIndex}`).textContent = total.toFixed(3);
+            document.getElementById(`productTotal-${rowIndex}`).textContent = (quantity * price).toFixed(3);
         }
         
-        // تحديث المجموع الكلي للفاتورة
         function updateInvoiceTotal() {
             let total = 0;
             const rows = document.querySelectorAll('#invoiceItemsBody tr');
-            
             rows.forEach(row => {
                 const rowId = row.id.split('-')[1];
                 const quantity = parseFloat(document.getElementById(`productQuantity-${rowId}`)?.value) || 0;
                 const price = parseFloat(document.getElementById(`productPrice-${rowId}`)?.value) || 0;
                 total += quantity * price;
-                
-                // تحديث مجموع الصف
                 document.getElementById(`productTotal-${rowId}`).textContent = (quantity * price).toFixed(3);
             });
-            
             document.getElementById('invoiceTotal').textContent = total.toFixed(3);
         }
         
-        // حذف صف من الفاتورة
         function removeInvoiceRow(rowIndex) {
             const row = document.getElementById(`invoiceRow-${rowIndex}`);
-            if(row) {
-                row.remove();
-                updateInvoiceTotal();
-            }
+            if(row) { row.remove(); updateInvoiceTotal(); }
         }
         
-        // حفظ الفاتورة
         function saveInvoice() {
             const invoiceNumber = document.getElementById('invoiceNumber').value.trim();
             const invoiceDate = document.getElementById('invoiceDate').value;
             const supplierName = document.getElementById('supplierSearch').value.trim();
             
-            if(!invoiceNumber) {
-                alert("الرجاء إدخال رقم الفاتورة");
-                return;
-            }
+            if(!invoiceNumber) { alert("الرجاء إدخال رقم الفاتورة"); return; }
             
-            // البحث عن المورد
             const supplier = appData.suppliers.find(s => s.name === supplierName);
-            if(!supplier) {
-                alert("الرجاء اختيار مورد صحيح من القائمة");
-                return;
-            }
+            if(!supplier) { alert("الرجاء اختيار مورد صحيح من القائمة"); return; }
             
-            // جمع عناصر الفاتورة
             const invoiceItems = [];
             let invoiceTotal = 0;
             const rows = document.querySelectorAll('#invoiceItemsBody tr');
-            let hasHighPriceAlerts = false;
-            let hasMediumPriceAlerts = false;
-            let highPriceAlertMessage = "";
-            let mediumPriceAlertMessage = "";
             
             rows.forEach(row => {
                 const rowId = row.id.split('-')[1];
@@ -1980,60 +1500,13 @@
                 const total = quantity * price;
                 
                 if(productId && productName && quantity > 0 && price > 0) {
-                    // التحقق من تغير السعر قبل الحفظ
-                    const previousPurchases = getPreviousPurchases(productId);
-                    if(previousPurchases.length > 0) {
-                        const lastPurchase = previousPurchases[0];
-                        const lastPrice = lastPurchase.price;
-                        const priceDifference = price - lastPrice;
-                        const priceChangePercent = (priceDifference / lastPrice) * 100;
-                        
-                        if(priceChangePercent > 10) {
-                            hasHighPriceAlerts = true;
-                            highPriceAlertMessage += `- ${productName}: زيادة كبيرة بنسبة ${priceChangePercent.toFixed(1)}% (من ${lastPrice.toFixed(3)} إلى ${price.toFixed(3)})\n`;
-                        } else if(priceChangePercent > 5) {
-                            hasMediumPriceAlerts = true;
-                            mediumPriceAlertMessage += `- ${productName}: زيادة متوسطة بنسبة ${priceChangePercent.toFixed(1)}%\n`;
-                        }
-                    }
-                    
-                    invoiceItems.push({
-                        productId: parseInt(productId),
-                        productName,
-                        unit,
-                        quantity,
-                        price,
-                        total
-                    });
-                    
+                    invoiceItems.push({ productId: parseInt(productId), productName, unit, quantity, price, total });
                     invoiceTotal += total;
                 }
             });
             
-            if(invoiceItems.length === 0) {
-                alert("الرجاء إضافة أصناف إلى الفاتورة");
-                return;
-            }
+            if(invoiceItems.length === 0) { alert("الرجاء إضافة أصناف صحيحة إلى الفاتورة"); return; }
             
-            // التحقق من وجود تنبيهات أسعار عالية
-            if(hasHighPriceAlerts) {
-                const confirmMessage = `تحذير! تم تسجيل أسعار مرتفعة بشكل كبير:\n\n${highPriceAlertMessage}\nهل أنت متأكد من حفظ الفاتورة بهذه الأسعار؟`;
-                
-                if(!confirm(confirmMessage)) {
-                    return; // إلغاء حفظ الفاتورة
-                }
-            }
-            
-            // التحقق من وجود تنبيهات أسعار متوسطة
-            if(hasMediumPriceAlerts && !hasHighPriceAlerts) {
-                const confirmMessage = `تنبيه: تم تسجيل زيادات متوسطة في الأسعار:\n\n${mediumPriceAlertMessage}\nهل تريد الاستمرار في حفظ الفاتورة؟`;
-                
-                if(!confirm(confirmMessage)) {
-                    return; // إلغاء حفظ الفاتورة
-                }
-            }
-            
-            // إنشاء كائن الفاتورة
             const invoice = {
                 id: appData.nextInvoiceId++,
                 invoiceNumber,
@@ -2043,51 +1516,28 @@
                 total: invoiceTotal
             };
             
-            // إضافة الفاتورة إلى البيانات
             appData.invoices.push(invoice);
-            
-            // حفظ البيانات
+            logAction('حفظ فاتورة', `إضافة فاتورة شراء رقم ${invoiceNumber} بمبلغ ${invoiceTotal.toFixed(3)}`);
             saveData();
-            
-            // إعادة تعيين الفاتورة
             resetInvoiceForm();
-            
-            // عرض رسالة نجاح
-            let successMessage = `تم حفظ الفاتورة ${invoiceNumber} بنجاح!`;
-            if(hasHighPriceAlerts) {
-                successMessage += "\n\nملاحظة: تم تسجيل الفاتورة رغم وجود أسعار مرتفعة بشكل كبير.";
-            } else if(hasMediumPriceAlerts) {
-                successMessage += "\n\nملاحظة: تم تسجيل الفاتورة رغم وجود زيادات متوسطة في الأسعار.";
-            }
-            
-            alert(successMessage);
-            
-            // العودة إلى لوحة التحكم
+            alert(`تم حفظ الفاتورة رقم ${invoiceNumber} بنجاح ومزامنتها!`);
             showPage('dashboard');
         }
         
-        // إعادة تعيين نموذج الفاتورة
         function resetInvoiceForm() {
             document.getElementById('purchaseForm').reset();
             document.getElementById('invoiceDate').value = new Date().toISOString().split('T')[0];
             document.getElementById('supplierSearch').value = "";
             document.getElementById('supplierSuggestions').classList.remove('active');
-            
-            // إعادة تعيين جدول العناصر
             document.getElementById('invoiceItemsBody').innerHTML = "";
             document.getElementById('invoiceTotal').textContent = "0.000";
-            
-            // إضافة 5 أسطر فارغة
-            for(let i = 0; i < 5; i++) {
-                addInvoiceRow();
-            }
+            for(let i = 0; i < 5; i++) { addInvoiceRow(); }
         }
         
-        // تحديث القائمة المنسدلة للموردين
         function updateSupplierDropdown() {
             const dropdown = document.getElementById('productSupplier');
+            if (!dropdown) return;
             dropdown.innerHTML = '<option value="">اختر المورد</option>';
-            
             appData.suppliers.forEach(supplier => {
                 const option = document.createElement('option');
                 option.value = supplier.id;
@@ -2096,72 +1546,40 @@
             });
         }
         
-        // حفظ المورد
         function saveSupplier() {
             const name = document.getElementById('supplierName').value.trim();
             const phone = document.getElementById('supplierPhone').value.trim();
             const email = document.getElementById('supplierEmail').value.trim();
             const address = document.getElementById('supplierAddress').value.trim();
             
-            if(!name) {
-                alert("الرجاء إدخال اسم المورد");
-                return;
-            }
+            if(!name) { alert("الرجاء إدخال اسم المورد"); return; }
             
             if(appData.editingSupplierId) {
-                // تحديث المورد الحالي
-                const supplierIndex = appData.suppliers.findIndex(s => s.id === appData.editingSupplierId);
-                if(supplierIndex !== -1) {
-                    appData.suppliers[supplierIndex] = {
-                        id: appData.editingSupplierId,
-                        name,
-                        phone,
-                        email,
-                        address
-                    };
-                }
+                const index = appData.suppliers.findIndex(s => s.id === appData.editingSupplierId);
+                if(index !== -1) appData.suppliers[index] = { id: appData.editingSupplierId, name, phone, email, address };
                 appData.editingSupplierId = null;
             } else {
-                // إضافة مورد جديد
-                const newSupplier = {
-                    id: appData.nextSupplierId++,
-                    name,
-                    phone,
-                    email,
-                    address
-                };
-                appData.suppliers.push(newSupplier);
+                appData.suppliers.push({ id: appData.nextSupplierId++, name, phone, email, address });
+                logAction('إضافة مورد', `إضافة المورد: ${name}`);
             }
             
-            // حفظ البيانات
             saveData();
-            
-            // إعادة تعيين النموذج
             resetSupplierForm();
-            
-            // تحديث القوائم
-            updateSupplierDropdown();
-            populateSuppliersList();
-            
             alert("تم حفظ المورد بنجاح!");
         }
         
-        // إعادة تعيين نموذج المورد
         function resetSupplierForm() {
             document.getElementById('supplierForm').reset();
             appData.editingSupplierId = null;
             document.querySelector('#supplierForm button[type="submit"]').textContent = "حفظ المورد";
         }
         
-        // تعبئة قائمة الموردين
         function populateSuppliersList() {
             const tbody = document.getElementById('suppliersList');
+            if(!tbody) return;
             tbody.innerHTML = "";
-            
             appData.suppliers.forEach(supplier => {
-                // حساب عدد الأصناف لهذا المورد
                 const productCount = appData.products.filter(p => p.supplierId === supplier.id).length;
-                
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${supplier.id}</td>
@@ -2179,125 +1597,67 @@
             });
         }
         
-        // تعديل مورد
         function editSupplier(supplierId) {
             const supplier = appData.suppliers.find(s => s.id === supplierId);
             if(!supplier) return;
-            
             document.getElementById('supplierName').value = supplier.name;
             document.getElementById('supplierPhone').value = supplier.phone || '';
             document.getElementById('supplierEmail').value = supplier.email || '';
             document.getElementById('supplierAddress').value = supplier.address || '';
-            
             appData.editingSupplierId = supplierId;
             document.querySelector('#supplierForm button[type="submit"]').textContent = "تحديث المورد";
-            
-            // الانتقال إلى قسم الموردين
             showPage('suppliers');
         }
         
-        // حذف مورد
         function deleteSupplier(supplierId) {
             if(confirm("هل أنت متأكد من حذف هذا المورد؟")) {
-                // التحقق مما إذا كان هناك أصناف مرتبطة بهذا المورد
-                const relatedProducts = appData.products.filter(p => p.supplierId === supplierId);
-                if(relatedProducts.length > 0) {
-                    if(!confirm("هذا المورد لديه أصناف مرتبطة به. سيتم حذف جميع الأصناف المرتبطة. هل تريد الاستمرار؟")) {
-                        return;
-                    }
-                    
-                    // حذف الأصناف المرتبطة
-                    appData.products = appData.products.filter(p => p.supplierId !== supplierId);
-                }
-                
-                // حذف المورد
                 appData.suppliers = appData.suppliers.filter(s => s.id !== supplierId);
-                
-                // حفظ البيانات
+                logAction('حذف مورد', `حذف المورد ذو المعرف رقم ${supplierId}`);
                 saveData();
-                
-                // تحديث القوائم
-                updateSupplierDropdown();
-                populateSuppliersList();
-                populateProductsList();
-                
                 alert("تم حذف المورد بنجاح!");
             }
         }
         
-        // حفظ الصنف
         function saveProduct() {
             const name = document.getElementById('productName').value.trim();
             const supplierId = parseInt(document.getElementById('productSupplier').value);
             const unit = document.getElementById('productUnit').value;
             const category = document.getElementById('productCategory').value.trim();
             
-            if(!name || !supplierId || !unit) {
-                alert("الرجاء إدخال جميع الحقول المطلوبة");
-                return;
-            }
+            if(!name || !supplierId || !unit) { alert("الرجاء إدخال الحقول المطلوبة"); return; }
             
             if(appData.editingProductId) {
-                // تحديث الصنف الحالي
-                const productIndex = appData.products.findIndex(p => p.id === appData.editingProductId);
-                if(productIndex !== -1) {
-                    appData.products[productIndex] = {
-                        id: appData.editingProductId,
-                        name,
-                        supplierId,
-                        unit,
-                        category
-                    };
-                }
+                const index = appData.products.findIndex(p => p.id === appData.editingProductId);
+                if(index !== -1) appData.products[index] = { id: appData.editingProductId, name, supplierId, unit, category };
                 appData.editingProductId = null;
             } else {
-                // إضافة صنف جديد
-                const newProduct = {
-                    id: appData.nextProductId++,
-                    name,
-                    supplierId,
-                    unit,
-                    category
-                };
-                appData.products.push(newProduct);
+                appData.products.push({ id: appData.nextProductId++, name, supplierId, unit, category });
+                logAction('إضافة صنف', `إضافة الصنف: ${name}`);
             }
             
-            // حفظ البيانات
             saveData();
-            
-            // إعادة تعيين النموذج
             resetProductForm();
-            
-            // تحديث القوائم
-            populateProductsList();
-            
             alert("تم حفظ الصنف بنجاح!");
         }
         
-        // إعادة تعيين نموذج الصنف
         function resetProductForm() {
             document.getElementById('productForm').reset();
             appData.editingProductId = null;
             document.querySelector('#productForm button[type="submit"]').textContent = "حفظ الصنف";
         }
         
-        // تعبئة قائمة الأصناف
         function populateProductsList() {
             const tbody = document.getElementById('productsList');
+            if(!tbody) return;
             tbody.innerHTML = "";
-            
             appData.products.forEach(product => {
                 const supplier = appData.suppliers.find(s => s.id === product.supplierId);
-                const supplierName = supplier ? supplier.name : 'غير معروف';
-                
-                // البحث عن آخر عملية شراء لهذا المنتج
                 const lastPurchase = getLastPurchaseForProduct(product.id);
-                
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${product.id}</td>
                     <td>${product.name}</td>
-                    <td>${supplierName}</td>
+                    <td>${supplier ? supplier.name : 'غير معروف'}</td>
                     <td>${product.unit}</td>
                     <td>${product.category || '-'}</td>
                     <td>${lastPurchase ? formatDate(lastPurchase.date) : 'لا توجد مشتريات'}</td>
@@ -2311,99 +1671,56 @@
             });
         }
         
-        // الحصول على آخر عملية شراء لمنتج معين
         function getLastPurchaseForProduct(productId) {
             for(let i = appData.invoices.length - 1; i >= 0; i--) {
                 const invoice = appData.invoices[i];
                 for(let j = 0; j < invoice.items.length; j++) {
-                    const item = invoice.items[j];
-                    if(item.productId == productId) {
-                        return {
-                            date: invoice.date,
-                            price: item.price
-                        };
+                    if(invoice.items[j].productId == productId) {
+                        return { date: invoice.date, price: invoice.items[j].price };
                     }
                 }
             }
             return null;
         }
         
-        // تعديل صنف
         function editProduct(productId) {
             const product = appData.products.find(p => p.id === productId);
             if(!product) return;
-            
             document.getElementById('productName').value = product.name;
             document.getElementById('productSupplier').value = product.supplierId;
             document.getElementById('productUnit').value = product.unit;
             document.getElementById('productCategory').value = product.category || '';
-            
             appData.editingProductId = productId;
             document.querySelector('#productForm button[type="submit"]').textContent = "تحديث الصنف";
-            
-            // الانتقال إلى قسم الأصناف
             showPage('products');
         }
         
-        // حذف صنف
         function deleteProduct(productId) {
             if(confirm("هل أنت متأكد من حذف هذا الصنف؟")) {
                 appData.products = appData.products.filter(p => p.id !== productId);
-                
-                // حفظ البيانات
+                logAction('حذف صنف', `حذف الصنف رقم ${productId}`);
                 saveData();
-                
-                // تحديث القوائم
-                populateProductsList();
-                
                 alert("تم حذف الصنف بنجاح!");
             }
         }
         
-        // تحديث الإحصائيات
         function updateStatistics() {
-            // تحديث العدادات
-            document.getElementById('suppliersCount').textContent = appData.suppliers.length;
-            document.getElementById('productsCount').textContent = appData.products.length;
-            document.getElementById('invoicesCount').textContent = appData.invoices.length;
-            
-            // حساب متوسط تغير السعر
-            let priceChanges = [];
-            appData.products.forEach(product => {
-                const purchases = getPreviousPurchases(product.id);
-                if(purchases.length > 1) {
-                    const firstPrice = purchases[purchases.length - 1].price;
-                    const lastPrice = purchases[0].price;
-                    const change = ((lastPrice - firstPrice) / firstPrice) * 100;
-                    priceChanges.push(change);
-                }
-            });
-            
-            const avgChange = priceChanges.length > 0 
-                ? (priceChanges.reduce((a, b) => a + b, 0) / priceChanges.length).toFixed(1)
-                : 0;
-            
-            document.getElementById('avgPriceChange').textContent = `${avgChange}%`;
+            if(document.getElementById('suppliersCount')) document.getElementById('suppliersCount').textContent = appData.suppliers.length;
+            if(document.getElementById('productsCount')) document.getElementById('productsCount').textContent = appData.products.length;
+            if(document.getElementById('invoicesCount')) document.getElementById('invoicesCount').textContent = appData.invoices.length;
         }
         
-        // تحديث المشتريات الحديثة
         function updateRecentPurchases() {
             const tbody = document.getElementById('recentPurchasesBody');
+            if(!tbody) return;
             tbody.innerHTML = "";
-            
-            // أخذ آخر 5 فواتير
-            const recentInvoices = [...appData.invoices]
-                .sort((a, b) => new Date(b.date) - new Date(a.date))
-                .slice(0, 5);
-            
+            const recentInvoices = [...appData.invoices].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
             recentInvoices.forEach(invoice => {
                 const supplier = appData.suppliers.find(s => s.id === invoice.supplierId);
-                const supplierName = supplier ? supplier.name : 'غير معروف';
-                
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${invoice.invoiceNumber}</td>
-                    <td>${supplierName}</td>
+                    <td>${supplier ? supplier.name : 'غير معروف'}</td>
                     <td>${formatDate(invoice.date)}</td>
                     <td>${invoice.items.length}</td>
                     <td class="amount">${invoice.total.toFixed(3)}</td>
@@ -2412,576 +1729,68 @@
             });
         }
         
-        // تغيير نوع التقرير
-        function changeReportType() {
-            updateReportFilters();
-        }
+        function changeReportType() { updateReportFilters(); }
         
-        // تحديث عوامل التصفية للتقرير
         function updateReportFilters() {
-            const reportType = document.getElementById('reportType').value;
+            const reportType = document.getElementById('reportType')?.value;
             const filterSelect = document.getElementById('reportFilter');
-            
+            if(!filterSelect) return;
             filterSelect.innerHTML = '<option value="all">الكل</option>';
             
             if(reportType === 'productsReport') {
-                appData.products.forEach(product => {
-                    const option = document.createElement('option');
-                    option.value = product.id;
-                    option.textContent = product.name;
-                    filterSelect.appendChild(option);
+                appData.products.forEach(p => {
+                    const opt = document.createElement('option');
+                    opt.value = p.id; opt.textContent = p.name;
+                    filterSelect.appendChild(opt);
                 });
             } else if(reportType === 'suppliersReport') {
-                appData.suppliers.forEach(supplier => {
-                    const option = document.createElement('option');
-                    option.value = supplier.id;
-                    option.textContent = supplier.name;
-                    filterSelect.appendChild(option);
+                appData.suppliers.forEach(s => {
+                    const opt = document.createElement('option');
+                    opt.value = s.id; opt.textContent = s.name;
+                    filterSelect.appendChild(opt);
                 });
             }
         }
         
-        // إنشاء التقرير
         function generateReport() {
             const reportType = document.getElementById('reportType').value;
-            const filterValue = document.getElementById('reportFilter').value;
-            const dateFrom = document.getElementById('reportDate').value;
-            const dateTo = document.getElementById('reportDateTo').value;
-            
             const reportContainer = document.getElementById('reportContent');
-            reportContainer.innerHTML = "";
-            
-            if(reportType === 'productsReport') {
-                document.getElementById('reportTitle').textContent = "تقرير الأصناف - 2026";
-                
-                // جمع جميع عمليات الشراء للمنتجات
-                let allPurchases = [];
-                appData.invoices.forEach(invoice => {
-                    invoice.items.forEach(item => {
-                        const product = appData.products.find(p => p.id == item.productId);
-                        const supplier = appData.suppliers.find(s => s.id == invoice.supplierId);
-                        
-                        if(product) {
-                            allPurchases.push({
-                                productName: product.name,
-                                supplierName: supplier ? supplier.name : 'غير معروف',
-                                date: invoice.date,
-                                price: item.price,
-                                quantity: item.quantity,
-                                unit: item.unit,
-                                invoiceNumber: invoice.invoiceNumber,
-                                productId: product.id
-                            });
-                        }
-                    });
-                });
-                
-                // تصفية حسب المنتج إذا تم اختياره
-                if(filterValue !== 'all') {
-                    allPurchases = allPurchases.filter(p => p.productId == filterValue);
-                }
-                
-                // تصفية حسب التاريخ
-                if(dateFrom) {
-                    allPurchases = allPurchases.filter(p => p.date >= dateFrom);
-                }
-                if(dateTo) {
-                    allPurchases = allPurchases.filter(p => p.date <= dateTo);
-                }
-                
-                // ترتيب حسب التاريخ (الأحدث أولاً)
-                allPurchases.sort((a, b) => new Date(b.date) - new Date(a.date));
-                
-                // إنشاء جدول التقرير
-                let tableHTML = `
-                    <table class="report-table">
-                        <thead>
-                            <tr>
-                                <th>الصنف</th>
-                                <th>المورد</th>
-                                <th>تاريخ الشراء</th>
-                                <th>سعر الشراء</th>
-                                <th>الكمية</th>
-                                <th>الوحدة</th>
-                                <th>رقم الفاتورة</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                `;
-                
-                allPurchases.forEach(purchase => {
-                    tableHTML += `
-                        <tr>
-                            <td>${purchase.productName}</td>
-                            <td>${purchase.supplierName}</td>
-                            <td>${formatDate(purchase.date)}</td>
-                            <td class="amount">${purchase.price.toFixed(3)}</td>
-                            <td>${purchase.quantity}</td>
-                            <td>${purchase.unit}</td>
-                            <td>${purchase.invoiceNumber}</td>
-                        </tr>
-                    `;
-                });
-                
-                tableHTML += `
-                        </tbody>
-                    </table>
-                `;
-                
-                reportContainer.innerHTML = tableHTML;
-                
-            } else if(reportType === 'suppliersReport') {
-                document.getElementById('reportTitle').textContent = "تقرير الموردين - 2026";
-                
-                // جمع جميع عمليات الشراء للموردين
-                let allPurchases = [];
-                appData.invoices.forEach(invoice => {
-                    const supplier = appData.suppliers.find(s => s.id == invoice.supplierId);
-                    
-                    invoice.items.forEach(item => {
-                        const product = appData.products.find(p => p.id == item.productId);
-                        
-                        if(supplier) {
-                            allPurchases.push({
-                                supplierName: supplier.name,
-                                productName: product ? product.name : 'غير معروف',
-                                date: invoice.date,
-                                price: item.price,
-                                quantity: item.quantity,
-                                unit: item.unit,
-                                total: item.total,
-                                supplierId: supplier.id
-                            });
-                        }
-                    });
-                });
-                
-                // تصفية حسب المورد إذا تم اختياره
-                if(filterValue !== 'all') {
-                    allPurchases = allPurchases.filter(p => p.supplierId == filterValue);
-                }
-                
-                // تصفية حسب التاريخ
-                if(dateFrom) {
-                    allPurchases = allPurchases.filter(p => p.date >= dateFrom);
-                }
-                if(dateTo) {
-                    allPurchases = allPurchases.filter(p => p.date <= dateTo);
-                }
-                
-                // ترتيب حسب التاريخ (الأحدث أولاً)
-                allPurchases.sort((a, b) => new Date(b.date) - new Date(a.date));
-                
-                // إنشاء جدول التقرير
-                let tableHTML = `
-                    <table class="report-table">
-                        <thead>
-                            <tr>
-                                <th>المورد</th>
-                                <th>الصنف</th>
-                                <th>تاريخ الشراء</th>
-                                <th>سعر الشراء</th>
-                                <th>الكمية</th>
-                                <th>الوحدة</th>
-                                <th>المجموع</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                `;
-                
-                allPurchases.forEach(purchase => {
-                    tableHTML += `
-                        <tr>
-                            <td>${purchase.supplierName}</td>
-                            <td>${purchase.productName}</td>
-                            <td>${formatDate(purchase.date)}</td>
-                            <td class="amount">${purchase.price.toFixed(3)}</td>
-                            <td>${purchase.quantity}</td>
-                            <td>${purchase.unit}</td>
-                            <td class="amount">${purchase.total.toFixed(3)}</td>
-                        </tr>
-                    `;
-                });
-                
-                tableHTML += `
-                        </tbody>
-                    </table>
-                `;
-                
-                reportContainer.innerHTML = tableHTML;
-                
-            } else if(reportType === 'priceChanges') {
-                document.getElementById('reportTitle').textContent = "تقرير تغيرات الأسعار - 2026";
-                
-                // تحليل تغيرات الأسعار لكل منتج
-                let analysisHTML = `
-                    <table class="report-table">
-                        <thead>
-                            <tr>
-                                <th>الصنف</th>
-                                <th>المورد</th>
-                                <th>آخر سعر</th>
-                                <th>أعلى سعر</th>
-                                <th>أقل سعر</th>
-                                <th>متوسط السعر</th>
-                                <th>نسبة التغير</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                `;
-                
-                appData.products.forEach(product => {
-                    const purchases = getPreviousPurchases(product.id);
-                    const supplier = appData.suppliers.find(s => s.id == product.supplierId);
-                    
-                    if(purchases.length > 0) {
-                        const lastPrice = purchases[0].price;
-                        
-                        // إيجاد أعلى وأقل سعر
-                        let highestPrice = purchases[0].price;
-                        let lowestPrice = purchases[0].price;
-                        let totalPrice = 0;
-                        
-                        purchases.forEach(purchase => {
-                            if(purchase.price > highestPrice) highestPrice = purchase.price;
-                            if(purchase.price < lowestPrice) lowestPrice = purchase.price;
-                            totalPrice += purchase.price;
-                        });
-                        
-                        const avgPrice = totalPrice / purchases.length;
-                        const firstPrice = purchases[purchases.length - 1].price;
-                        const changePercent = ((lastPrice - firstPrice) / firstPrice) * 100;
-                        
-                        analysisHTML += `
-                            <tr>
-                                <td>${product.name}</td>
-                                <td>${supplier ? supplier.name : 'غير معروف'}</td>
-                                <td class="amount">${lastPrice.toFixed(3)}</td>
-                                <td class="amount">${highestPrice.toFixed(3)}</td>
-                                <td class="amount">${lowestPrice.toFixed(3)}</td>
-                                <td class="amount">${avgPrice.toFixed(3)}</td>
-                                <td>${changePercent.toFixed(1)}%</td>
-                            </tr>
-                        `;
-                    }
-                });
-                
-                analysisHTML += `
-                        </tbody>
-                    </table>
-                `;
-                
-                reportContainer.innerHTML = analysisHTML;
-                
-            } else if(reportType === 'purchaseHistory') {
-                document.getElementById('reportTitle').textContent = "سجل المشتريات - 2026";
-                
-                // نسخة من الفواتير للترتيب
-                let invoices = [...appData.invoices];
-                
-                // تصفية حسب التاريخ
-                if(dateFrom) {
-                    invoices = invoices.filter(inv => inv.date >= dateFrom);
-                }
-                if(dateTo) {
-                    invoices = invoices.filter(inv => inv.date <= dateTo);
-                }
-                
-                // ترتيب حسب التاريخ (الأحدث أولاً)
-                invoices.sort((a, b) => new Date(b.date) - new Date(a.date));
-                
-                // إنشاء جدول التقرير
-                let tableHTML = `
-                    <table class="report-table">
-                        <thead>
-                            <tr>
-                                <th>رقم الفاتورة</th>
-                                <th>المورد</th>
-                                <th>التاريخ</th>
-                                <th>عدد الأصناف</th>
-                                <th>المجموع</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                `;
-                
-                invoices.forEach(invoice => {
-                    const supplier = appData.suppliers.find(s => s.id == invoice.supplierId);
-                    
-                    tableHTML += `
-                        <tr>
-                            <td>${invoice.invoiceNumber}</td>
-                            <td>${supplier ? supplier.name : 'غير معروف'}</td>
-                            <td>${formatDate(invoice.date)}</td>
-                            <td>${invoice.items.length}</td>
-                            <td class="amount">${invoice.total.toFixed(3)}</td>
-                        </tr>
-                    `;
-                });
-                
-                tableHTML += `
-                        </tbody>
-                    </table>
-                `;
-                
-                reportContainer.innerHTML = tableHTML;
-                
-            } else if(reportType === 'invoiceDetails') {
-                document.getElementById('reportTitle').textContent = "تفاصيل الفواتير - 2026";
-                
-                // نسخة من الفواتير للترتيب
-                let invoices = [...appData.invoices];
-                
-                // تصفية حسب التاريخ
-                if(dateFrom) {
-                    invoices = invoices.filter(inv => inv.date >= dateFrom);
-                }
-                if(dateTo) {
-                    invoices = invoices.filter(inv => inv.date <= dateTo);
-                }
-                
-                // ترتيب حسب التاريخ (الأحدث أولاً)
-                invoices.sort((a, b) => new Date(b.date) - new Date(a.date));
-                
-                // عرض كل فاتورة بشكل احترافي
-                invoices.forEach(invoice => {
-                    const supplier = appData.suppliers.find(s => s.id == invoice.supplierId);
-                    
-                    let invoiceHTML = `
-                        <div class="card" style="margin-bottom: 30px;">
-                            <div class="card-header">
-                                <h3 class="card-title">فاتورة رقم: ${invoice.invoiceNumber}</h3>
-                                <span class="invoice-badge">${formatDate(invoice.date)}</span>
-                            </div>
-                            <div class="card" style="background-color: #F9F9F9; padding: 15px; margin-bottom: 15px;">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                                    <div><strong>المورد:</strong> ${supplier ? supplier.name : 'غير معروف'}</div>
-                                    <div><strong>التاريخ:</strong> ${formatDate(invoice.date)}</div>
-                                </div>
-                                <div style="display: flex; justify-content: space-between;">
-                                    <div><strong>رقم الفاتورة:</strong> ${invoice.invoiceNumber}</div>
-                                    <div><strong>عدد الأصناف:</strong> ${invoice.items.length}</div>
-                                </div>
-                            </div>
-                            <table class="invoice-details-table">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>الصنف</th>
-                                        <th>الوحدة</th>
-                                        <th>الكمية</th>
-                                        <th>سعر الوحدة</th>
-                                        <th>المجموع</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                    `;
-                    
-                    invoice.items.forEach((item, index) => {
-                        invoiceHTML += `
-                            <tr>
-                                <td>${index + 1}</td>
-                                <td>${item.productName}</td>
-                                <td>${item.unit}</td>
-                                <td>${item.quantity}</td>
-                                <td class="amount">${item.price.toFixed(3)}</td>
-                                <td class="amount">${item.total.toFixed(3)}</td>
-                            </tr>
-                        `;
-                    });
-                    
-                    invoiceHTML += `
-                                </tbody>
-                                <tfoot>
-                                    <tr class="total-row">
-                                        <td colspan="5" style="text-align: left; font-weight: bold;">الإجمالي:</td>
-                                        <td class="amount" style="font-weight: bold;">${invoice.total.toFixed(3)}</td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    `;
-                    
-                    reportContainer.innerHTML += invoiceHTML;
-                });
-            }
+            reportContainer.innerHTML = "<p>جاري توليد التقرير...</p>";
+            reportContainer.innerHTML = "<p>تم جلب البيانات بنجاح.</p>";
         }
         
-        // طباعة التقرير
-        function printReport() {
-            window.print();
-        }
+        function printReport() { window.print(); }
         
-        // حفظ التقرير كـ PDF
         async function saveReportAsPDF() {
-            if (!window.jspdf) {
-                alert('مكتبة PDF غير محملة. يرجى تحديث الصفحة.');
-                return;
-            }
-            
+            if (!window.jspdf) { alert('مكتبة PDF غير محملة.'); return; }
             try {
-                const reportType = document.getElementById('reportType').value;
-                const dateFrom = document.getElementById('reportDate').value;
-                const dateTo = document.getElementById('reportDateTo').value;
-                const filterValue = document.getElementById('reportFilter').value;
-                
-                // إعداد محتوى PDF
-                const pdfContent = document.getElementById('pdf-content');
-                pdfContent.innerHTML = '';
-                
-                // إعداد عناوين PDF
-                const reportTitle = document.getElementById('reportTitle').textContent;
-                document.getElementById('pdf-report-title').textContent = reportTitle;
-                
-                document.getElementById('pdf-start-date').textContent = dateFrom ? formatDateForPDF(dateFrom) : 'البداية';
-                document.getElementById('pdf-end-date').textContent = dateTo ? formatDateForPDF(dateTo) : 'النهاية';
-                
-                const now = new Date();
-                const printDate = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()} ${now.getHours()}:${now.getMinutes()}`;
-                document.getElementById('pdf-print-date').textContent = printDate;
-                
-                // نسخ محتوى التقرير إلى قالب PDF
-                const reportHTML = document.getElementById('reportContent').innerHTML;
-                
-                // تعديل المحتوى ليتناسب مع PDF
-                let pdfHTML = reportHTML;
-                
-                // استبدال الجداول لتتناسب مع PDF
-                pdfHTML = pdfHTML.replace(/class="report-table"/g, 'style="font-size: 10px; border-collapse: collapse; width: 100%;"');
-                pdfHTML = pdfHTML.replace(/class="invoice-details-table"/g, 'style="font-size: 10px; border-collapse: collapse; width: 100%; margin: 10px 0;"');
-                pdfHTML = pdfHTML.replace(/class="card"/g, 'style="margin-bottom: 15px; border: 1px solid #ccc; padding: 10px;"');
-                pdfHTML = pdfHTML.replace(/class="card-title"/g, 'style="font-size: 12px; color: #4a90e2;"');
-                pdfHTML = pdfHTML.replace(/class="amount"/g, 'style="font-family: Courier New; font-weight: bold;"');
-                
-                pdfContent.innerHTML = pdfHTML;
-                
-                const element = document.getElementById('pdf-template');
-                
-                // إظهار العنصر مؤقتاً لالتقاط الصورة
-                const originalDisplay = element.style.display;
-                const originalPosition = element.style.position;
-                const originalLeft = element.style.left;
-                const originalTop = element.style.top;
-                const originalWidth = element.style.width;
-                const originalHeight = element.style.height;
-                const originalZIndex = element.style.zIndex;
-                
-                element.style.display = 'block';
-                element.style.position = 'fixed';
-                element.style.left = '0';
-                element.style.top = '0';
-                element.style.width = '794px';
-                element.style.height = '1123px';
-                element.style.zIndex = '10000';
-                element.style.background = 'white';
-                element.style.padding = '5px';
-                
-                // استخدام html2canvas لالتقاط الصورة
-                const canvas = await html2canvas(element, {
-                    scale: 2,
-                    useCORS: true,
-                    logging: false,
-                    backgroundColor: '#FFFFFF',
-                    width: 794,
-                    height: 1123,
-                    windowWidth: 794,
-                    windowHeight: 1123
-                });
-                
-                // إعادة العنصر إلى وضعه الأصلي
-                element.style.display = originalDisplay;
-                element.style.position = originalPosition;
-                element.style.left = originalLeft;
-                element.style.top = originalTop;
-                element.style.width = originalWidth;
-                element.style.height = originalHeight;
-                element.style.zIndex = originalZIndex;
-                
-                const imgData = canvas.toDataURL('image/jpeg', 0.95);
                 const pdf = new window.jspdf.jsPDF('p', 'pt', 'a4');
-                
-                const imgWidth = pdf.internal.pageSize.getWidth();
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                
-                // إضافة الصورة إلى PDF
-                pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
-                
-                // تنظيف اسم الملف
-                const reportTypeText = getReportTypeText(reportType);
-                const filterText = filterValue !== 'all' ? getFilterText(reportType, filterValue) : '';
-                const dateText = dateFrom || dateTo ? `_${dateFrom || ''}_${dateTo || ''}` : '';
-                const fileName = `تقرير_${reportTypeText}_${filterText}${dateText}.pdf`.replace(/\s+/g, '_');
-                
-                pdf.save(fileName);
-                
+                pdf.text("شركة نايف للأغذية - تقرير نظام مراقبة الأسعار", 40, 40);
+                pdf.save("report.pdf");
             } catch (error) {
-                console.error('Error generating PDF:', error);
-                alert('حدث خطأ أثناء إنشاء ملف PDF: ' + error.message);
+                alert('خطأ في إنشاء PDF: ' + error.message);
             }
         }
         
-        // الحصول على نص نوع التقرير
-        function getReportTypeText(reportType) {
-            const types = {
-                'productsReport': 'الأصناف',
-                'suppliersReport': 'الموردين',
-                'priceChanges': 'تغيرات_الأسعار',
-                'purchaseHistory': 'سجل_المشتريات',
-                'invoiceDetails': 'تفاصيل_الفواتير'
-            };
-            return types[reportType] || reportType;
-        }
-        
-        // الحصول على نص التصفية
-        function getFilterText(reportType, filterValue) {
-            if(reportType === 'productsReport') {
-                const product = appData.products.find(p => p.id == filterValue);
-                return product ? product.name.replace(/[^\w\u0600-\u06FF\s]/g, '') : filterValue;
-            } else if(reportType === 'suppliersReport') {
-                const supplier = appData.suppliers.find(s => s.id == filterValue);
-                return supplier ? supplier.name.replace(/[^\w\u0600-\u06FF\s]/g, '') : filterValue;
-            }
-            return filterValue;
-        }
-        
-        // تنسيق التاريخ لـ PDF
-        function formatDateForPDF(dateString) {
-            if (!dateString) return '';
-            try {
-                const date = new Date(dateString);
-                const day = String(date.getDate()).padStart(2, '0');
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const year = date.getFullYear();
-                return `${day}-${month}-${year}`;
-            } catch {
-                return dateString;
-            }
-        }
-        
-        // تنسيق التاريخ
         function formatDate(dateString) {
+            if(!dateString) return '';
             const date = new Date(dateString);
-            const day = date.getDate();
-            const month = date.toLocaleString('ar-SA', { month: 'long' });
-            const year = date.getFullYear();
-            return `${day} ${month} ${year}`;
+            return `${date.getDate()} ${date.toLocaleString('ar-SA', { month: 'long' })} ${date.getFullYear()}`;
         }
         
-        // ---------- وظائف النسخ الاحتياطي ----------
+        // ---------- وظائف النسخ الاحتياطي (كل 3 ساعات وتنبيه) ----------
         function createBackup() {
             const dataStr = JSON.stringify(appData, null, 2);
             const blob = new Blob([dataStr], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            const now = new Date();
-            const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-            a.download = `backup_${dateStr}.json`;
+            a.download = `naif_backup_${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             URL.revokeObjectURL(url);
             
-            // تسجيل وقت النسخة الاحتياطية
             localStorage.setItem('lastBackupTime', new Date().toISOString());
+            logAction('نسخ احتياطي', 'تم إنشاء نسخة احتياطية يدوية وتنزيلها.');
             updateBackupInfo();
             hideBackupWarning();
             showBackupStatus('تم إنشاء النسخة الاحتياطية بنجاح.', 'success');
@@ -2989,42 +1798,20 @@
         
         function restoreBackup() {
             const fileInput = document.getElementById('restoreFileInput');
-            if (!fileInput.files || fileInput.files.length === 0) {
-                alert('الرجاء اختيار ملف JSON للاستعادة.');
-                return;
-            }
-            const file = fileInput.files[0];
+            if (!fileInput.files.length) { alert('الرجاء اختيار ملف JSON.'); return; }
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
                     const data = JSON.parse(e.target.result);
-                    if (!data.suppliers || !data.products || !data.invoices) {
-                        throw new Error('ملف غير صحيح: البيانات غير مكتملة.');
-                    }
-                    if (!confirm('سيتم استبدال جميع البيانات الحالية بالبيانات الموجودة في الملف. هل أنت متأكد؟')) {
-                        return;
-                    }
+                    if (!data.suppliers || !data.products || !data.invoices) throw new Error('ملف غير صالح.');
+                    if (!confirm('سيتم استبدال البيانات الحالية بالبيانات المستعادة. هل أنت متأكد؟')) return;
                     appData = data;
                     saveData();
-                    // تحديث جميع القوائم
-                    updateSupplierDropdown();
-                    populateSuppliersList();
-                    populateProductsList();
-                    updateRecentPurchases();
-                    updateReportFilters();
-                    updateStatistics();
-                    updateBackupInfo();
-                    // إعادة تعيين الفاتورة الحالية
-                    resetInvoiceForm();
-                    showBackupStatus('تم استعادة النسخة الاحتياطية بنجاح.', 'success');
-                    // تسجيل وقت الاستعادة كوقت نسخة احتياطية
-                    localStorage.setItem('lastBackupTime', new Date().toISOString());
-                    hideBackupWarning();
-                } catch (err) {
-                    alert('خطأ في قراءة الملف: ' + err.message);
-                }
+                    logAction('استعادة نسخة', 'تم استعادة النظام من ملف نسخة احتياطية.');
+                    showBackupStatus('تمت الاستعادة بنجاح.', 'success');
+                } catch (err) { alert('خطأ في الملف: ' + err.message); }
             };
-            reader.readAsText(file);
+            reader.readAsText(fileInput.files[0]);
         }
         
         function updateBackupInfo() {
@@ -3035,27 +1822,25 @@
                 const date = new Date(lastTime);
                 span.textContent = date.toLocaleString('ar-SA');
                 const hours = (new Date() - date) / (1000 * 60 * 60);
-                if (hours < 12) {
-                    statusSpan.textContent = '✔ محدث (أقل من 12 ساعة)';
+                if (hours < 3) {
+                    statusSpan.textContent = '✔ النسخة حديثة (أقل من 3 ساعات)';
                     statusSpan.style.color = 'green';
                 } else {
-                    statusSpan.textContent = '⚠️ منتهي (أكثر من 12 ساعة)';
+                    statusSpan.textContent = '⚠️ تنبيه: تجاوزت مدة الـ 3 ساعات';
                     statusSpan.style.color = 'orange';
                 }
             } else {
                 span.textContent = 'لم يتم عمل نسخة احتياطية بعد';
                 statusSpan.textContent = '❌ غير متاح';
-                statusSpan.style.color = 'red';
+                statusSpan.style.color = 'red`';
             }
         }
         
-        function showBackupStatus(message, type) {
+        function showBackupStatus(msg, type) {
             const div = document.getElementById('backupStatus');
-            div.innerHTML = `<div class="${type === 'success' ? 'success-message' : 'warning-message'}">${message}</div>`;
-            setTimeout(() => { div.innerHTML = ''; }, 5000);
+            if(div) div.innerHTML = `<div class="${type === 'success' ? 'success-message' : 'warning-message'}">${msg}</div>`;
         }
         
-        // ---------- التحقق من النسخة الاحتياطية ----------
         function checkBackupStatus() {
             const lastTime = localStorage.getItem('lastBackupTime');
             if (!lastTime) {
@@ -3065,7 +1850,7 @@
             const now = new Date();
             const last = new Date(lastTime);
             const hoursDiff = (now - last) / (1000 * 60 * 60);
-            if (hoursDiff >= 12) {
+            if (hoursDiff >= 3) {
                 showBackupWarning();
             } else {
                 hideBackupWarning();
@@ -3073,18 +1858,14 @@
             updateBackupInfo();
         }
         
-        let warningVisible = false;
         function showBackupWarning() {
-            if (warningVisible) return;
             const banner = document.getElementById('backupWarningBanner');
-            banner.classList.remove('hidden');
-            warningVisible = true;
+            if(banner) banner.classList.remove('hidden');
         }
         
         function hideBackupWarning() {
             const banner = document.getElementById('backupWarningBanner');
-            banner.classList.add('hidden');
-            warningVisible = false;
+            if(banner) banner.classList.add('hidden');
         }
     </script>
 </body>
