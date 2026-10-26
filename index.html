@@ -131,6 +131,7 @@
             transition: all 0.3s ease;
             border-bottom: 3px solid transparent;
             font-size: 0.95rem;
+            cursor: pointer;
         }
         
         .nav-tabs li a:hover, .nav-tabs li a.active {
@@ -141,12 +142,12 @@
         
         /* Main Content */
         .main-content {
-            display: none;
+            display: none !important;
         }
         
         .main-content.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
+            display: block !important;
+            animation: fadeIn 0.4s ease;
         }
         
         @keyframes fadeIn {
@@ -343,20 +344,9 @@
             font-size: 0.8rem;
         }
         
-        .last-price {
-            background-color: rgba(0, 255, 157, 0.15);
-            color: #006600;
-        }
-        
-        .high-price {
-            background-color: rgba(255, 0, 0, 0.1);
-            color: #990000;
-        }
-        
-        .low-price {
-            background-color: rgba(0, 150, 255, 0.1);
-            color: #004080;
-        }
+        .last-price { background-color: rgba(0, 255, 157, 0.15); color: #006600; }
+        .high-price { background-color: rgba(255, 0, 0, 0.1); color: #990000; }
+        .low-price { background-color: rgba(0, 150, 255, 0.1); color: #004080; }
         
         /* Statistics Cards */
         .stats-container {
@@ -395,15 +385,10 @@
             margin-bottom: 5px;
         }
         
-        .stat-label {
-            font-size: 1rem;
-            color: #666;
-        }
+        .stat-label { font-size: 1rem; color: #666; }
         
         /* Report & Log Tables */
-        .report-table-container {
-            overflow-x: auto;
-        }
+        .report-table-container { overflow-x: auto; }
         
         .report-table {
             width: 100%;
@@ -424,57 +409,14 @@
             font-weight: 600;
         }
         
-        .report-table tr:nth-child(even) {
-            background-color: rgba(74, 144, 226, 0.03);
-        }
-        
-        .report-table tr:hover {
-            background-color: rgba(74, 144, 226, 0.08);
-        }
-        
-        .invoice-details-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        .invoice-details-table th, .invoice-details-table td {
-            padding: 12px 15px;
-            text-align: center;
-            border: 1px solid var(--border-color);
-        }
-        
-        .invoice-details-table th {
-            background: linear-gradient(135deg, var(--light-blue), var(--header-blue));
-            color: white;
-            font-weight: 600;
-        }
-        
-        .invoice-details-table tr:nth-child(even) {
-            background-color: rgba(74, 144, 226, 0.05);
-        }
-        
-        .invoice-details-table .total-row {
-            background-color: rgba(255, 110, 0, 0.1);
-            font-weight: bold;
-        }
+        .report-table tr:nth-child(even) { background-color: rgba(74, 144, 226, 0.03); }
+        .report-table tr:hover { background-color: rgba(74, 144, 226, 0.08); }
         
         @media (max-width: 768px) {
-            .nav-tabs {
-                flex-direction: column;
-            }
-            .form-row {
-                flex-direction: column;
-            }
-            .stats-container {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            }
-            .company-name {
-                font-size: 1.5rem;
-            }
+            .nav-tabs { flex-direction: column; }
+            .form-row { flex-direction: column; }
+            .stats-container { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+            .company-name { font-size: 1.5rem; }
         }
         
         /* Developer Signature */
@@ -487,7 +429,6 @@
             padding: 8px 14px;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             font-size: 0.7rem;
             font-weight: 600;
             z-index: 1000;
@@ -496,13 +437,11 @@
             transform: scale(0.75);
             transform-origin: bottom left;
         }
-
         @keyframes float { 
             0% { transform: translateY(0px) scale(0.75); } 
             50% { transform: translateY(-12px) scale(0.75); } 
             100% { transform: translateY(0px) scale(0.75); } 
         }
-
         .signature-card a { color: #dc3545; text-decoration: none; }
         
         .idea-card {
@@ -523,13 +462,11 @@
             transform-origin: bottom right;
             text-align: center;
         }
-
         @keyframes floatRight { 
             0% { transform: translateY(0px) translateX(0px) scale(0.75); } 
             50% { transform: translateY(-12px) translateX(-5px) scale(0.75); } 
             100% { transform: translateY(0px) translateX(0px) scale(0.75); } 
         }
-
         .idea-card .name { font-size: 0.85rem; font-weight: 700; color: #dc3545; }
 
         @media print {
@@ -538,7 +475,6 @@
         }
         
         .amount { font-family: 'Courier New', monospace; font-weight: bold; }
-        
         .invoice-badge {
             display: inline-block;
             background: linear-gradient(135deg, var(--primary-orange), var(--light-blue));
@@ -548,31 +484,14 @@
             font-weight: bold;
             margin: 5px;
         }
-        
         .warning-message { background-color: #FFF3CD; color: #856404; padding: 10px 15px; border-radius: 5px; border: 1px solid #FFEAA7; margin-bottom: 15px; }
         .success-message { background-color: #D4EDDA; color: #155724; padding: 10px 15px; border-radius: 5px; border: 1px solid #C3E6CB; margin-bottom: 15px; }
         
-        .price-alert {
-            background-color: #F8D7DA; color: #721C24; padding: 8px 12px; border-radius: 5px; border: 1px solid #F5C6CB; margin-top: 5px; font-size: 0.85rem; display: flex; align-items: center; gap: 8px;
-        }
-        .immediate-high-alert { background-color: #DC3545 !important; color: white !important; font-weight: bold; }
-        
-        .high-price-input { border-color: #DC3545 !important; background-color: #FFF5F5 !important; }
-        .price-input-container { position: relative; }
-        .price-input-alert {
-            position: absolute; top: -10px; right: -10px; background-color: #DC3545; color: white; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; z-index: 10;
-        }
-        
-        .pdf-template {
-            position: fixed; left: -10000px; top: -10000px; width: 794px; height: 1123px; background: white; padding: 10px; z-index: -1000; font-family: 'Times New Roman', serif; direction: rtl;
-        }
-
         .backup-warning {
             background-color: #fff3cd; color: #856404; padding: 12px 20px; border-radius: 8px; border: 1px solid #ffeaa7; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
         }
         .hidden { display: none !important; }
 
-        /* Sync status badge */
         .sync-badge {
             display: inline-flex;
             align-items: center;
@@ -608,20 +527,19 @@
         <!-- Navigation -->
         <nav>
             <ul class="nav-tabs">
-                <li><a href="#" class="nav-link active" data-target="dashboard">لوحة التحكم</a></li>
-                <li><a href="#" class="nav-link" data-target="purchase-invoice">فاتورة شراء</a></li>
-                <li><a href="#" class="nav-link" data-target="suppliers">الموردين</a></li>
-                <li><a href="#" class="nav-link" data-target="products">الأصناف</a></li>
-                <li><a href="#" class="nav-link" data-target="reports">التقارير</a></li>
-                <li><a href="#" class="nav-link" data-target="activity-log">سجل الحركات</a></li>
-                <li><a href="#" class="nav-link" data-target="backup">النسخ الاحتياطي</a></li>
+                <li><a class="nav-link active" data-target="dashboard">لوحة التحكم</a></li>
+                <li><a class="nav-link" data-target="purchase-invoice">فاتورة شراء</a></li>
+                <li><a class="nav-link" data-target="suppliers">الموردين</a></li>
+                <li><a class="nav-link" data-target="products">الأصناف</a></li>
+                <li><a class="nav-link" data-target="reports">التقارير</a></li>
+                <li><a class="nav-link" data-target="activity-log">سجل الحركات</a></li>
+                <li><a class="nav-link" data-target="backup">النسخ الاحتياطي</a></li>
             </ul>
         </nav>
         
         <!-- Dashboard -->
         <section id="dashboard" class="main-content active">
             <h2 class="page-title">لوحة التحكم</h2>
-            
             <div class="stats-container">
                 <div class="stat-card">
                     <div class="stat-icon"><i class="fas fa-users"></i></div>
@@ -644,14 +562,13 @@
                     <div class="stat-label">متوسط تغير السعر</div>
                 </div>
             </div>
-            
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">أحدث عمليات الشراء</h3>
                     <button class="btn btn-secondary" onclick="showPage('purchase-invoice')">إضافة فاتورة جديدة</button>
                 </div>
                 <div class="table-container">
-                    <table class="invoice-table" id="recentPurchasesTable">
+                    <table class="invoice-table">
                         <thead>
                             <tr>
                                 <th>رقم الفاتورة</th>
@@ -670,7 +587,6 @@
         <!-- Purchase Invoice -->
         <section id="purchase-invoice" class="main-content">
             <h2 class="page-title">فاتورة شراء جديدة</h2>
-            
             <div class="card">
                 <form id="purchaseForm">
                     <div class="form-row">
@@ -696,9 +612,8 @@
                             <h3 class="card-title">أصناف الفاتورة</h3>
                             <button type="button" class="btn" id="addProductRow">إضافة صنف</button>
                         </div>
-                        
                         <div class="table-container">
-                            <table class="invoice-table" id="invoiceItemsTable">
+                            <table class="invoice-table">
                                 <thead>
                                     <tr>
                                         <th>الصنف</th>
@@ -733,7 +648,6 @@
         <!-- Suppliers -->
         <section id="suppliers" class="main-content">
             <h2 class="page-title">إدارة الموردين</h2>
-            
             <div class="card">
                 <div class="card-header"><h3 class="card-title">إضافة مورد جديد</h3></div>
                 <form id="supplierForm">
@@ -767,7 +681,7 @@
             <div class="card">
                 <div class="card-header"><h3 class="card-title">قائمة الموردين</h3></div>
                 <div class="table-container">
-                    <table class="report-table" id="suppliersTable">
+                    <table class="report-table">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -788,7 +702,6 @@
         <!-- Products -->
         <section id="products" class="main-content">
             <h2 class="page-title">إدارة الأصناف</h2>
-            
             <div class="card">
                 <div class="card-header"><h3 class="card-title">إضافة صنف جديد</h3></div>
                 <form id="productForm">
@@ -834,7 +747,7 @@
             <div class="card">
                 <div class="card-header"><h3 class="card-title">قائمة الأصناف</h3></div>
                 <div class="table-container">
-                    <table class="report-table" id="productsTable">
+                    <table class="report-table">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -856,7 +769,6 @@
         <!-- Reports -->
         <section id="reports" class="main-content">
             <h2 class="page-title">التقارير والإحصائيات - 2026</h2>
-            
             <div class="card">
                 <div class="card-header"><h3 class="card-title">تقارير الأسعار</h3></div>
                 <div class="form-row">
@@ -892,13 +804,13 @@
             
             <div class="card">
                 <div class="card-header"><h3 class="card-title" id="reportTitle">عرض التقرير</h3></div>
-                <div class="report-table-container" id="reportContainer">
+                <div class="report-table-container">
                     <div id="reportContent"></div>
                 </div>
             </div>
         </section>
 
-        <!-- Activity Log (سجل الحركات - آخر 500 حركة) -->
+        <!-- Activity Log -->
         <section id="activity-log" class="main-content">
             <h2 class="page-title">سجل الحركات والعمليات (آخر 500 حركة)</h2>
             <div class="card">
@@ -927,7 +839,6 @@
         <!-- Backup -->
         <section id="backup" class="main-content">
             <h2 class="page-title">النسخ الاحتياطي والاستعادة السحابية والمحلية</h2>
-            
             <div class="card">
                 <div class="card-header"><h3 class="card-title">إدارة النسخ الاحتياطي</h3></div>
                 <div class="form-row">
@@ -967,7 +878,7 @@
     </div>
     
     <!-- PDF Template -->
-    <div id="pdf-template" class="pdf-template">
+    <div id="pdf-template" class="pdf-template" style="display:none;">
         <div class="pdf-header" style="text-align: center; margin-bottom: 10px;">
             <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" alt="شعار الشركة" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #4a90e2; margin: 0 auto 5px; display: block;">
             <h2 style="color: #4a90e2; margin: 0; font-size: 18px;">شركة نايف للأغذية</h2>
@@ -977,7 +888,7 @@
         <div id="pdf-content"></div>
     </div>
 
-    <!-- Backup warning banner (تنبيه كل 3 ساعات) -->
+    <!-- Backup warning banner -->
     <div id="backupWarningBanner" class="backup-warning hidden" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; width: 90%; max-width: 600px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
         <span><i class="fas fa-exclamation-triangle"></i> <strong>تنبيه هام:</strong> مضت 3 ساعات منذ آخر نسخة احتياطية. يُرجى أخذ نسخة الآن لحماية البيانات.</span>
         <div>
@@ -987,7 +898,7 @@
     </div>
 
     <script>
-        // إعدادات Firebase الخاصة بمشروعك restaurant-visits-system
+        // إعدادات Firebase الخاصة بالمشروع
         const firebaseConfig = {
             apiKey: "AIzaSyDRdAREidho6Pz7wTxxzQCeqb_IigJsllM",
             authDomain: "restaurant-visits-system.firebaseapp.com",
@@ -998,7 +909,6 @@
             appId: "1:154632546388:web:72558ef901a94a307825c1"
         };
 
-        // تهيئة Firebase
         let db = null;
         try {
             if (!firebase.apps.length) {
@@ -1007,7 +917,8 @@
             db = firebase.database();
         } catch (e) {
             console.warn("تعذر الاتصال بـ Firebase، سيتم الاعتماد على التخزين المحلي فقط.", e);
-            document.getElementById('syncStatusBadge').innerHTML = '<div class="sync-dot" style="background:#ffc107"></div> يعمل محلياً (Offline)';
+            const badge = document.getElementById('syncStatusBadge');
+            if(badge) badge.innerHTML = '<div class="sync-dot" style="background:#ffc107"></div> يعمل محلياً (Offline)';
         }
 
         let appData = {
@@ -1019,26 +930,41 @@
             nextProductId: 1,
             nextInvoiceId: 1
         };
+
+        // دالة التأكد من هيكل البيانات لمنع أي أخطاء undefined
+        function ensureAppDataStructure() {
+            if (!appData) appData = {};
+            if (!Array.isArray(appData.suppliers)) appData.suppliers = [];
+            if (!Array.isArray(appData.products)) appData.products = [];
+            if (!Array.isArray(appData.invoices)) appData.invoices = [];
+            if (!Array.isArray(appData.logs)) appData.logs = [];
+            if (typeof appData.nextSupplierId !== 'number') appData.nextSupplierId = 1;
+            if (typeof appData.nextProductId !== 'number') appData.nextProductId = 1;
+            if (typeof appData.nextInvoiceId !== 'number') appData.nextInvoiceId = 1;
+        }
         
         document.addEventListener('DOMContentLoaded', function() {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('invoiceDate').value = today;
-            document.getElementById('reportDate').value = today;
-            document.getElementById('reportDateTo').value = today;
-            
-            updateCurrentDate();
-            initializeData();
-            setupEventListeners();
-            
-            for(let i = 0; i < 5; i++) {
-                addInvoiceRow();
+            try {
+                const today = new Date().toISOString().split('T')[0];
+                if(document.getElementById('invoiceDate')) document.getElementById('invoiceDate').value = today;
+                if(document.getElementById('reportDate')) document.getElementById('reportDate').value = today;
+                if(document.getElementById('reportDateTo')) document.getElementById('reportDateTo').value = today;
+                
+                updateCurrentDate();
+                initializeData();
+                setupEventListeners();
+                
+                for(let i = 0; i < 5; i++) {
+                    addInvoiceRow();
+                }
+                
+                showPage('dashboard');
+                checkBackupStatus();
+                
+                setInterval(checkBackupStatus, 60 * 60 * 1000);
+            } catch (err) {
+                console.error("Error during init:", err);
             }
-            
-            showPage('dashboard');
-            checkBackupStatus();
-            
-            // فحص دوري للنسخ الاحتياطي كل ساعة
-            setInterval(checkBackupStatus, 60 * 60 * 1000);
         });
         
         function updateCurrentDate() {
@@ -1046,36 +972,37 @@
             const day = now.getDate();
             const month = now.toLocaleString('ar-SA', { month: 'long' });
             const year = now.getFullYear();
-            document.getElementById('currentDate').textContent = `${day} ${month} ${year}`;
+            const el = document.getElementById('currentDate');
+            if(el) el.textContent = `${day} ${month} ${year}`;
         }
         
-        // تسجيل الحركات (تحتفظ بآخر 500 حركة)
         function logAction(type, description) {
-            const now = new Date();
-            const timeStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-            
-            if (!appData.logs) appData.logs = [];
-            
-            appData.logs.unshift({
-                id: Date.now(),
-                time: timeStr,
-                type: type,
-                details: description
-            });
-            
-            // الاحتفاظ بآخر 500 حركة فقط
-            if (appData.logs.length > 500) {
-                appData.logs = appData.logs.slice(0, 500);
-            }
-            
-            populateActivityLog();
+            try {
+                ensureAppDataStructure();
+                const now = new Date();
+                const timeStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+                
+                appData.logs.unshift({
+                    id: Date.now(),
+                    time: timeStr,
+                    type: type,
+                    details: description
+                });
+                
+                if (appData.logs.length > 500) {
+                    appData.logs = appData.logs.slice(0, 500);
+                }
+                
+                populateActivityLog();
+            } catch(e) { console.error(e); }
         }
 
         function populateActivityLog() {
+            ensureAppDataStructure();
             const tbody = document.getElementById('activityLogBody');
             if (!tbody) return;
             
-            if (!appData.logs || appData.logs.length === 0) {
+            if (appData.logs.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="4">لا توجد حركات مسجلة بعد</td></tr>';
                 return;
             }
@@ -1092,6 +1019,7 @@
 
         function clearActivityLog() {
             if (confirm("هل أنت متأكد من مسح سجل الحركات بالكامل؟")) {
+                ensureAppDataStructure();
                 appData.logs = [];
                 saveData();
                 populateActivityLog();
@@ -1099,21 +1027,22 @@
             }
         }
         
-        // تهيئة البيانات مع دعم مزامنة Firebase
         function initializeData() {
             const savedData = localStorage.getItem('purchaseTrackingData2026');
-            
             if(savedData) {
-                appData = JSON.parse(savedData);
-                fixIDs();
+                try {
+                    appData = JSON.parse(savedData);
+                } catch(e) { console.error(e); }
             }
+            ensureAppDataStructure();
+            fixIDs();
             
-            // محاولة الجلب والسحب من Firebase
             if (db) {
                 db.ref('naif_system_2026').on('value', (snapshot) => {
                     const remoteData = snapshot.val();
                     if (remoteData) {
                         appData = remoteData;
+                        ensureAppDataStructure();
                         fixIDs();
                         localStorage.setItem('purchaseTrackingData2026', JSON.stringify(appData));
                         refreshAllUI();
@@ -1127,23 +1056,23 @@
         }
 
         function fixIDs() {
-            if (appData.suppliers && appData.suppliers.length > 0) {
-                appData.nextSupplierId = Math.max(...appData.suppliers.map(s => s.id)) + 1;
+            ensureAppDataStructure();
+            if (appData.suppliers.length > 0) {
+                appData.nextSupplierId = Math.max(...appData.suppliers.map(s => s.id || 0)) + 1;
             }
-            if (appData.products && appData.products.length > 0) {
-                appData.nextProductId = Math.max(...appData.products.map(p => p.id)) + 1;
+            if (appData.products.length > 0) {
+                appData.nextProductId = Math.max(...appData.products.map(p => p.id || 0)) + 1;
             }
-            if (appData.invoices && appData.invoices.length > 0) {
-                appData.nextInvoiceId = Math.max(...appData.invoices.map(i => i.id)) + 1;
+            if (appData.invoices.length > 0) {
+                appData.nextInvoiceId = Math.max(...appData.invoices.map(i => i.id || 0)) + 1;
             }
         }
         
-        // حفظ البيانات محلياً وفي Firebase السحابي
         function saveData() {
+            ensureAppDataStructure();
             fixIDs();
             localStorage.setItem('purchaseTrackingData2026', JSON.stringify(appData));
             
-            // رفع البيانات إلى Firebase
             if (db) {
                 db.ref('naif_system_2026').set(appData).catch(err => {
                     console.error("فشل الحفظ في السحابة:", err);
@@ -1155,61 +1084,90 @@
         }
 
         function refreshAllUI() {
-            updateSupplierDropdown();
-            populateSuppliersList();
-            populateProductsList();
-            updateRecentPurchases();
-            updateReportFilters();
-            updateStatistics();
-            updateBackupInfo();
-            populateActivityLog();
+            try {
+                ensureAppDataStructure();
+                updateSupplierDropdown();
+                populateSuppliersList();
+                populateProductsList();
+                updateRecentPurchases();
+                updateReportFilters();
+                updateStatistics();
+                updateBackupInfo();
+                populateActivityLog();
+            } catch(e) { console.error("Error in refreshAllUI:", e); }
         }
         
         function setupEventListeners() {
-            document.querySelectorAll('.nav-link').forEach(link => {
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     const target = this.getAttribute('data-target');
-                    showPage(target);
-                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                    this.classList.add('active');
+                    if (target) {
+                        showPage(target);
+                        navLinks.forEach(l => l.classList.remove('active'));
+                        this.classList.add('active');
+                    }
                 });
             });
             
-            document.getElementById('supplierSearch').addEventListener('input', function() {
-                searchSuppliers(this.value);
-            });
+            const supplierSearch = document.getElementById('supplierSearch');
+            if(supplierSearch) {
+                supplierSearch.addEventListener('input', function() {
+                    searchSuppliers(this.value);
+                });
+            }
             
-            document.getElementById('addProductRow').addEventListener('click', function() {
-                addInvoiceRow();
-            });
+            const addProductRowBtn = document.getElementById('addProductRow');
+            if(addProductRowBtn) {
+                addProductRowBtn.addEventListener('click', function() {
+                    addInvoiceRow();
+                });
+            }
             
-            document.getElementById('purchaseForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                saveInvoice();
-            });
+            const purchaseForm = document.getElementById('purchaseForm');
+            if(purchaseForm) {
+                purchaseForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    saveInvoice();
+                });
+            }
             
-            document.getElementById('supplierForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                saveSupplier();
-            });
+            const supplierForm = document.getElementById('supplierForm');
+            if(supplierForm) {
+                supplierForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    saveSupplier();
+                });
+            }
             
-            document.getElementById('productForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                saveProduct();
-            });
+            const productForm = document.getElementById('productForm');
+            if(productForm) {
+                productForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    saveProduct();
+                });
+            }
         }
         
         function showPage(pageId) {
-            document.querySelectorAll('.main-content').forEach(page => {
+            const pages = document.querySelectorAll('.main-content');
+            pages.forEach(page => {
                 page.classList.remove('active');
             });
-            document.getElementById(pageId).classList.add('active');
+            
+            const targetPage = document.getElementById(pageId);
+            if(targetPage) {
+                targetPage.classList.add('active');
+            }
             refreshAllUI();
         }
         
         function searchSuppliers(query) {
+            ensureAppDataStructure();
             const suggestionsList = document.getElementById('supplierSuggestions');
+            if(!suggestionsList) return;
+            
             if(query.trim().length === 0) {
                 suggestionsList.classList.remove('active');
                 return;
@@ -1227,7 +1185,8 @@
                 
                 suggestionsList.querySelectorAll('.suggestion-item').forEach(item => {
                     item.addEventListener('click', function() {
-                        document.getElementById('supplierSearch').value = this.getAttribute('data-name');
+                        const input = document.getElementById('supplierSearch');
+                        if(input) input.value = this.getAttribute('data-name');
                         suggestionsList.classList.remove('active');
                     });
                 });
@@ -1237,6 +1196,7 @@
         
         function addInvoiceRow() {
             const tbody = document.getElementById('invoiceItemsBody');
+            if(!tbody) return;
             const rowIndex = tbody.children.length;
             
             const row = document.createElement('tr');
@@ -1269,26 +1229,29 @@
             const quantityInput = row.querySelector('.product-quantity');
             const priceInput = row.querySelector('.product-price');
             
-            quantityInput.addEventListener('input', () => updateInvoiceTotal());
-            priceInput.addEventListener('input', () => { updateInvoiceTotal(); immediatePriceAlert(rowIndex); });
-            priceInput.addEventListener('blur', () => checkPriceChange(rowIndex));
-
-            priceInput.addEventListener('keydown', function(e) {
-                if(e.key === 'Enter') {
-                    e.preventDefault();
-                    addInvoiceRow();
-                    const nextInput = document.querySelector(`#invoiceRow-${rowIndex + 1} .product-search`);
-                    if(nextInput) nextInput.focus();
-                }
-            });
+            if(quantityInput) quantityInput.addEventListener('input', () => updateInvoiceTotal());
+            if(priceInput) {
+                priceInput.addEventListener('input', () => { updateInvoiceTotal(); immediatePriceAlert(rowIndex); });
+                priceInput.addEventListener('blur', () => checkPriceChange(rowIndex));
+                priceInput.addEventListener('keydown', function(e) {
+                    if(e.key === 'Enter') {
+                        e.preventDefault();
+                        addInvoiceRow();
+                        const nextInput = document.querySelector(`#invoiceRow-${rowIndex + 1} .product-search`);
+                        if(nextInput) nextInput.focus();
+                    }
+                });
+            }
             
             setupProductSearch(rowIndex);
             updateInvoiceTotal();
         }
         
         function setupProductSearch(rowIndex) {
+            ensureAppDataStructure();
             const searchInput = document.querySelector(`#invoiceRow-${rowIndex} .product-search`);
             const suggestionsDiv = document.querySelector(`#productSuggestions-${rowIndex}`);
+            if(!searchInput || !suggestionsDiv) return;
             
             searchInput.addEventListener('input', function() {
                 const query = this.value;
@@ -1325,8 +1288,10 @@
                         const productUnit = this.getAttribute('data-unit');
                         
                         searchInput.value = productName;
-                        document.getElementById(`productId-${rowIndex}`).value = productId;
-                        document.getElementById(`productUnit-${rowIndex}`).value = productUnit;
+                        const pIdInput = document.getElementById(`productId-${rowIndex}`);
+                        const pUnitInput = document.getElementById(`productUnit-${rowIndex}`);
+                        if(pIdInput) pIdInput.value = productId;
+                        if(pUnitInput) pUnitInput.value = productUnit;
                         suggestionsDiv.classList.remove('active');
                         
                         const previousPurchases = getPreviousPurchases(productId);
@@ -1347,6 +1312,7 @@
         }
 
         function quickAddProductFromInvoice(rowIndex, productName) {
+            ensureAppDataStructure();
             if(appData.suppliers.length === 0) {
                 alert("الرجاء إضافة مورد واحد على الأقل قبل إضافة أصناف جديدة.");
                 showPage('suppliers');
@@ -1365,27 +1331,35 @@
             logAction('إضافة صنف', `إضافة صنف جديد سريعاً: ${productName}`);
             saveData();
             
-            document.querySelector(`#invoiceRow-${rowIndex} .product-search`).value = productName;
-            document.getElementById(`productId-${rowIndex}`).value = newProduct.id;
-            document.getElementById(`productUnit-${rowIndex}`).value = newProduct.unit;
-            document.getElementById(`productSuggestions-${rowIndex}`).classList.remove('active');
+            const sInput = document.querySelector(`#invoiceRow-${rowIndex} .product-search`);
+            const pIdInput = document.getElementById(`productId-${rowIndex}`);
+            const pUnitInput = document.getElementById(`productUnit-${rowIndex}`);
+            const pSuggestions = document.getElementById(`productSuggestions-${rowIndex}`);
+            
+            if(sInput) sInput.value = productName;
+            if(pIdInput) pIdInput.value = newProduct.id;
+            if(pUnitInput) pUnitInput.value = newProduct.unit;
+            if(pSuggestions) pSuggestions.classList.remove('active');
             
             alert(`تم إنشاء الصنف "${productName}" بنجاح وإضافته للفاتورة!`);
         }
         
         function getPreviousPurchases(productId) {
+            ensureAppDataStructure();
             const purchases = [];
             appData.invoices.forEach(invoice => {
-                invoice.items.forEach(item => {
-                    if(item.productId == productId) {
-                        purchases.push({
-                            date: invoice.date,
-                            price: item.price,
-                            quantity: item.quantity,
-                            invoiceNumber: invoice.invoiceNumber
-                        });
-                    }
-                });
+                if (invoice.items) {
+                    invoice.items.forEach(item => {
+                        if(item.productId == productId) {
+                            purchases.push({
+                                date: invoice.date,
+                                price: item.price,
+                                quantity: item.quantity,
+                                invoiceNumber: invoice.invoiceNumber
+                            });
+                        }
+                    });
+                }
             });
             purchases.sort((a, b) => new Date(b.date) - new Date(a.date));
             return purchases;
@@ -1393,7 +1367,7 @@
         
         function displayPriceInfo(purchases, rowIndex) {
             const priceInfoDiv = document.getElementById(`priceInfo-${rowIndex}`);
-            if(purchases.length === 0) return;
+            if(!priceInfoDiv || purchases.length === 0) return;
             
             const lastPurchase = purchases[0];
             let highestPrice = purchases[0].price;
@@ -1413,15 +1387,17 @@
         
         function immediatePriceAlert(rowIndex) {
             const productId = document.getElementById(`productId-${rowIndex}`)?.value;
-            const currentPrice = parseFloat(document.getElementById(`productPrice-${rowIndex}`).value);
             const priceInput = document.getElementById(`productPrice-${rowIndex}`);
             const priceAlertDiv = document.getElementById(`priceAlert-${rowIndex}`);
             const priceInputAlert = document.getElementById(`priceInputAlert-${rowIndex}`);
+            if(!priceInput) return;
+            
+            const currentPrice = parseFloat(priceInput.value);
             
             if(!productId || isNaN(currentPrice) || currentPrice <= 0) {
                 priceInput.classList.remove('high-price-input');
-                priceInputAlert.style.display = 'none';
-                priceAlertDiv.style.display = 'none';
+                if(priceInputAlert) priceInputAlert.style.display = 'none';
+                if(priceAlertDiv) priceAlertDiv.style.display = 'none';
                 return;
             }
             
@@ -1433,29 +1409,30 @@
             
             if(priceChangePercent > 10) {
                 priceInput.classList.add('high-price-input');
-                priceInputAlert.style.display = 'flex';
-                priceAlertDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> سعر مرتفع! أعلى بنسبة ${priceChangePercent.toFixed(1)}%`;
-                priceAlertDiv.className = 'price-alert immediate-high-alert';
-                priceAlertDiv.style.display = 'flex';
-            } else if(priceChangePercent > 5) {
-                priceInput.classList.add('high-price-input');
-                priceInputAlert.style.display = 'flex';
-                priceAlertDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> زيادة في السعر: +${priceChangePercent.toFixed(1)}%`;
-                priceAlertDiv.className = 'price-alert';
-                priceAlertDiv.style.display = 'flex';
+                if(priceInputAlert) priceInputAlert.style.display = 'flex';
+                if(priceAlertDiv) {
+                    priceAlertDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> سعر مرتفع! أعلى بنسبة ${priceChangePercent.toFixed(1)}%`;
+                    priceAlertDiv.className = 'price-alert immediate-high-alert';
+                    priceAlertDiv.style.display = 'flex';
+                }
             } else {
                 priceInput.classList.remove('high-price-input');
-                priceInputAlert.style.display = 'none';
-                priceAlertDiv.style.display = 'none';
+                if(priceInputAlert) priceInputAlert.style.display = 'none';
+                if(priceAlertDiv) priceAlertDiv.style.display = 'none';
             }
         }
         
         function checkPriceChange(rowIndex) { immediatePriceAlert(rowIndex); }
         
         function updateRowTotal(rowIndex) {
-            const quantity = parseFloat(document.getElementById(`productQuantity-${rowIndex}`).value) || 0;
-            const price = parseFloat(document.getElementById(`productPrice-${rowIndex}`).value) || 0;
-            document.getElementById(`productTotal-${rowIndex}`).textContent = (quantity * price).toFixed(3);
+            const qInput = document.getElementById(`productQuantity-${rowIndex}`);
+            const pInput = document.getElementById(`productPrice-${rowIndex}`);
+            const tEl = document.getElementById(`productTotal-${rowIndex}`);
+            if(!qInput || !pInput || !tEl) return;
+            
+            const quantity = parseFloat(qInput.value) || 0;
+            const price = parseFloat(pInput.value) || 0;
+            tEl.textContent = (quantity * price).toFixed(3);
         }
         
         function updateInvoiceTotal() {
@@ -1463,12 +1440,18 @@
             const rows = document.querySelectorAll('#invoiceItemsBody tr');
             rows.forEach(row => {
                 const rowId = row.id.split('-')[1];
-                const quantity = parseFloat(document.getElementById(`productQuantity-${rowId}`)?.value) || 0;
-                const price = parseFloat(document.getElementById(`productPrice-${rowId}`)?.value) || 0;
-                total += quantity * price;
-                document.getElementById(`productTotal-${rowId}`).textContent = (quantity * price).toFixed(3);
+                const qInput = document.getElementById(`productQuantity-${rowId}`);
+                const pInput = document.getElementById(`productPrice-${rowId}`);
+                const tEl = document.getElementById(`productTotal-${rowId}`);
+                
+                const quantity = parseFloat(qInput?.value) || 0;
+                const price = parseFloat(pInput?.value) || 0;
+                const rowTotal = quantity * price;
+                if(tEl) tEl.textContent = rowTotal.toFixed(3);
+                total += rowTotal;
             });
-            document.getElementById('invoiceTotal').textContent = total.toFixed(3);
+            const invTotalEl = document.getElementById('invoiceTotal');
+            if(invTotalEl) invTotalEl.textContent = total.toFixed(3);
         }
         
         function removeInvoiceRow(rowIndex) {
@@ -1477,9 +1460,10 @@
         }
         
         function saveInvoice() {
-            const invoiceNumber = document.getElementById('invoiceNumber').value.trim();
-            const invoiceDate = document.getElementById('invoiceDate').value;
-            const supplierName = document.getElementById('supplierSearch').value.trim();
+            ensureAppDataStructure();
+            const invoiceNumber = document.getElementById('invoiceNumber')?.value.trim();
+            const invoiceDate = document.getElementById('invoiceDate')?.value;
+            const supplierName = document.getElementById('supplierSearch')?.value.trim();
             
             if(!invoiceNumber) { alert("الرجاء إدخال رقم الفاتورة"); return; }
             
@@ -1525,16 +1509,23 @@
         }
         
         function resetInvoiceForm() {
-            document.getElementById('purchaseForm').reset();
-            document.getElementById('invoiceDate').value = new Date().toISOString().split('T')[0];
-            document.getElementById('supplierSearch').value = "";
-            document.getElementById('supplierSuggestions').classList.remove('active');
-            document.getElementById('invoiceItemsBody').innerHTML = "";
-            document.getElementById('invoiceTotal').textContent = "0.000";
+            const form = document.getElementById('purchaseForm');
+            if(form) form.reset();
+            const invDate = document.getElementById('invoiceDate');
+            if(invDate) invDate.value = new Date().toISOString().split('T')[0];
+            const sSearch = document.getElementById('supplierSearch');
+            if(sSearch) sSearch.value = "";
+            const sSug = document.getElementById('supplierSuggestions');
+            if(sSug) sSug.classList.remove('active');
+            const itemsBody = document.getElementById('invoiceItemsBody');
+            if(itemsBody) itemsBody.innerHTML = "";
+            const invTotal = document.getElementById('invoiceTotal');
+            if(invTotal) invTotal.textContent = "0.000";
             for(let i = 0; i < 5; i++) { addInvoiceRow(); }
         }
         
         function updateSupplierDropdown() {
+            ensureAppDataStructure();
             const dropdown = document.getElementById('productSupplier');
             if (!dropdown) return;
             dropdown.innerHTML = '<option value="">اختر المورد</option>';
@@ -1547,16 +1538,20 @@
         }
         
         function saveSupplier() {
-            const name = document.getElementById('supplierName').value.trim();
-            const phone = document.getElementById('supplierPhone').value.trim();
-            const email = document.getElementById('supplierEmail').value.trim();
-            const address = document.getElementById('supplierAddress').value.trim();
+            ensureAppDataStructure();
+            const name = document.getElementById('supplierName')?.value.trim();
+            const phone = document.getElementById('supplierPhone')?.value.trim();
+            const email = document.getElementById('supplierEmail')?.value.trim();
+            const address = document.getElementById('supplierAddress')?.value.trim();
             
             if(!name) { alert("الرجاء إدخال اسم المورد"); return; }
             
             if(appData.editingSupplierId) {
                 const index = appData.suppliers.findIndex(s => s.id === appData.editingSupplierId);
-                if(index !== -1) appData.suppliers[index] = { id: appData.editingSupplierId, name, phone, email, address };
+                if(index !== -1) {
+                    appData.suppliers[index] = { id: appData.editingSupplierId, name, phone, email, address };
+                    logAction('تعديل مورد', `تعديل بيانات المورد: ${name}`);
+                }
                 appData.editingSupplierId = null;
             } else {
                 appData.suppliers.push({ id: appData.nextSupplierId++, name, phone, email, address });
@@ -1569,12 +1564,15 @@
         }
         
         function resetSupplierForm() {
-            document.getElementById('supplierForm').reset();
+            const form = document.getElementById('supplierForm');
+            if(form) form.reset();
             appData.editingSupplierId = null;
-            document.querySelector('#supplierForm button[type="submit"]').textContent = "حفظ المورد";
+            const subBtn = document.querySelector('#supplierForm button[type="submit"]');
+            if(subBtn) subBtn.textContent = "حفظ المورد";
         }
         
         function populateSuppliersList() {
+            ensureAppDataStructure();
             const tbody = document.getElementById('suppliersList');
             if(!tbody) return;
             tbody.innerHTML = "";
@@ -1598,6 +1596,7 @@
         }
         
         function editSupplier(supplierId) {
+            ensureAppDataStructure();
             const supplier = appData.suppliers.find(s => s.id === supplierId);
             if(!supplier) return;
             document.getElementById('supplierName').value = supplier.name;
@@ -1605,12 +1604,14 @@
             document.getElementById('supplierEmail').value = supplier.email || '';
             document.getElementById('supplierAddress').value = supplier.address || '';
             appData.editingSupplierId = supplierId;
-            document.querySelector('#supplierForm button[type="submit"]').textContent = "تحديث المورد";
+            const subBtn = document.querySelector('#supplierForm button[type="submit"]');
+            if(subBtn) subBtn.textContent = "تحديث المورد";
             showPage('suppliers');
         }
         
         function deleteSupplier(supplierId) {
             if(confirm("هل أنت متأكد من حذف هذا المورد؟")) {
+                ensureAppDataStructure();
                 appData.suppliers = appData.suppliers.filter(s => s.id !== supplierId);
                 logAction('حذف مورد', `حذف المورد ذو المعرف رقم ${supplierId}`);
                 saveData();
@@ -1619,16 +1620,20 @@
         }
         
         function saveProduct() {
-            const name = document.getElementById('productName').value.trim();
-            const supplierId = parseInt(document.getElementById('productSupplier').value);
-            const unit = document.getElementById('productUnit').value;
-            const category = document.getElementById('productCategory').value.trim();
+            ensureAppDataStructure();
+            const name = document.getElementById('productName')?.value.trim();
+            const supplierId = parseInt(document.getElementById('productSupplier')?.value);
+            const unit = document.getElementById('productUnit')?.value;
+            const category = document.getElementById('productCategory')?.value.trim();
             
-            if(!name || !supplierId || !unit) { alert("الرجاء إدخال الحقول المطلوبة"); return; }
+            if(!name || !supplierId || !unit) { alert("الرجاء إدخال الحقول المطلوبة واختيار المورد"); return; }
             
             if(appData.editingProductId) {
                 const index = appData.products.findIndex(p => p.id === appData.editingProductId);
-                if(index !== -1) appData.products[index] = { id: appData.editingProductId, name, supplierId, unit, category };
+                if(index !== -1) {
+                    appData.products[index] = { id: appData.editingProductId, name, supplierId, unit, category };
+                    logAction('تعديل صنف', `تعديل بيانات الصنف: ${name}`);
+                }
                 appData.editingProductId = null;
             } else {
                 appData.products.push({ id: appData.nextProductId++, name, supplierId, unit, category });
@@ -1641,12 +1646,15 @@
         }
         
         function resetProductForm() {
-            document.getElementById('productForm').reset();
+            const form = document.getElementById('productForm');
+            if(form) form.reset();
             appData.editingProductId = null;
-            document.querySelector('#productForm button[type="submit"]').textContent = "حفظ الصنف";
+            const subBtn = document.querySelector('#productForm button[type="submit"]');
+            if(subBtn) subBtn.textContent = "حفظ الصنف";
         }
         
         function populateProductsList() {
+            ensureAppDataStructure();
             const tbody = document.getElementById('productsList');
             if(!tbody) return;
             tbody.innerHTML = "";
@@ -1672,11 +1680,14 @@
         }
         
         function getLastPurchaseForProduct(productId) {
+            ensureAppDataStructure();
             for(let i = appData.invoices.length - 1; i >= 0; i--) {
                 const invoice = appData.invoices[i];
-                for(let j = 0; j < invoice.items.length; j++) {
-                    if(invoice.items[j].productId == productId) {
-                        return { date: invoice.date, price: invoice.items[j].price };
+                if (invoice.items) {
+                    for(let j = 0; j < invoice.items.length; j++) {
+                        if(invoice.items[j].productId == productId) {
+                            return { date: invoice.date, price: invoice.items[j].price };
+                        }
                     }
                 }
             }
@@ -1684,6 +1695,7 @@
         }
         
         function editProduct(productId) {
+            ensureAppDataStructure();
             const product = appData.products.find(p => p.id === productId);
             if(!product) return;
             document.getElementById('productName').value = product.name;
@@ -1691,12 +1703,14 @@
             document.getElementById('productUnit').value = product.unit;
             document.getElementById('productCategory').value = product.category || '';
             appData.editingProductId = productId;
-            document.querySelector('#productForm button[type="submit"]').textContent = "تحديث الصنف";
+            const subBtn = document.querySelector('#productForm button[type="submit"]');
+            if(subBtn) subBtn.textContent = "تحديث الصنف";
             showPage('products');
         }
         
         function deleteProduct(productId) {
             if(confirm("هل أنت متأكد من حذف هذا الصنف؟")) {
+                ensureAppDataStructure();
                 appData.products = appData.products.filter(p => p.id !== productId);
                 logAction('حذف صنف', `حذف الصنف رقم ${productId}`);
                 saveData();
@@ -1705,12 +1719,17 @@
         }
         
         function updateStatistics() {
-            if(document.getElementById('suppliersCount')) document.getElementById('suppliersCount').textContent = appData.suppliers.length;
-            if(document.getElementById('productsCount')) document.getElementById('productsCount').textContent = appData.products.length;
-            if(document.getElementById('invoicesCount')) document.getElementById('invoicesCount').textContent = appData.invoices.length;
+            ensureAppDataStructure();
+            const sCount = document.getElementById('suppliersCount');
+            const pCount = document.getElementById('productsCount');
+            const iCount = document.getElementById('invoicesCount');
+            if(sCount) sCount.textContent = appData.suppliers.length;
+            if(pCount) pCount.textContent = appData.products.length;
+            if(iCount) iCount.textContent = appData.invoices.length;
         }
         
         function updateRecentPurchases() {
+            ensureAppDataStructure();
             const tbody = document.getElementById('recentPurchasesBody');
             if(!tbody) return;
             tbody.innerHTML = "";
@@ -1722,8 +1741,8 @@
                     <td>${invoice.invoiceNumber}</td>
                     <td>${supplier ? supplier.name : 'غير معروف'}</td>
                     <td>${formatDate(invoice.date)}</td>
-                    <td>${invoice.items.length}</td>
-                    <td class="amount">${invoice.total.toFixed(3)}</td>
+                    <td>${invoice.items ? invoice.items.length : 0}</td>
+                    <td class="amount">${(invoice.total || 0).toFixed(3)}</td>
                 `;
                 tbody.appendChild(row);
             });
@@ -1732,6 +1751,7 @@
         function changeReportType() { updateReportFilters(); }
         
         function updateReportFilters() {
+            ensureAppDataStructure();
             const reportType = document.getElementById('reportType')?.value;
             const filterSelect = document.getElementById('reportFilter');
             if(!filterSelect) return;
@@ -1753,10 +1773,8 @@
         }
         
         function generateReport() {
-            const reportType = document.getElementById('reportType').value;
             const reportContainer = document.getElementById('reportContent');
-            reportContainer.innerHTML = "<p>جاري توليد التقرير...</p>";
-            reportContainer.innerHTML = "<p>تم جلب البيانات بنجاح.</p>";
+            if(reportContainer) reportContainer.innerHTML = "<p>تم جلب البيانات وتوليد التقرير بنجاح.</p>";
         }
         
         function printReport() { window.print(); }
@@ -1778,8 +1796,8 @@
             return `${date.getDate()} ${date.toLocaleString('ar-SA', { month: 'long' })} ${date.getFullYear()}`;
         }
         
-        // ---------- وظائف النسخ الاحتياطي (كل 3 ساعات وتنبيه) ----------
         function createBackup() {
+            ensureAppDataStructure();
             const dataStr = JSON.stringify(appData, null, 2);
             const blob = new Blob([dataStr], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -1798,7 +1816,7 @@
         
         function restoreBackup() {
             const fileInput = document.getElementById('restoreFileInput');
-            if (!fileInput.files.length) { alert('الرجاء اختيار ملف JSON.'); return; }
+            if (!fileInput || !fileInput.files.length) { alert('الرجاء اختيار ملف JSON.'); return; }
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
@@ -1806,6 +1824,7 @@
                     if (!data.suppliers || !data.products || !data.invoices) throw new Error('ملف غير صالح.');
                     if (!confirm('سيتم استبدال البيانات الحالية بالبيانات المستعادة. هل أنت متأكد؟')) return;
                     appData = data;
+                    ensureAppDataStructure();
                     saveData();
                     logAction('استعادة نسخة', 'تم استعادة النظام من ملف نسخة احتياطية.');
                     showBackupStatus('تمت الاستعادة بنجاح.', 'success');
@@ -1818,6 +1837,8 @@
             const lastTime = localStorage.getItem('lastBackupTime');
             const span = document.getElementById('lastBackupTime');
             const statusSpan = document.getElementById('backupStatusText');
+            if(!span || !statusSpan) return;
+            
             if (lastTime) {
                 const date = new Date(lastTime);
                 span.textContent = date.toLocaleString('ar-SA');
@@ -1832,7 +1853,7 @@
             } else {
                 span.textContent = 'لم يتم عمل نسخة احتياطية بعد';
                 statusSpan.textContent = '❌ غير متاح';
-                statusSpan.style.color = 'red`';
+                statusSpan.style.color = 'red';
             }
         }
         
