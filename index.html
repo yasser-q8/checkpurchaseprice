@@ -8,11 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
-    <!-- Firebase SDK Compat -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-
     <style>
         :root {
             --primary-green: #00FF9D;
@@ -46,6 +41,47 @@
             padding: 20px;
         }
         
+        /* Login Modal Styles */
+        #loginModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .login-box {
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            border: 2px solid var(--light-blue);
+        }
+        
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            border: 3px solid var(--light-blue);
+            overflow: hidden;
+        }
+        
+        .login-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         /* Header Styles */
         header {
             background: linear-gradient(135deg, var(--header-blue), var(--light-blue));
@@ -118,20 +154,18 @@
         
         .nav-tabs li {
             flex: 1;
-            min-width: 130px;
+            min-width: 150px;
         }
         
         .nav-tabs li a {
             display: block;
-            padding: 15px 15px;
+            padding: 15px 20px;
             text-decoration: none;
             color: var(--text-color);
             text-align: center;
             font-weight: 600;
             transition: all 0.3s ease;
             border-bottom: 3px solid transparent;
-            font-size: 0.95rem;
-            cursor: pointer;
         }
         
         .nav-tabs li a:hover, .nav-tabs li a.active {
@@ -142,12 +176,12 @@
         
         /* Main Content */
         .main-content {
-            display: none !important;
+            display: none;
         }
         
         .main-content.active {
-            display: block !important;
-            animation: fadeIn 0.4s ease;
+            display: block;
+            animation: fadeIn 0.5s ease;
         }
         
         @keyframes fadeIn {
@@ -298,13 +332,6 @@
         .suggestion-item:hover {
             background-color: rgba(74, 144, 226, 0.1);
         }
-
-        .suggestion-action {
-            background-color: rgba(0, 255, 157, 0.15);
-            color: #006600;
-            font-weight: bold;
-            text-align: center;
-        }
         
         /* Invoice Table */
         .invoice-table {
@@ -344,9 +371,20 @@
             font-size: 0.8rem;
         }
         
-        .last-price { background-color: rgba(0, 255, 157, 0.15); color: #006600; }
-        .high-price { background-color: rgba(255, 0, 0, 0.1); color: #990000; }
-        .low-price { background-color: rgba(0, 150, 255, 0.1); color: #004080; }
+        .last-price {
+            background-color: rgba(0, 255, 157, 0.15);
+            color: #006600;
+        }
+        
+        .high-price {
+            background-color: rgba(255, 0, 0, 0.1);
+            color: #990000;
+        }
+        
+        .low-price {
+            background-color: rgba(0, 150, 255, 0.1);
+            color: #004080;
+        }
         
         /* Statistics Cards */
         .stats-container {
@@ -385,10 +423,15 @@
             margin-bottom: 5px;
         }
         
-        .stat-label { font-size: 1rem; color: #666; }
+        .stat-label {
+            font-size: 1rem;
+            color: #666;
+        }
         
-        /* Report & Log Tables */
-        .report-table-container { overflow-x: auto; }
+        /* Report Tables */
+        .report-table-container {
+            overflow-x: auto;
+        }
         
         .report-table {
             width: 100%;
@@ -409,17 +452,70 @@
             font-weight: 600;
         }
         
-        .report-table tr:nth-child(even) { background-color: rgba(74, 144, 226, 0.03); }
-        .report-table tr:hover { background-color: rgba(74, 144, 226, 0.08); }
-        
-        @media (max-width: 768px) {
-            .nav-tabs { flex-direction: column; }
-            .form-row { flex-direction: column; }
-            .stats-container { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
-            .company-name { font-size: 1.5rem; }
+        .report-table tr:nth-child(even) {
+            background-color: rgba(74, 144, 226, 0.03);
         }
         
-        /* Developer Signature */
+        .report-table tr:hover {
+            background-color: rgba(74, 144, 226, 0.08);
+        }
+        
+        /* Invoice Details Table */
+        .invoice-details-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .invoice-details-table th, .invoice-details-table td {
+            padding: 12px 15px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+        
+        .invoice-details-table th {
+            background: linear-gradient(135deg, var(--light-blue), var(--header-blue));
+            color: white;
+            font-weight: 600;
+        }
+        
+        .invoice-details-table tr:nth-child(even) {
+            background-color: rgba(74, 144, 226, 0.05);
+        }
+        
+        .invoice-details-table .total-row {
+            background-color: rgba(255, 110, 0, 0.1);
+            font-weight: bold;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            
+            .company-name {
+                font-size: 1.5rem;
+            }
+            
+            .invoice-table th, .invoice-table td {
+                padding: 8px 10px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* توقيع المطور - معدل */
         .signature-card {
             position: fixed;
             bottom: 20px;
@@ -429,21 +525,50 @@
             padding: 8px 14px;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             font-size: 0.7rem;
             font-weight: 600;
             z-index: 1000;
             animation: float 6s ease-in-out infinite;
+            transition: all 0.3s ease;
+            cursor: pointer;
             border: 2px solid #dc3545;
             transform: scale(0.75);
             transform-origin: bottom left;
         }
+
+        .signature-card:hover { 
+            transform: scale(0.8); 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2); 
+        }
+
         @keyframes float { 
             0% { transform: translateY(0px) scale(0.75); } 
             50% { transform: translateY(-12px) scale(0.75); } 
             100% { transform: translateY(0px) scale(0.75); } 
         }
-        .signature-card a { color: #dc3545; text-decoration: none; }
-        
+
+        .signature-card .name { 
+            font-size: 0.85rem; 
+            font-weight: 700; 
+            margin-bottom: 3px; 
+        }
+
+        .signature-card .title { 
+            font-size: 0.65rem; 
+            opacity: 0.8; 
+            font-weight: 500;
+        }
+
+        .signature-card a {
+            color: #dc3545;
+            text-decoration: none;
+        }
+        .signature-card a:hover {
+            text-decoration: underline;
+        }
+
+        /* كارت فكرة البرنامج - معدل */
         .idea-card {
             position: fixed;
             bottom: 20px;
@@ -453,28 +578,90 @@
             padding: 8px 14px;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             font-size: 0.7rem;
             font-weight: 600;
             z-index: 1000;
             animation: floatRight 6s ease-in-out infinite;
+            transition: all 0.3s ease;
+            cursor: pointer;
             border: 2px solid #dc3545;
             transform: scale(0.75);
             transform-origin: bottom right;
             text-align: center;
+            max-width: 180px;
         }
+
+        .idea-card:hover { 
+            transform: scale(0.8); 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2); 
+        }
+
         @keyframes floatRight { 
             0% { transform: translateY(0px) translateX(0px) scale(0.75); } 
             50% { transform: translateY(-12px) translateX(-5px) scale(0.75); } 
             100% { transform: translateY(0px) translateX(0px) scale(0.75); } 
         }
-        .idea-card .name { font-size: 0.85rem; font-weight: 700; color: #dc3545; }
+
+        .idea-card .name { 
+            font-size: 0.85rem; 
+            font-weight: 700; 
+            margin-bottom: 3px; 
+            color: #dc3545;
+        }
+
+        .idea-card .program-idea {
+            font-size: 0.7rem;
+            margin-top: 4px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        @media (max-width: 768px) { 
+            .signature-card { 
+                position: relative; 
+                bottom: auto; 
+                left: auto; 
+                margin: 20px auto 0; 
+                width: fit-content; 
+                animation: none; 
+                transform: none;
+                transform-origin: initial;
+            } 
+            .signature-card:hover { 
+                transform: none; 
+            }
+            .idea-card { 
+                position: relative; 
+                bottom: auto; 
+                right: auto; 
+                margin: 20px auto 0; 
+                width: fit-content; 
+                max-width: 90%;
+                animation: none; 
+                transform: none;
+                transform-origin: initial;
+            } 
+        }
 
         @media print {
-            .signature-card, .idea-card, .backup-warning { display: none !important; }
-            body { background-color: white !important; }
+            .signature-card, .idea-card, #loginModal {
+                display: none !important;
+            }
+            body {
+                background-color: white !important;
+            }
+            .card {
+                box-shadow: none !important;
+                border: 1px solid #ccc !important;
+            }
         }
         
-        .amount { font-family: 'Courier New', monospace; font-weight: bold; }
+        .amount {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+        
         .invoice-badge {
             display: inline-block;
             background: linear-gradient(135deg, var(--primary-orange), var(--light-blue));
@@ -484,28 +671,133 @@
             font-weight: bold;
             margin: 5px;
         }
-        .warning-message { background-color: #FFF3CD; color: #856404; padding: 10px 15px; border-radius: 5px; border: 1px solid #FFEAA7; margin-bottom: 15px; }
-        .success-message { background-color: #D4EDDA; color: #155724; padding: 10px 15px; border-radius: 5px; border: 1px solid #C3E6CB; margin-bottom: 15px; }
         
-        .backup-warning {
-            background-color: #fff3cd; color: #856404; padding: 12px 20px; border-radius: 8px; border: 1px solid #ffeaa7; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
-        }
-        .hidden { display: none !important; }
-
-        .sync-badge {
-            display: inline-flex;
+        .warning-message {
+            background-color: #FFF3CD;
+            color: #856404;
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: 1px solid #FFEAA7;
+            margin-bottom: 15px;
+            display: flex;
             align-items: center;
-            gap: 6px;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            background: rgba(255,255,255,0.2);
-            color: white;
+            gap: 10px;
         }
-        .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: #00FF9D; }
+        
+        .success-message {
+            background-color: #D4EDDA;
+            color: #155724;
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: 1px solid #C3E6CB;
+            margin-bottom: 15px;
+        }
+        
+        .price-alert {
+            background-color: #F8D7DA;
+            color: #721C24;
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: 1px solid #F5C6CB;
+            margin-top: 5px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .price-alert.high-price-alert {
+            background-color: #F8D7DA;
+            color: #721C24;
+            border-color: #F5C6CB;
+        }
+        
+        .price-alert.low-price-alert {
+            background-color: #D1ECF1;
+            color: #0C5460;
+            border-color: #BEE5EB;
+        }
+        
+        .price-alert.immediate-high-alert {
+            background-color: #DC3545;
+            color: white;
+            border-color: #C82333;
+            font-weight: bold;
+        }
+        
+        .high-price-input {
+            border-color: #DC3545 !important;
+            background-color: #FFF5F5 !important;
+        }
+        
+        .price-input-container {
+            position: relative;
+        }
+        
+        .price-input-alert {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #DC3545;
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            z-index: 10;
+        }
+        
+        .pdf-template {
+            position: fixed;
+            left: -10000px;
+            top: -10000px;
+            width: 794px;
+            height: 1123px;
+            background: white;
+            padding: 10px;
+            box-sizing: border-box;
+            z-index: -1000;
+            font-size: 12px;
+            font-family: 'Times New Roman', serif;
+            direction: rtl;
+        }
+        
+        .pdf-header {
+            padding: 5px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .pdf-header-row {
+            margin-bottom: 10px;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
+    <!-- شاشة تسجيل الدخول -->
+    <div id="loginModal">
+        <div class="login-box">
+            <div class="login-logo">
+                <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" alt="شركة نايف للأغذية">
+            </div>
+            <h3 style="color: var(--header-blue); margin-bottom: 10px;">شركة نايف للأغذية</h3>
+            <p style="color: #666; font-size: 0.95rem; margin-bottom: 20px;">نظام مراقبة أسعار الشراء - 2026</p>
+            <div class="form-group">
+                <input type="password" id="loginPasswordInput" placeholder="أدخل كلمة المرور (555666)" style="text-align: center; font-size: 1.1rem; letter-spacing: 2px;" autofocus>
+            </div>
+            <button class="btn" onclick="checkLogin()" style="width: 100%; padding: 12px; font-size: 1rem;">دخول النظام</button>
+            <div id="loginErrorMsg" style="color: #DC3545; margin-top: 12px; font-size: 0.9rem; font-weight: 600;"></div>
+        </div>
+    </div>
+
     <div class="container">
         <!-- Header -->
         <header>
@@ -513,10 +805,7 @@
                 <div class="logo">
                     <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" alt="شركة نايف للأغذية">
                 </div>
-                <div>
-                    <div class="company-name">شركة نايف للأغذية</div>
-                    <div class="sync-badge" id="syncStatusBadge"><div class="sync-dot"></div> متصل بالسحابية (Firebase)</div>
-                </div>
+                <div class="company-name">شركة نايف للأغذية</div>
             </div>
             <div class="header-info">
                 <div class="date-display" id="currentDate"></div>
@@ -527,19 +816,19 @@
         <!-- Navigation -->
         <nav>
             <ul class="nav-tabs">
-                <li><a class="nav-link active" data-target="dashboard">لوحة التحكم</a></li>
-                <li><a class="nav-link" data-target="purchase-invoice">فاتورة شراء</a></li>
-                <li><a class="nav-link" data-target="suppliers">الموردين</a></li>
-                <li><a class="nav-link" data-target="products">الأصناف</a></li>
-                <li><a class="nav-link" data-target="reports">التقارير</a></li>
-                <li><a class="nav-link" data-target="activity-log">سجل الحركات</a></li>
-                <li><a class="nav-link" data-target="backup">النسخ الاحتياطي</a></li>
+                <li><a href="#" class="nav-link active" data-target="dashboard">لوحة التحكم</a></li>
+                <li><a href="#" class="nav-link" data-target="purchase-invoice">فاتورة شراء</a></li>
+                <li><a href="#" class="nav-link" data-target="suppliers">الموردين</a></li>
+                <li><a href="#" class="nav-link" data-target="products">الأصناف</a></li>
+                <li><a href="#" class="nav-link" data-target="reports">التقارير</a></li>
+                <li><a href="#" class="nav-link" data-target="backup">سجل الحركات والنسخ السحابي</a></li>
             </ul>
         </nav>
         
         <!-- Dashboard -->
         <section id="dashboard" class="main-content active">
             <h2 class="page-title">لوحة التحكم</h2>
+            
             <div class="stats-container">
                 <div class="stat-card">
                     <div class="stat-icon"><i class="fas fa-users"></i></div>
@@ -562,13 +851,14 @@
                     <div class="stat-label">متوسط تغير السعر</div>
                 </div>
             </div>
+            
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">أحدث عمليات الشراء</h3>
                     <button class="btn btn-secondary" onclick="showPage('purchase-invoice')">إضافة فاتورة جديدة</button>
                 </div>
                 <div class="table-container">
-                    <table class="invoice-table">
+                    <table class="invoice-table" id="recentPurchasesTable">
                         <thead>
                             <tr>
                                 <th>رقم الفاتورة</th>
@@ -587,21 +877,22 @@
         <!-- Purchase Invoice -->
         <section id="purchase-invoice" class="main-content">
             <h2 class="page-title">فاتورة شراء جديدة</h2>
+            
             <div class="card">
                 <form id="purchaseForm">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="invoiceNumber">رقم الفاتورة *</label>
-                            <input type="text" id="invoiceNumber" placeholder="أدخل رقم الفاتورة كما في الأصل" required>
+                            <input type="text" id="invoiceNumber" placeholder="أدخل رقم الفاتورة كما في الفاتورة الأصلية" required>
                         </div>
                         <div class="form-group">
                             <label for="invoiceDate">تاريخ الفاتورة</label>
                             <input type="date" id="invoiceDate" required>
                         </div>
                         <div class="form-group">
-                            <label for="supplierSearch">بحث عن المورد *</label>
+                            <label for="supplierSearch">بحث عن المورد</label>
                             <div class="suggestions-container">
-                                <input type="text" id="supplierSearch" placeholder="اكتب اسم المورد للبحث" autocomplete="off" required>
+                                <input type="text" id="supplierSearch" placeholder="اكتب اسم المورد للبحث" autocomplete="off">
                                 <div class="suggestions-list" id="supplierSuggestions"></div>
                             </div>
                         </div>
@@ -612,8 +903,9 @@
                             <h3 class="card-title">أصناف الفاتورة</h3>
                             <button type="button" class="btn" id="addProductRow">إضافة صنف</button>
                         </div>
+                        
                         <div class="table-container">
-                            <table class="invoice-table">
+                            <table class="invoice-table" id="invoiceItemsTable">
                                 <thead>
                                     <tr>
                                         <th>الصنف</th>
@@ -648,8 +940,11 @@
         <!-- Suppliers -->
         <section id="suppliers" class="main-content">
             <h2 class="page-title">إدارة الموردين</h2>
+            
             <div class="card">
-                <div class="card-header"><h3 class="card-title">إضافة مورد جديد</h3></div>
+                <div class="card-header">
+                    <h3 class="card-title">إضافة مورد جديد</h3>
+                </div>
                 <form id="supplierForm">
                     <div class="form-row">
                         <div class="form-group">
@@ -679,9 +974,11 @@
             </div>
             
             <div class="card">
-                <div class="card-header"><h3 class="card-title">قائمة الموردين</h3></div>
+                <div class="card-header">
+                    <h3 class="card-title">قائمة الموردين</h3>
+                </div>
                 <div class="table-container">
-                    <table class="report-table">
+                    <table class="report-table" id="suppliersTable">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -702,8 +999,11 @@
         <!-- Products -->
         <section id="products" class="main-content">
             <h2 class="page-title">إدارة الأصناف</h2>
+            
             <div class="card">
-                <div class="card-header"><h3 class="card-title">إضافة صنف جديد</h3></div>
+                <div class="card-header">
+                    <h3 class="card-title">إضافة صنف جديد</h3>
+                </div>
                 <form id="productForm">
                     <div class="form-row">
                         <div class="form-group">
@@ -745,9 +1045,11 @@
             </div>
             
             <div class="card">
-                <div class="card-header"><h3 class="card-title">قائمة الأصناف</h3></div>
+                <div class="card-header">
+                    <h3 class="card-title">قائمة الأصناف</h3>
+                </div>
                 <div class="table-container">
-                    <table class="report-table">
+                    <table class="report-table" id="productsTable">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -769,8 +1071,11 @@
         <!-- Reports -->
         <section id="reports" class="main-content">
             <h2 class="page-title">التقارير والإحصائيات - 2026</h2>
+            
             <div class="card">
-                <div class="card-header"><h3 class="card-title">تقارير الأسعار</h3></div>
+                <div class="card-header">
+                    <h3 class="card-title">تقارير الأسعار</h3>
+                </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="reportType">نوع التقرير</label>
@@ -784,7 +1089,9 @@
                     </div>
                     <div class="form-group">
                         <label for="reportFilter">فلتر حسب</label>
-                        <select id="reportFilter"><option value="all">الكل</option></select>
+                        <select id="reportFilter">
+                            <option value="all">الكل</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="reportDate">التاريخ من</label>
@@ -803,63 +1110,58 @@
             </div>
             
             <div class="card">
-                <div class="card-header"><h3 class="card-title" id="reportTitle">عرض التقرير</h3></div>
-                <div class="report-table-container">
+                <div class="card-header">
+                    <h3 class="card-title" id="reportTitle">عرض التقرير</h3>
+                </div>
+                <div class="report-table-container" id="reportContainer">
                     <div id="reportContent"></div>
                 </div>
             </div>
         </section>
 
-        <!-- Activity Log -->
-        <section id="activity-log" class="main-content">
-            <h2 class="page-title">سجل الحركات والعمليات (آخر 500 حركة)</h2>
+        <!-- Backup & Cloud System & Activity Log -->
+        <section id="backup" class="main-content">
+            <h2 class="page-title">سجل الحركات والنسخ السحابي</h2>
+            
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">سجل النشاطات الفورية</h3>
-                    <button class="btn btn-secondary btn-small" onclick="clearActivityLog()">مسح السجل</button>
+                    <h3 class="card-title">حالة المزامنة والنسخ السحابي</h3>
                 </div>
-                <div class="table-container">
-                    <table class="report-table">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>الوقت والتاريخ</th>
-                                <th>نوع الحركة</th>
-                                <th>تفاصيل الحدث</th>
-                            </tr>
-                        </thead>
-                        <tbody id="activityLogBody">
-                            <tr><td colspan="4">لا توجد حركات مسجلة بعد</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- Backup -->
-        <section id="backup" class="main-content">
-            <h2 class="page-title">النسخ الاحتياطي والاستعادة السحابية والمحلية</h2>
-            <div class="card">
-                <div class="card-header"><h3 class="card-title">إدارة النسخ الاحتياطي</h3></div>
-                <div class="form-row">
+                <div class="form-row" style="align-items: center;">
                     <div class="form-group">
-                        <button class="btn btn-backup" onclick="createBackup()"><i class="fas fa-download"></i> تحميل نسخة احتياطية محلية (JSON)</button>
+                        <button class="btn btn-backup" onclick="syncCloudDataNow()"><i class="fas fa-cloud-upload-alt"></i> مزامنة البيانات سحابياً الآن</button>
                     </div>
                     <div class="form-group">
-                        <label for="restoreFileInput">اختر ملف JSON لاستعادته محلياً</label>
-                        <input type="file" id="restoreFileInput" accept=".json" style="padding: 8px;">
-                        <button class="btn btn-restore" onclick="restoreBackup()" style="margin-top: 8px;"><i class="fas fa-upload"></i> استعادة النسخة المحلية</button>
+                        <button class="btn btn-restore" onclick="refreshCloudData()"><i class="fas fa-sync-alt"></i> تحديث وجلب البيانات السحابية</button>
                     </div>
                 </div>
                 <div id="backupStatus" style="margin-top: 15px;"></div>
+                <div id="backupInfo" style="margin-top: 15px;">
+                    <p><strong>حالة الاتصال السحابي:</strong> <span id="cloudStatusText" style="color: green; font-weight: bold;">متزامن مع قاعدة البيانات Firebase</span></p>
+                    <p><strong>آخر مزامنة ناجحة:</strong> <span id="lastCloudSyncTime">-</span></p>
+                </div>
             </div>
-            
+
+            <!-- سجل الحركات (حتى 500 حركة - غير قابل للحذف) -->
             <div class="card">
-                <div class="card-header"><h3 class="card-title">معلومات النسخ الاحتياطي والمزامنة</h3></div>
-                <div id="backupInfo">
-                    <p><strong>آخر نسخة احتياطية:</strong> <span id="lastBackupTime">لم يتم عمل نسخة احتياطية بعد</span></p>
-                    <p><strong>حالة النسخ الاحتياطي:</strong> <span id="backupStatusText">غير متاح</span></p>
-                    <p><strong>حالة مزامنة Firebase:</strong> <span id="firebaseSyncStatus" style="color: green;">متصل وجاهز للمزامنة</span></p>
+                <div class="card-header">
+                    <h3 class="card-title">سجل حركات النظام السحابي (أحدث 500 حركة - غير قابل للحذف)</h3>
+                    <button class="btn btn-small btn-secondary" onclick="renderActivityLogsTable()"><i class="fas fa-redo"></i> تحديث السجل</button>
+                </div>
+                <div class="report-table-container" style="max-height: 450px; overflow-y: auto;">
+                    <table class="report-table" id="activityLogTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>التاريخ والوقت</th>
+                                <th>نوع الحركة</th>
+                                <th>تفاصيل الحركة</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activityLogBody">
+                            <!-- سيتم ملؤها تلقائياً -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>
@@ -878,296 +1180,330 @@
     </div>
     
     <!-- PDF Template -->
-    <div id="pdf-template" class="pdf-template" style="display:none;">
-        <div class="pdf-header" style="text-align: center; margin-bottom: 10px;">
-            <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" alt="شعار الشركة" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #4a90e2; margin: 0 auto 5px; display: block;">
-            <h2 style="color: #4a90e2; margin: 0; font-size: 18px;">شركة نايف للأغذية</h2>
-            <h3 style="color: #4a90e2; margin: 5px 0 8px 0; font-size: 16px;">نظام مراقبة أسعار الشراء</h3>
-            <div style="font-size: 15px; font-weight: bold; margin-top: 10px;">تقرير: <span id="pdf-report-title"></span></div>
+    <div id="pdf-template" class="pdf-template">
+        <div class="pdf-header">
+            <div class="pdf-header-row">
+                <div style="text-align: center; margin-bottom: 10px;">
+                    <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" alt="شعار الشركة" 
+                         style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #4a90e2; margin: 0 auto 5px; display: block;">
+                    <h2 style="color: #4a90e2; margin: 0; font-size: 18px;">شركة نايف للأغذية</h2>
+                    <h3 style="color: #4a90e2; margin: 5px 0 8px 0; font-size: 16px;">نظام مراقبة أسعار الشراء</h3>
+                </div>
+                <div style="margin-bottom: 8px; text-align: center;">
+                    <div style="font-size: 15px; font-weight: bold;">تقرير: <span id="pdf-report-title"></span></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 11px;">
+                    <div>الفترة: من <span id="pdf-start-date"></span> إلى <span id="pdf-end-date"></span></div>
+                    <div>تاريخ الطباعة: <span id="pdf-print-date"></span></div>
+                </div>
+            </div>
         </div>
         <div id="pdf-content"></div>
     </div>
 
-    <!-- Backup warning banner -->
-    <div id="backupWarningBanner" class="backup-warning hidden" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; width: 90%; max-width: 600px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
-        <span><i class="fas fa-exclamation-triangle"></i> <strong>تنبيه هام:</strong> مضت 3 ساعات منذ آخر نسخة احتياطية. يُرجى أخذ نسخة الآن لحماية البيانات.</span>
-        <div>
-            <button class="btn btn-success" onclick="createBackup(); hideBackupWarning();" style="margin-left: 8px; background: #28a745; color: #fff; border:none; padding:6px 12px; border-radius:4px; cursor:pointer;">نسخ الآن</button>
-            <button class="btn btn-secondary" onclick="hideBackupWarning();">تجاهل</button>
-        </div>
-    </div>
+    <!-- Firebase SDK & Application Script -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, setDoc, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    <script>
-        // إعدادات Firebase الخاصة بالمشروع
         const firebaseConfig = {
-            apiKey: "AIzaSyDRdAREidho6Pz7wTxxzQCeqb_IigJsllM",
-            authDomain: "restaurant-visits-system.firebaseapp.com",
-            databaseURL: "https://restaurant-visits-system-default-rtdb.firebaseio.com",
-            projectId: "restaurant-visits-system",
-            storageBucket: "restaurant-visits-system.firebasestorage.app",
-            messagingSenderId: "154632546388",
-            appId: "1:154632546388:web:72558ef901a94a307825c1"
+            apiKey: "AIzaSyDnUVthxxTvvLgvLh7dj5qQ0kzo8aI4uuc",
+            authDomain: "naif-purchase-check.firebaseapp.com",
+            projectId: "naif-purchase-check",
+            storageBucket: "naif-purchase-check.firebasestorage.app",
+            messagingSenderId: "44324498381",
+            appId: "1:44324498381:web:fe962b044bd47c2cecb284",
+            measurementId: "G-JKNB50VCZB"
         };
 
-        let db = null;
-        try {
-            if (!firebase.apps.length) {
-                firebase.initializeApp(firebaseConfig);
-            }
-            db = firebase.database();
-        } catch (e) {
-            console.warn("تعذر الاتصال بـ Firebase، سيتم الاعتماد على التخزين المحلي فقط.", e);
-            const badge = document.getElementById('syncStatusBadge');
-            if(badge) badge.innerHTML = '<div class="sync-dot" style="background:#ffc107"></div> يعمل محلياً (Offline)';
-        }
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
         let appData = {
             suppliers: [],
             products: [],
             invoices: [],
-            logs: [],
+            activityLogs: [],
             nextSupplierId: 1,
             nextProductId: 1,
             nextInvoiceId: 1
         };
 
-        // دالة التأكد من هيكل البيانات لمنع أي أخطاء undefined
-        function ensureAppDataStructure() {
-            if (!appData) appData = {};
-            if (!Array.isArray(appData.suppliers)) appData.suppliers = [];
-            if (!Array.isArray(appData.products)) appData.products = [];
-            if (!Array.isArray(appData.invoices)) appData.invoices = [];
-            if (!Array.isArray(appData.logs)) appData.logs = [];
-            if (typeof appData.nextSupplierId !== 'number') appData.nextSupplierId = 1;
-            if (typeof appData.nextProductId !== 'number') appData.nextProductId = 1;
-            if (typeof appData.nextInvoiceId !== 'number') appData.nextInvoiceId = 1;
-        }
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            try {
-                const today = new Date().toISOString().split('T')[0];
-                if(document.getElementById('invoiceDate')) document.getElementById('invoiceDate').value = today;
-                if(document.getElementById('reportDate')) document.getElementById('reportDate').value = today;
-                if(document.getElementById('reportDateTo')) document.getElementById('reportDateTo').value = today;
-                
-                updateCurrentDate();
-                initializeData();
-                setupEventListeners();
-                
-                for(let i = 0; i < 5; i++) {
-                    addInvoiceRow();
-                }
-                
-                showPage('dashboard');
-                checkBackupStatus();
-                
-                setInterval(checkBackupStatus, 60 * 60 * 1000);
-            } catch (err) {
-                console.error("Error during init:", err);
+        // ربط الدوال بالنافذة العامة لتشغيل أحداث onclick
+        window.checkLogin = checkLogin;
+        window.showPage = showPage;
+        window.addInvoiceRow = addInvoiceRow;
+        window.removeInvoiceRow = removeInvoiceRow;
+        window.saveInvoice = saveInvoice;
+        window.resetInvoiceForm = resetInvoiceForm;
+        window.saveSupplier = saveSupplier;
+        window.resetSupplierForm = resetSupplierForm;
+        window.editSupplier = editSupplier;
+        window.deleteSupplier = deleteSupplier;
+        window.saveProduct = saveProduct;
+        window.resetProductForm = resetProductForm;
+        window.editProduct = editProduct;
+        window.deleteProduct = deleteProduct;
+        window.changeReportType = changeReportType;
+        window.generateReport = generateReport;
+        window.printReport = printReport;
+        window.saveReportAsPDF = saveReportAsPDF;
+        window.syncCloudDataNow = syncCloudDataNow;
+        window.refreshCloudData = refreshCloudData;
+        window.renderActivityLogsTable = renderActivityLogsTable;
+
+        // التحقق من تسجيل الدخول
+        function checkLogin() {
+            const passInput = document.getElementById('loginPasswordInput').value;
+            const errorMsg = document.getElementById('loginErrorMsg');
+            if (passInput === '555666') {
+                document.getElementById('loginModal').style.display = 'none';
+                sessionStorage.setItem('naifLoggedIn', 'true');
+                logActivity('تسجيل دخول', 'تم تسجيل الدخول إلى النظام بنجاح');
+            } else {
+                errorMsg.textContent = 'كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى.';
             }
+        }
+
+        // دعم الضغط على Enter في حقل كلمة المرور
+        document.addEventListener('DOMContentLoaded', () => {
+            const passField = document.getElementById('loginPasswordInput');
+            if (passField) {
+                passField.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        checkLogin();
+                    }
+                });
+            }
+
+            if (sessionStorage.getItem('naifLoggedIn') === 'true') {
+                document.getElementById('loginModal').style.display = 'none';
+            }
+
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('invoiceDate').value = today;
+            document.getElementById('reportDate').value = today;
+            document.getElementById('reportDateTo').value = today;
+            
+            updateCurrentDate();
+            initializeAppFromFirebase();
+            setupEventListeners();
+            
+            for(let i = 0; i < 5; i++) {
+                addInvoiceRow();
+            }
+            
+            showPage('dashboard');
         });
-        
+
         function updateCurrentDate() {
             const now = new Date();
             const day = now.getDate();
             const month = now.toLocaleString('ar-SA', { month: 'long' });
             const year = now.getFullYear();
-            const el = document.getElementById('currentDate');
-            if(el) el.textContent = `${day} ${month} ${year}`;
-        }
-        
-        function logAction(type, description) {
-            try {
-                ensureAppDataStructure();
-                const now = new Date();
-                const timeStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-                
-                appData.logs.unshift({
-                    id: Date.now(),
-                    time: timeStr,
-                    type: type,
-                    details: description
-                });
-                
-                if (appData.logs.length > 500) {
-                    appData.logs = appData.logs.slice(0, 500);
-                }
-                
-                populateActivityLog();
-            } catch(e) { console.error(e); }
+            document.getElementById('currentDate').textContent = `${day} ${month} ${year}`;
         }
 
-        function populateActivityLog() {
-            ensureAppDataStructure();
+        // تسجيل حركة جديدة سحابياً (تصل حتى 500 حركة، لا يمكن مسحها)
+        async function logActivity(actionType, details) {
+            const now = new Date();
+            const timeStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+            
+            const logEntry = {
+                id: 'log_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+                timestamp: timeStr,
+                actionType,
+                details
+            };
+
+            appData.activityLogs.unshift(logEntry); // الأحدث أولاً
+            if (appData.activityLogs.length > 500) {
+                appData.activityLogs = appData.activityLogs.slice(0, 500); // الاحتفاظ بآخر 500 فقط
+            }
+
+            try {
+                await setDoc(doc(db, "activity_logs", logEntry.id), logEntry);
+            } catch (e) {
+                console.error("خطأ في مزامنة سجل الحركات:", e);
+            }
+
+            renderActivityLogsTable();
+        }
+
+        // عرض جدول السجل
+        function renderActivityLogsTable() {
             const tbody = document.getElementById('activityLogBody');
             if (!tbody) return;
-            
-            if (appData.logs.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4">لا توجد حركات مسجلة بعد</td></tr>';
+            tbody.innerHTML = "";
+
+            if (appData.activityLogs.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4">لا توجد حركات مسجلة حتى الآن</td></tr>`;
                 return;
             }
-            
-            tbody.innerHTML = appData.logs.map((log, index) => `
-                <tr>
+
+            appData.activityLogs.forEach((log, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
                     <td>${index + 1}</td>
-                    <td>${log.time}</td>
-                    <td><span class="invoice-badge" style="font-size:0.8rem; padding:3px 8px;">${log.type}</span></td>
-                    <td style="text-align:right;">${log.details}</td>
-                </tr>
-            `).join('');
+                    <td>${log.timestamp}</td>
+                    <td><strong>${log.actionType}</strong></td>
+                    <td>${log.details}</td>
+                `;
+                tbody.appendChild(row);
+            });
         }
 
-        function clearActivityLog() {
-            if (confirm("هل أنت متأكد من مسح سجل الحركات بالكامل؟")) {
-                ensureAppDataStructure();
-                appData.logs = [];
-                saveData();
-                populateActivityLog();
-                alert("تم مسح السجل بنجاح.");
-            }
-        }
-        
-        function initializeData() {
-            const savedData = localStorage.getItem('purchaseTrackingData2026');
-            if(savedData) {
-                try {
-                    appData = JSON.parse(savedData);
-                } catch(e) { console.error(e); }
-            }
-            ensureAppDataStructure();
-            fixIDs();
-            
-            if (db) {
-                db.ref('naif_system_2026').on('value', (snapshot) => {
-                    const remoteData = snapshot.val();
-                    if (remoteData) {
-                        appData = remoteData;
-                        ensureAppDataStructure();
-                        fixIDs();
-                        localStorage.setItem('purchaseTrackingData2026', JSON.stringify(appData));
-                        refreshAllUI();
-                    }
-                }, (error) => {
-                    console.error("خطأ في المزامنة السحابية:", error);
-                });
-            }
-            
-            refreshAllUI();
-        }
-
-        function fixIDs() {
-            ensureAppDataStructure();
-            if (appData.suppliers.length > 0) {
-                appData.nextSupplierId = Math.max(...appData.suppliers.map(s => s.id || 0)) + 1;
-            }
-            if (appData.products.length > 0) {
-                appData.nextProductId = Math.max(...appData.products.map(p => p.id || 0)) + 1;
-            }
-            if (appData.invoices.length > 0) {
-                appData.nextInvoiceId = Math.max(...appData.invoices.map(i => i.id || 0)) + 1;
-            }
-        }
-        
-        function saveData() {
-            ensureAppDataStructure();
-            fixIDs();
-            localStorage.setItem('purchaseTrackingData2026', JSON.stringify(appData));
-            
-            if (db) {
-                db.ref('naif_system_2026').set(appData).catch(err => {
-                    console.error("فشل الحفظ في السحابة:", err);
-                });
-            }
-            
-            refreshAllUI();
-            updateBackupInfo();
-        }
-
-        function refreshAllUI() {
+        // جلب البيانات بالكامل من Firebase
+        async function initializeAppFromFirebase() {
             try {
-                ensureAppDataStructure();
-                updateSupplierDropdown();
-                populateSuppliersList();
-                populateProductsList();
-                updateRecentPurchases();
-                updateReportFilters();
-                updateStatistics();
-                updateBackupInfo();
-                populateActivityLog();
-            } catch(e) { console.error("Error in refreshAllUI:", e); }
+                // جلب الموردين
+                const suppliersSnap = await getDocs(collection(db, "suppliers"));
+                appData.suppliers = [];
+                suppliersSnap.forEach(d => appData.suppliers.push(d.data()));
+
+                // جلب الأصناف
+                const productsSnap = await getDocs(collection(db, "products"));
+                appData.products = [];
+                productsSnap.forEach(d => appData.products.push(d.data()));
+
+                // جلب الفواتير
+                const invoicesSnap = await getDocs(collection(db, "invoices"));
+                appData.invoices = [];
+                invoicesSnap.forEach(d => appData.invoices.push(d.data()));
+
+                // جلب سجل الحركات السحابي
+                const logsSnap = await getDocs(collection(db, "activity_logs"));
+                appData.activityLogs = [];
+                logsSnap.forEach(d => appData.activityLogs.push(d.data()));
+                appData.activityLogs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                if (appData.activityLogs.length > 500) {
+                    appData.activityLogs = appData.activityLogs.slice(0, 500);
+                }
+
+                // جلب العدادات
+                const metaDoc = await getDoc(doc(db, "metadata", "counters"));
+                if (metaDoc.exists()) {
+                    const data = metaDoc.data();
+                    appData.nextSupplierId = data.nextSupplierId || 1;
+                    appData.nextProductId = data.nextProductId || 1;
+                    appData.nextInvoiceId = data.nextInvoiceId || 1;
+                } else {
+                    appData.nextSupplierId = appData.suppliers.length > 0 ? Math.max(...appData.suppliers.map(s => Number(s.id) || 0)) + 1 : 1;
+                    appData.nextProductId = appData.products.length > 0 ? Math.max(...appData.products.map(p => Number(p.id) || 0)) + 1 : 1;
+                    appData.nextInvoiceId = appData.invoices.length > 0 ? Math.max(...appData.invoices.map(i => Number(i.id) || 0)) + 1 : 1;
+                }
+
+                document.getElementById('lastCloudSyncTime').textContent = new Date().toLocaleString('ar-SA');
+            } catch (error) {
+                console.error("خطأ في الاتصال بقاعدة البيانات السحابية:", error);
+                const savedData = localStorage.getItem('purchaseTrackingData2026');
+                if(savedData) {
+                    appData = JSON.parse(savedData);
+                }
+            }
+
+            updateSupplierDropdown();
+            populateSuppliersList();
+            populateProductsList();
+            updateRecentPurchases();
+            updateReportFilters();
+            updateStatistics();
+            renderActivityLogsTable();
         }
-        
+
+        async function saveCountersToFirebase() {
+            try {
+                await setDoc(doc(db, "metadata", "counters"), {
+                    nextSupplierId: appData.nextSupplierId,
+                    nextProductId: appData.nextProductId,
+                    nextInvoiceId: appData.nextInvoiceId
+                });
+            } catch (e) {
+                console.error("خطأ في حفظ العدادات:", e);
+            }
+        }
+
+        function saveDataLocally() {
+            localStorage.setItem('purchaseTrackingData2026', JSON.stringify(appData));
+            updateStatistics();
+        }
+
+        async function syncCloudDataNow() {
+            try {
+                await saveCountersToFirebase();
+                document.getElementById('lastCloudSyncTime').textContent = new Date().toLocaleString('ar-SA');
+                alert("تمت مزامنة جميع البيانات والنسخ السحابي مع قاعدة البيانات بنجاح!");
+                logActivity('مزامنة يدوية', 'تمت مزامنة بيانات النظام السحابية يدوياً');
+            } catch (e) {
+                alert("حدث خطأ أثناء مزامنة البيانات: " + e.message);
+            }
+        }
+
+        async function refreshCloudData() {
+            await initializeAppFromFirebase();
+            alert("تم تحديث وجلب أحدث البيانات من سحابة Firebase بنجاح!");
+            logActivity('تحديث سحابي', 'تم استعراض وجلب البيانات المحدثة من السحابة');
+        }
+
         function setupEventListeners() {
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
+            document.querySelectorAll('.nav-link').forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     const target = this.getAttribute('data-target');
-                    if (target) {
-                        showPage(target);
-                        navLinks.forEach(l => l.classList.remove('active'));
-                        this.classList.add('active');
-                    }
+                    showPage(target);
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
                 });
             });
             
-            const supplierSearch = document.getElementById('supplierSearch');
-            if(supplierSearch) {
-                supplierSearch.addEventListener('input', function() {
-                    searchSuppliers(this.value);
-                });
-            }
+            document.getElementById('supplierSearch').addEventListener('input', function() {
+                searchSuppliers(this.value);
+            });
             
-            const addProductRowBtn = document.getElementById('addProductRow');
-            if(addProductRowBtn) {
-                addProductRowBtn.addEventListener('click', function() {
-                    addInvoiceRow();
-                });
-            }
+            document.getElementById('addProductRow').addEventListener('click', function() {
+                addInvoiceRow();
+            });
             
-            const purchaseForm = document.getElementById('purchaseForm');
-            if(purchaseForm) {
-                purchaseForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    saveInvoice();
-                });
-            }
+            document.getElementById('purchaseForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveInvoice();
+            });
             
-            const supplierForm = document.getElementById('supplierForm');
-            if(supplierForm) {
-                supplierForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    saveSupplier();
-                });
-            }
+            document.getElementById('supplierForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveSupplier();
+            });
             
-            const productForm = document.getElementById('productForm');
-            if(productForm) {
-                productForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    saveProduct();
-                });
-            }
+            document.getElementById('productForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveProduct();
+            });
         }
-        
+
         function showPage(pageId) {
-            const pages = document.querySelectorAll('.main-content');
-            pages.forEach(page => {
+            document.querySelectorAll('.main-content').forEach(page => {
                 page.classList.remove('active');
             });
+            document.getElementById(pageId).classList.add('active');
             
-            const targetPage = document.getElementById(pageId);
-            if(targetPage) {
-                targetPage.classList.add('active');
+            if(pageId === 'dashboard') {
+                updateStatistics();
+                updateRecentPurchases();
             }
-            refreshAllUI();
+            if(pageId === 'suppliers') {
+                populateSuppliersList();
+            }
+            if(pageId === 'products') {
+                populateProductsList();
+                updateSupplierDropdown();
+            }
+            if(pageId === 'backup') {
+                renderActivityLogsTable();
+            }
         }
-        
+
         function searchSuppliers(query) {
-            ensureAppDataStructure();
             const suggestionsList = document.getElementById('supplierSuggestions');
-            if(!suggestionsList) return;
-            
             if(query.trim().length === 0) {
                 suggestionsList.classList.remove('active');
                 return;
@@ -1185,37 +1521,41 @@
                 
                 suggestionsList.querySelectorAll('.suggestion-item').forEach(item => {
                     item.addEventListener('click', function() {
-                        const input = document.getElementById('supplierSearch');
-                        if(input) input.value = this.getAttribute('data-name');
+                        document.getElementById('supplierSearch').value = this.getAttribute('data-name');
                         suggestionsList.classList.remove('active');
                     });
                 });
             }
             suggestionsList.classList.add('active');
         }
-        
-        function addInvoiceRow() {
+
+        function addInvoiceRow(productId = null) {
             const tbody = document.getElementById('invoiceItemsBody');
-            if(!tbody) return;
             const rowIndex = tbody.children.length;
-            
             const row = document.createElement('tr');
             row.id = `invoiceRow-${rowIndex}`;
             
+            const productCell = document.createElement('td');
+            productCell.innerHTML = `
+                <div class="suggestions-container">
+                    <input type="text" class="product-search empty-placeholder" placeholder="ابحث عن الصنف" data-row="${rowIndex}" autocomplete="off">
+                    <div class="suggestions-list product-suggestions" id="productSuggestions-${rowIndex}"></div>
+                </div>
+                <input type="hidden" class="product-id" id="productId-${rowIndex}">
+            `;
+            
+            const priceCell = document.createElement('td');
+            priceCell.className = 'price-input-container';
+            priceCell.innerHTML = `
+                <input type="number" class="product-price empty-placeholder" id="productPrice-${rowIndex}" min="0.001" step="0.001" placeholder="أدخل السعر">
+                <div class="price-input-alert" id="priceInputAlert-${rowIndex}" style="display: none;">!</div>
+            `;
+            
             row.innerHTML = `
-                <td>
-                    <div class="suggestions-container">
-                        <input type="text" class="product-search" placeholder="ابحث عن الصنف" data-row="${rowIndex}" autocomplete="off">
-                        <div class="suggestions-list product-suggestions" id="productSuggestions-${rowIndex}"></div>
-                    </div>
-                    <input type="hidden" class="product-id" id="productId-${rowIndex}">
-                </td>
+                <td>${productCell.innerHTML}</td>
                 <td><input type="text" class="product-unit" id="productUnit-${rowIndex}" readonly></td>
-                <td><input type="number" class="product-quantity" id="productQuantity-${rowIndex}" min="0.001" step="0.001" placeholder="الكمية"></td>
-                <td class="price-input-container">
-                    <input type="number" class="product-price" id="productPrice-${rowIndex}" min="0.001" step="0.001" placeholder="السعر">
-                    <div class="price-input-alert" id="priceInputAlert-${rowIndex}" style="display: none;">!</div>
-                </td>
+                <td><input type="number" class="product-quantity empty-placeholder" id="productQuantity-${rowIndex}" min="0.001" step="0.001" placeholder="أدخل الكمية"></td>
+                <td>${priceCell.innerHTML}</td>
                 <td class="product-total amount" id="productTotal-${rowIndex}">0.000</td>
                 <td class="price-info-container" id="priceInfoContainer-${rowIndex}">
                     <div class="price-info" id="priceInfo-${rowIndex}">لا توجد بيانات سابقة</div>
@@ -1229,29 +1569,41 @@
             const quantityInput = row.querySelector('.product-quantity');
             const priceInput = row.querySelector('.product-price');
             
-            if(quantityInput) quantityInput.addEventListener('input', () => updateInvoiceTotal());
-            if(priceInput) {
-                priceInput.addEventListener('input', () => { updateInvoiceTotal(); immediatePriceAlert(rowIndex); });
-                priceInput.addEventListener('blur', () => checkPriceChange(rowIndex));
-                priceInput.addEventListener('keydown', function(e) {
-                    if(e.key === 'Enter') {
-                        e.preventDefault();
-                        addInvoiceRow();
-                        const nextInput = document.querySelector(`#invoiceRow-${rowIndex + 1} .product-search`);
-                        if(nextInput) nextInput.focus();
+            quantityInput.addEventListener('input', function() {
+                updateInvoiceTotal();
+                if(productId) checkPriceChange(rowIndex);
+            });
+            
+            priceInput.addEventListener('input', function() {
+                updateInvoiceTotal();
+                if(productId) immediatePriceAlert(rowIndex);
+            });
+            
+            priceInput.addEventListener('blur', function() {
+                if(productId) checkPriceChange(rowIndex);
+            });
+            
+            if(productId) {
+                const product = appData.products.find(p => p.id == productId);
+                if(product) {
+                    row.querySelector('.product-search').value = product.name;
+                    row.querySelector('.product-id').value = product.id;
+                    row.querySelector('.product-unit').value = product.unit;
+                    const previousPurchases = getPreviousPurchases(product.id);
+                    if(previousPurchases.length > 0) {
+                        displayPriceInfo(previousPurchases, rowIndex);
                     }
-                });
+                    updateRowTotal(rowIndex);
+                }
             }
             
-            setupProductSearch(rowIndex);
             updateInvoiceTotal();
+            setupProductSearch(rowIndex);
         }
-        
+
         function setupProductSearch(rowIndex) {
-            ensureAppDataStructure();
             const searchInput = document.querySelector(`#invoiceRow-${rowIndex} .product-search`);
             const suggestionsDiv = document.querySelector(`#productSuggestions-${rowIndex}`);
-            if(!searchInput || !suggestionsDiv) return;
             
             searchInput.addEventListener('input', function() {
                 const query = this.value;
@@ -1259,145 +1611,97 @@
                     suggestionsDiv.classList.remove('active');
                     return;
                 }
-                
                 const filteredProducts = appData.products.filter(product =>
                     product.name.toLowerCase().includes(query.toLowerCase())
                 );
                 
-                let html = '';
-                if(filteredProducts.length > 0) {
-                    html += filteredProducts.map(product => {
+                if(filteredProducts.length === 0) {
+                    suggestionsDiv.innerHTML = '<div class="suggestion-item">لا توجد نتائج</div>';
+                } else {
+                    suggestionsDiv.innerHTML = filteredProducts.map(product => {
                         const supplier = appData.suppliers.find(s => s.id === product.supplierId);
                         return `<div class="suggestion-item" data-id="${product.id}" data-name="${product.name}" data-unit="${product.unit}">
                             ${product.name} - ${supplier ? supplier.name : 'غير معروف'} (${product.unit})
                         </div>`;
                     }).join('');
-                }
-                
-                html += `<div class="suggestion-item suggestion-action" onclick="quickAddProductFromInvoice(${rowIndex}, '${query}')">
-                    <i class="fas fa-plus-circle"></i> إضافة صنف جديد باسم: "${query}"
-                </div>`;
-                
-                suggestionsDiv.innerHTML = html;
-                suggestionsDiv.classList.add('active');
-                
-                suggestionsDiv.querySelectorAll('.suggestion-item:not(.suggestion-action)').forEach(item => {
-                    item.addEventListener('click', function() {
-                        const productId = this.getAttribute('data-id');
-                        const productName = this.getAttribute('data-name');
-                        const productUnit = this.getAttribute('data-unit');
-                        
-                        searchInput.value = productName;
-                        const pIdInput = document.getElementById(`productId-${rowIndex}`);
-                        const pUnitInput = document.getElementById(`productUnit-${rowIndex}`);
-                        if(pIdInput) pIdInput.value = productId;
-                        if(pUnitInput) pUnitInput.value = productUnit;
-                        suggestionsDiv.classList.remove('active');
-                        
-                        const previousPurchases = getPreviousPurchases(productId);
-                        if(previousPurchases.length > 0) {
-                            displayPriceInfo(previousPurchases, rowIndex);
-                        }
-                        updateRowTotal(rowIndex);
-                        updateInvoiceTotal();
+                    
+                    suggestionsDiv.querySelectorAll('.suggestion-item').forEach(item => {
+                        item.addEventListener('click', function() {
+                            const productId = this.getAttribute('data-id');
+                            const productName = this.getAttribute('data-name');
+                            const productUnit = this.getAttribute('data-unit');
+                            
+                            searchInput.value = productName;
+                            document.getElementById(`productId-${rowIndex}`).value = productId;
+                            document.getElementById(`productUnit-${rowIndex}`).value = productUnit;
+                            suggestionsDiv.classList.remove('active');
+                            
+                            const previousPurchases = getPreviousPurchases(productId);
+                            if(previousPurchases.length > 0) {
+                                displayPriceInfo(previousPurchases, rowIndex);
+                            }
+                            updateRowTotal(rowIndex);
+                            updateInvoiceTotal();
+                        });
                     });
-                });
-            });
-            
-            document.addEventListener('click', function(e) {
-                if(!searchInput.contains(e.target) && !suggestionsDiv.contains(e.target)) {
-                    suggestionsDiv.classList.remove('active');
                 }
+                suggestionsDiv.classList.add('active');
             });
         }
 
-        function quickAddProductFromInvoice(rowIndex, productName) {
-            ensureAppDataStructure();
-            if(appData.suppliers.length === 0) {
-                alert("الرجاء إضافة مورد واحد على الأقل قبل إضافة أصناف جديدة.");
-                showPage('suppliers');
-                return;
-            }
-            const defaultSupplier = appData.suppliers[0];
-            const newProduct = {
-                id: appData.nextProductId++,
-                name: productName,
-                supplierId: defaultSupplier.id,
-                unit: 'كيلو',
-                category: 'عام'
-            };
-            
-            appData.products.push(newProduct);
-            logAction('إضافة صنف', `إضافة صنف جديد سريعاً: ${productName}`);
-            saveData();
-            
-            const sInput = document.querySelector(`#invoiceRow-${rowIndex} .product-search`);
-            const pIdInput = document.getElementById(`productId-${rowIndex}`);
-            const pUnitInput = document.getElementById(`productUnit-${rowIndex}`);
-            const pSuggestions = document.getElementById(`productSuggestions-${rowIndex}`);
-            
-            if(sInput) sInput.value = productName;
-            if(pIdInput) pIdInput.value = newProduct.id;
-            if(pUnitInput) pUnitInput.value = newProduct.unit;
-            if(pSuggestions) pSuggestions.classList.remove('active');
-            
-            alert(`تم إنشاء الصنف "${productName}" بنجاح وإضافته للفاتورة!`);
-        }
-        
         function getPreviousPurchases(productId) {
-            ensureAppDataStructure();
             const purchases = [];
             appData.invoices.forEach(invoice => {
-                if (invoice.items) {
-                    invoice.items.forEach(item => {
-                        if(item.productId == productId) {
-                            purchases.push({
-                                date: invoice.date,
-                                price: item.price,
-                                quantity: item.quantity,
-                                invoiceNumber: invoice.invoiceNumber
-                            });
-                        }
-                    });
-                }
+                invoice.items.forEach(item => {
+                    if(item.productId == productId) {
+                        purchases.push({
+                            date: invoice.date,
+                            price: item.price,
+                            quantity: item.quantity,
+                            invoiceNumber: invoice.invoiceNumber
+                        });
+                    }
+                });
             });
             purchases.sort((a, b) => new Date(b.date) - new Date(a.date));
             return purchases;
         }
-        
+
         function displayPriceInfo(purchases, rowIndex) {
             const priceInfoDiv = document.getElementById(`priceInfo-${rowIndex}`);
-            if(!priceInfoDiv || purchases.length === 0) return;
-            
+            if(purchases.length === 0) {
+                priceInfoDiv.innerHTML = "لا توجد بيانات سابقة";
+                return;
+            }
             const lastPurchase = purchases[0];
             let highestPrice = purchases[0].price;
             let lowestPrice = purchases[0].price;
+            let highestDate = purchases[0].date;
+            let lowestDate = purchases[0].date;
             
-            purchases.forEach(p => {
-                if(p.price > highestPrice) highestPrice = p.price;
-                if(p.price < lowestPrice) lowestPrice = p.price;
+            purchases.forEach(purchase => {
+                if(purchase.price > highestPrice) { highestPrice = purchase.price; highestDate = purchase.date; }
+                if(purchase.price < lowestPrice) { lowestPrice = purchase.price; lowestDate = purchase.date; }
             });
             
             priceInfoDiv.innerHTML = `
                 <span class="last-price">آخر سعر: ${lastPurchase.price.toFixed(3)} (${formatDate(lastPurchase.date)})</span>
-                <span class="high-price">أعلى سعر: ${highestPrice.toFixed(3)}</span>
-                <span class="low-price">أقل سعر: ${lowestPrice.toFixed(3)}</span>
+                <span class="high-price">أعلى سعر: ${highestPrice.toFixed(3)} (${formatDate(highestDate)})</span>
+                <span class="low-price">أقل سعر: ${lowestPrice.toFixed(3)} (${formatDate(lowestDate)})</span>
             `;
         }
-        
+
         function immediatePriceAlert(rowIndex) {
             const productId = document.getElementById(`productId-${rowIndex}`)?.value;
+            const currentPrice = parseFloat(document.getElementById(`productPrice-${rowIndex}`).value);
             const priceInput = document.getElementById(`productPrice-${rowIndex}`);
             const priceAlertDiv = document.getElementById(`priceAlert-${rowIndex}`);
             const priceInputAlert = document.getElementById(`priceInputAlert-${rowIndex}`);
-            if(!priceInput) return;
-            
-            const currentPrice = parseFloat(priceInput.value);
             
             if(!productId || isNaN(currentPrice) || currentPrice <= 0) {
                 priceInput.classList.remove('high-price-input');
-                if(priceInputAlert) priceInputAlert.style.display = 'none';
-                if(priceAlertDiv) priceAlertDiv.style.display = 'none';
+                priceInputAlert.style.display = 'none';
+                priceAlertDiv.style.display = 'none';
                 return;
             }
             
@@ -1405,65 +1709,70 @@
             if(previousPurchases.length === 0) return;
             
             const lastPrice = previousPurchases[0].price;
-            const priceChangePercent = ((currentPrice - lastPrice) / lastPrice) * 100;
+            const priceDifference = currentPrice - lastPrice;
+            const priceChangePercent = (priceDifference / lastPrice) * 100;
+            
+            if(Math.abs(priceDifference) < 0.001) {
+                priceInput.classList.remove('high-price-input');
+                priceInputAlert.style.display = 'none';
+                priceAlertDiv.style.display = 'none';
+                return;
+            }
             
             if(priceChangePercent > 10) {
                 priceInput.classList.add('high-price-input');
-                if(priceInputAlert) priceInputAlert.style.display = 'flex';
-                if(priceAlertDiv) {
-                    priceAlertDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> سعر مرتفع! أعلى بنسبة ${priceChangePercent.toFixed(1)}%`;
-                    priceAlertDiv.className = 'price-alert immediate-high-alert';
-                    priceAlertDiv.style.display = 'flex';
-                }
+                priceInputAlert.style.display = 'flex';
+                priceAlertDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> سعر مرتفع! أعلى بنسبة ${priceChangePercent.toFixed(1)}%`;
+                priceAlertDiv.className = 'price-alert immediate-high-alert';
+                priceAlertDiv.style.display = 'flex';
+            } else if(priceChangePercent > 5) {
+                priceInput.classList.add('high-price-input');
+                priceInputAlert.style.display = 'flex';
+                priceAlertDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> زيادة في السعر: +${priceChangePercent.toFixed(1)}%`;
+                priceAlertDiv.className = 'price-alert high-price-alert';
+                priceAlertDiv.style.display = 'flex';
             } else {
                 priceInput.classList.remove('high-price-input');
-                if(priceInputAlert) priceInputAlert.style.display = 'none';
-                if(priceAlertDiv) priceAlertDiv.style.display = 'none';
+                priceInputAlert.style.display = 'none';
+                priceAlertDiv.style.display = 'none';
             }
         }
-        
-        function checkPriceChange(rowIndex) { immediatePriceAlert(rowIndex); }
-        
-        function updateRowTotal(rowIndex) {
-            const qInput = document.getElementById(`productQuantity-${rowIndex}`);
-            const pInput = document.getElementById(`productPrice-${rowIndex}`);
-            const tEl = document.getElementById(`productTotal-${rowIndex}`);
-            if(!qInput || !pInput || !tEl) return;
-            
-            const quantity = parseFloat(qInput.value) || 0;
-            const price = parseFloat(pInput.value) || 0;
-            tEl.textContent = (quantity * price).toFixed(3);
+
+        function checkPriceChange(rowIndex) {
+            immediatePriceAlert(rowIndex);
         }
-        
+
+        function updateRowTotal(rowIndex) {
+            const quantity = parseFloat(document.getElementById(`productQuantity-${rowIndex}`).value) || 0;
+            const price = parseFloat(document.getElementById(`productPrice-${rowIndex}`).value) || 0;
+            document.getElementById(`productTotal-${rowIndex}`).textContent = (quantity * price).toFixed(3);
+        }
+
         function updateInvoiceTotal() {
             let total = 0;
             const rows = document.querySelectorAll('#invoiceItemsBody tr');
             rows.forEach(row => {
                 const rowId = row.id.split('-')[1];
-                const qInput = document.getElementById(`productQuantity-${rowId}`);
-                const pInput = document.getElementById(`productPrice-${rowId}`);
-                const tEl = document.getElementById(`productTotal-${rowId}`);
-                
-                const quantity = parseFloat(qInput?.value) || 0;
-                const price = parseFloat(pInput?.value) || 0;
-                const rowTotal = quantity * price;
-                if(tEl) tEl.textContent = rowTotal.toFixed(3);
-                total += rowTotal;
+                const quantity = parseFloat(document.getElementById(`productQuantity-${rowId}`)?.value) || 0;
+                const price = parseFloat(document.getElementById(`productPrice-${rowId}`)?.value) || 0;
+                total += quantity * price;
+                document.getElementById(`productTotal-${rowId}`).textContent = (quantity * price).toFixed(3);
             });
-            const invTotalEl = document.getElementById('invoiceTotal');
-            if(invTotalEl) invTotalEl.textContent = total.toFixed(3);
+            document.getElementById('invoiceTotal').textContent = total.toFixed(3);
         }
-        
+
         function removeInvoiceRow(rowIndex) {
             const row = document.getElementById(`invoiceRow-${rowIndex}`);
-            if(row) { row.remove(); updateInvoiceTotal(); }
+            if(row) {
+                row.remove();
+                updateInvoiceTotal();
+            }
         }
-        
-        function saveInvoice() {
-            ensureAppDataStructure();
-            const invoiceNumber = document.getElementById('invoiceNumber')?.value.trim();
-            const invoiceDate = document.getElementById('invoiceDate')?.value;
-            const supplierName = document.getElementById('supplierSearch')?.value.trim();
+
+        async function saveInvoice() {
+            const invoiceNumber = document.getElementById('invoiceNumber').value.trim();
+            const invoiceDate = document.getElementById('invoiceDate').value;
+            const supplierName = document.getElementById('supplierSearch').value.trim();
             
             if(!invoiceNumber) { alert("الرجاء إدخال رقم الفاتورة"); return; }
             
@@ -1489,7 +1798,7 @@
                 }
             });
             
-            if(invoiceItems.length === 0) { alert("الرجاء إضافة أصناف صحيحة إلى الفاتورة"); return; }
+            if(invoiceItems.length === 0) { alert("الرجاء إضافة أصناف إلى الفاتورة"); return; }
             
             const invoice = {
                 id: appData.nextInvoiceId++,
@@ -1501,31 +1810,32 @@
             };
             
             appData.invoices.push(invoice);
-            logAction('حفظ فاتورة', `إضافة فاتورة شراء رقم ${invoiceNumber} بمبلغ ${invoiceTotal.toFixed(3)}`);
-            saveData();
+            
+            try {
+                await setDoc(doc(db, "invoices", String(invoice.id)), invoice);
+                await saveCountersToFirebase();
+                logActivity('إضافة فاتورة شراء', `تم حفظ الفاتورة رقم ${invoiceNumber} بمبلغ ${invoiceTotal.toFixed(3)}`);
+            } catch (e) {
+                console.error("خطأ في حفظ الفاتورة سحابياً:", e);
+            }
+            
+            saveDataLocally();
             resetInvoiceForm();
-            alert(`تم حفظ الفاتورة رقم ${invoiceNumber} بنجاح ومزامنتها!`);
+            alert(`تم حفظ الفاتورة ${invoiceNumber} بنجاح ومزامنتها سحابياً!`);
             showPage('dashboard');
         }
-        
+
         function resetInvoiceForm() {
-            const form = document.getElementById('purchaseForm');
-            if(form) form.reset();
-            const invDate = document.getElementById('invoiceDate');
-            if(invDate) invDate.value = new Date().toISOString().split('T')[0];
-            const sSearch = document.getElementById('supplierSearch');
-            if(sSearch) sSearch.value = "";
-            const sSug = document.getElementById('supplierSuggestions');
-            if(sSug) sSug.classList.remove('active');
-            const itemsBody = document.getElementById('invoiceItemsBody');
-            if(itemsBody) itemsBody.innerHTML = "";
-            const invTotal = document.getElementById('invoiceTotal');
-            if(invTotal) invTotal.textContent = "0.000";
+            document.getElementById('purchaseForm').reset();
+            document.getElementById('invoiceDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('supplierSearch').value = "";
+            document.getElementById('supplierSuggestions').classList.remove('active');
+            document.getElementById('invoiceItemsBody').innerHTML = "";
+            document.getElementById('invoiceTotal').textContent = "0.000";
             for(let i = 0; i < 5; i++) { addInvoiceRow(); }
         }
-        
+
         function updateSupplierDropdown() {
-            ensureAppDataStructure();
             const dropdown = document.getElementById('productSupplier');
             if (!dropdown) return;
             dropdown.innerHTML = '<option value="">اختر المورد</option>';
@@ -1536,45 +1846,53 @@
                 dropdown.appendChild(option);
             });
         }
-        
-        function saveSupplier() {
-            ensureAppDataStructure();
-            const name = document.getElementById('supplierName')?.value.trim();
-            const phone = document.getElementById('supplierPhone')?.value.trim();
-            const email = document.getElementById('supplierEmail')?.value.trim();
-            const address = document.getElementById('supplierAddress')?.value.trim();
+
+        async function saveSupplier() {
+            const name = document.getElementById('supplierName').value.trim();
+            const phone = document.getElementById('supplierPhone').value.trim();
+            const email = document.getElementById('supplierEmail').value.trim();
+            const address = document.getElementById('supplierAddress').value.trim();
             
             if(!name) { alert("الرجاء إدخال اسم المورد"); return; }
             
+            let supplierId;
             if(appData.editingSupplierId) {
-                const index = appData.suppliers.findIndex(s => s.id === appData.editingSupplierId);
-                if(index !== -1) {
-                    appData.suppliers[index] = { id: appData.editingSupplierId, name, phone, email, address };
-                    logAction('تعديل مورد', `تعديل بيانات المورد: ${name}`);
+                supplierId = appData.editingSupplierId;
+                const supplierIndex = appData.suppliers.findIndex(s => s.id === supplierId);
+                if(supplierIndex !== -1) {
+                    appData.suppliers[supplierIndex] = { id: supplierId, name, phone, email, address };
                 }
                 appData.editingSupplierId = null;
             } else {
-                appData.suppliers.push({ id: appData.nextSupplierId++, name, phone, email, address });
-                logAction('إضافة مورد', `إضافة المورد: ${name}`);
+                supplierId = appData.nextSupplierId++;
+                const newSupplier = { id: supplierId, name, phone, email, address };
+                appData.suppliers.push(newSupplier);
             }
             
-            saveData();
+            try {
+                await setDoc(doc(db, "suppliers", String(supplierId)), { id: supplierId, name, phone, email, address });
+                await saveCountersToFirebase();
+                logActivity('إدارة الموردين', `تم حفظ بيانات المورد: ${name}`);
+            } catch (e) {
+                console.error("خطأ في حفظ المورد سحابياً:", e);
+            }
+            
+            saveDataLocally();
             resetSupplierForm();
-            alert("تم حفظ المورد بنجاح!");
+            updateSupplierDropdown();
+            populateSuppliersList();
+            alert("تم حفظ المورد بنجاح ومزامنته سحابياً!");
         }
-        
+
         function resetSupplierForm() {
-            const form = document.getElementById('supplierForm');
-            if(form) form.reset();
+            document.getElementById('supplierForm').reset();
             appData.editingSupplierId = null;
-            const subBtn = document.querySelector('#supplierForm button[type="submit"]');
-            if(subBtn) subBtn.textContent = "حفظ المورد";
+            document.querySelector('#supplierForm button[type="submit"]').textContent = "حفظ المورد";
         }
-        
+
         function populateSuppliersList() {
-            ensureAppDataStructure();
             const tbody = document.getElementById('suppliersList');
-            if(!tbody) return;
+            if (!tbody) return;
             tbody.innerHTML = "";
             appData.suppliers.forEach(supplier => {
                 const productCount = appData.products.filter(p => p.supplierId === supplier.id).length;
@@ -1594,9 +1912,8 @@
                 tbody.appendChild(row);
             });
         }
-        
+
         function editSupplier(supplierId) {
-            ensureAppDataStructure();
             const supplier = appData.suppliers.find(s => s.id === supplierId);
             if(!supplier) return;
             document.getElementById('supplierName').value = supplier.name;
@@ -1604,68 +1921,82 @@
             document.getElementById('supplierEmail').value = supplier.email || '';
             document.getElementById('supplierAddress').value = supplier.address || '';
             appData.editingSupplierId = supplierId;
-            const subBtn = document.querySelector('#supplierForm button[type="submit"]');
-            if(subBtn) subBtn.textContent = "تحديث المورد";
+            document.querySelector('#supplierForm button[type="submit"]').textContent = "تحديث المورد";
             showPage('suppliers');
         }
-        
-        function deleteSupplier(supplierId) {
+
+        async function deleteSupplier(supplierId) {
             if(confirm("هل أنت متأكد من حذف هذا المورد؟")) {
-                ensureAppDataStructure();
+                const sup = appData.suppliers.find(s => s.id === supplierId);
                 appData.suppliers = appData.suppliers.filter(s => s.id !== supplierId);
-                logAction('حذف مورد', `حذف المورد ذو المعرف رقم ${supplierId}`);
-                saveData();
+                try {
+                    await deleteDoc(doc(db, "suppliers", String(supplierId)));
+                    logActivity('حذف مورد', `تم حذف المورد: ${sup ? sup.name : supplierId}`);
+                } catch(e) { console.error(e); }
+                saveDataLocally();
+                updateSupplierDropdown();
+                populateSuppliersList();
+                populateProductsList();
                 alert("تم حذف المورد بنجاح!");
             }
         }
-        
-        function saveProduct() {
-            ensureAppDataStructure();
-            const name = document.getElementById('productName')?.value.trim();
-            const supplierId = parseInt(document.getElementById('productSupplier')?.value);
-            const unit = document.getElementById('productUnit')?.value;
-            const category = document.getElementById('productCategory')?.value.trim();
+
+        async function saveProduct() {
+            const name = document.getElementById('productName').value.trim();
+            const supplierId = parseInt(document.getElementById('productSupplier').value);
+            const unit = document.getElementById('productUnit').value;
+            const category = document.getElementById('productCategory').value.trim();
             
-            if(!name || !supplierId || !unit) { alert("الرجاء إدخال الحقول المطلوبة واختيار المورد"); return; }
+            if(!name || !supplierId || !unit) { alert("الرجاء إدخال جميع الحقول المطلوبة"); return; }
             
+            let productId;
             if(appData.editingProductId) {
-                const index = appData.products.findIndex(p => p.id === appData.editingProductId);
-                if(index !== -1) {
-                    appData.products[index] = { id: appData.editingProductId, name, supplierId, unit, category };
-                    logAction('تعديل صنف', `تعديل بيانات الصنف: ${name}`);
+                productId = appData.editingProductId;
+                const productIndex = appData.products.findIndex(p => p.id === productId);
+                if(productIndex !== -1) {
+                    appData.products[productIndex] = { id: productId, name, supplierId, unit, category };
                 }
                 appData.editingProductId = null;
             } else {
-                appData.products.push({ id: appData.nextProductId++, name, supplierId, unit, category });
-                logAction('إضافة صنف', `إضافة الصنف: ${name}`);
+                productId = appData.nextProductId++;
+                const newProduct = { id: productId, name, supplierId, unit, category };
+                appData.products.push(newProduct);
             }
             
-            saveData();
+            try {
+                await setDoc(doc(db, "products", String(productId)), { id: productId, name, supplierId, unit, category });
+                await saveCountersToFirebase();
+                logActivity('إدارة الأصناف', `تم حفظ الصنف: ${name}`);
+            } catch (e) {
+                console.error("خطأ في حفظ الصنف سحابياً:", e);
+            }
+            
+            saveDataLocally();
             resetProductForm();
-            alert("تم حفظ الصنف بنجاح!");
+            populateProductsList();
+            alert("تم حفظ الصنف بنجاح ومزامنته سحابياً!");
         }
-        
+
         function resetProductForm() {
-            const form = document.getElementById('productForm');
-            if(form) form.reset();
+            document.getElementById('productForm').reset();
             appData.editingProductId = null;
-            const subBtn = document.querySelector('#productForm button[type="submit"]');
-            if(subBtn) subBtn.textContent = "حفظ الصنف";
+            document.querySelector('#productForm button[type="submit"]').textContent = "حفظ الصنف";
         }
-        
+
         function populateProductsList() {
-            ensureAppDataStructure();
             const tbody = document.getElementById('productsList');
-            if(!tbody) return;
+            if (!tbody) return;
             tbody.innerHTML = "";
             appData.products.forEach(product => {
                 const supplier = appData.suppliers.find(s => s.id === product.supplierId);
+                const supplierName = supplier ? supplier.name : 'غير معروف';
                 const lastPurchase = getLastPurchaseForProduct(product.id);
+                
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${product.id}</td>
                     <td>${product.name}</td>
-                    <td>${supplier ? supplier.name : 'غير معروف'}</td>
+                    <td>${supplierName}</td>
                     <td>${product.unit}</td>
                     <td>${product.category || '-'}</td>
                     <td>${lastPurchase ? formatDate(lastPurchase.date) : 'لا توجد مشتريات'}</td>
@@ -1678,24 +2009,21 @@
                 tbody.appendChild(row);
             });
         }
-        
+
         function getLastPurchaseForProduct(productId) {
-            ensureAppDataStructure();
             for(let i = appData.invoices.length - 1; i >= 0; i--) {
                 const invoice = appData.invoices[i];
-                if (invoice.items) {
-                    for(let j = 0; j < invoice.items.length; j++) {
-                        if(invoice.items[j].productId == productId) {
-                            return { date: invoice.date, price: invoice.items[j].price };
-                        }
+                for(let j = 0; j < invoice.items.length; j++) {
+                    const item = invoice.items[j];
+                    if(item.productId == productId) {
+                        return { date: invoice.date, price: item.price };
                     }
                 }
             }
             return null;
         }
-        
+
         function editProduct(productId) {
-            ensureAppDataStructure();
             const product = appData.products.find(p => p.id === productId);
             if(!product) return;
             document.getElementById('productName').value = product.name;
@@ -1703,190 +2031,273 @@
             document.getElementById('productUnit').value = product.unit;
             document.getElementById('productCategory').value = product.category || '';
             appData.editingProductId = productId;
-            const subBtn = document.querySelector('#productForm button[type="submit"]');
-            if(subBtn) subBtn.textContent = "تحديث الصنف";
+            document.querySelector('#productForm button[type="submit"]').textContent = "تحديث الصنف";
             showPage('products');
         }
-        
-        function deleteProduct(productId) {
+
+        async function deleteProduct(productId) {
             if(confirm("هل أنت متأكد من حذف هذا الصنف؟")) {
-                ensureAppDataStructure();
+                const prod = appData.products.find(p => p.id === productId);
                 appData.products = appData.products.filter(p => p.id !== productId);
-                logAction('حذف صنف', `حذف الصنف رقم ${productId}`);
-                saveData();
+                try {
+                    await deleteDoc(doc(db, "products", String(productId)));
+                    logActivity('حذف صنف', `تم حذف الصنف: ${prod ? prod.name : productId}`);
+                } catch(e) { console.error(e); }
+                saveDataLocally();
+                populateProductsList();
                 alert("تم حذف الصنف بنجاح!");
             }
         }
-        
+
         function updateStatistics() {
-            ensureAppDataStructure();
-            const sCount = document.getElementById('suppliersCount');
-            const pCount = document.getElementById('productsCount');
-            const iCount = document.getElementById('invoicesCount');
-            if(sCount) sCount.textContent = appData.suppliers.length;
-            if(pCount) pCount.textContent = appData.products.length;
-            if(iCount) iCount.textContent = appData.invoices.length;
+            document.getElementById('suppliersCount').textContent = appData.suppliers.length;
+            document.getElementById('productsCount').textContent = appData.products.length;
+            document.getElementById('invoicesCount').textContent = appData.invoices.length;
+            
+            let priceChanges = [];
+            appData.products.forEach(product => {
+                const purchases = getPreviousPurchases(product.id);
+                if(purchases.length > 1) {
+                    const firstPrice = purchases[purchases.length - 1].price;
+                    const lastPrice = purchases[0].price;
+                    const change = ((lastPrice - firstPrice) / firstPrice) * 100;
+                    priceChanges.push(change);
+                }
+            });
+            
+            const avgChange = priceChanges.length > 0 
+                ? (priceChanges.reduce((a, b) => a + b, 0) / priceChanges.length).toFixed(1)
+                : 0;
+            document.getElementById('avgPriceChange').textContent = `${avgChange}%`;
         }
-        
+
         function updateRecentPurchases() {
-            ensureAppDataStructure();
             const tbody = document.getElementById('recentPurchasesBody');
-            if(!tbody) return;
+            if (!tbody) return;
             tbody.innerHTML = "";
-            const recentInvoices = [...appData.invoices].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
+            const recentInvoices = [...appData.invoices]
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 5);
+            
             recentInvoices.forEach(invoice => {
                 const supplier = appData.suppliers.find(s => s.id === invoice.supplierId);
+                const supplierName = supplier ? supplier.name : 'غير معروف';
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${invoice.invoiceNumber}</td>
-                    <td>${supplier ? supplier.name : 'غير معروف'}</td>
+                    <td>${supplierName}</td>
                     <td>${formatDate(invoice.date)}</td>
-                    <td>${invoice.items ? invoice.items.length : 0}</td>
-                    <td class="amount">${(invoice.total || 0).toFixed(3)}</td>
+                    <td>${invoice.items.length}</td>
+                    <td class="amount">${invoice.total.toFixed(3)}</td>
                 `;
                 tbody.appendChild(row);
             });
         }
-        
-        function changeReportType() { updateReportFilters(); }
-        
+
+        function changeReportType() {
+            updateReportFilters();
+        }
+
         function updateReportFilters() {
-            ensureAppDataStructure();
-            const reportType = document.getElementById('reportType')?.value;
+            const reportType = document.getElementById('reportType').value;
             const filterSelect = document.getElementById('reportFilter');
-            if(!filterSelect) return;
+            if (!filterSelect) return;
             filterSelect.innerHTML = '<option value="all">الكل</option>';
             
             if(reportType === 'productsReport') {
-                appData.products.forEach(p => {
-                    const opt = document.createElement('option');
-                    opt.value = p.id; opt.textContent = p.name;
-                    filterSelect.appendChild(opt);
+                appData.products.forEach(product => {
+                    const option = document.createElement('option');
+                    option.value = product.id;
+                    option.textContent = product.name;
+                    filterSelect.appendChild(option);
                 });
             } else if(reportType === 'suppliersReport') {
-                appData.suppliers.forEach(s => {
-                    const opt = document.createElement('option');
-                    opt.value = s.id; opt.textContent = s.name;
-                    filterSelect.appendChild(opt);
+                appData.suppliers.forEach(supplier => {
+                    const option = document.createElement('option');
+                    option.value = supplier.id;
+                    option.textContent = supplier.name;
+                    filterSelect.appendChild(option);
                 });
             }
         }
-        
+
         function generateReport() {
+            const reportType = document.getElementById('reportType').value;
+            const filterValue = document.getElementById('reportFilter').value;
+            const dateFrom = document.getElementById('reportDate').value;
+            const dateTo = document.getElementById('reportDateTo').value;
             const reportContainer = document.getElementById('reportContent');
-            if(reportContainer) reportContainer.innerHTML = "<p>تم جلب البيانات وتوليد التقرير بنجاح.</p>";
+            reportContainer.innerHTML = "";
+            
+            if(reportType === 'productsReport') {
+                document.getElementById('reportTitle').textContent = "تقرير الأصناف - 2026";
+                let allPurchases = [];
+                appData.invoices.forEach(invoice => {
+                    invoice.items.forEach(item => {
+                        const product = appData.products.find(p => p.id == item.productId);
+                        const supplier = appData.suppliers.find(s => s.id == invoice.supplierId);
+                        if(product) {
+                            allPurchases.push({
+                                productName: product.name,
+                                supplierName: supplier ? supplier.name : 'غير معروف',
+                                date: invoice.date,
+                                price: item.price,
+                                quantity: item.quantity,
+                                unit: item.unit,
+                                invoiceNumber: invoice.invoiceNumber,
+                                productId: product.id
+                            });
+                        }
+                    });
+                });
+                
+                if(filterValue !== 'all') allPurchases = allPurchases.filter(p => p.productId == filterValue);
+                if(dateFrom) allPurchases = allPurchases.filter(p => p.date >= dateFrom);
+                if(dateTo) allPurchases = allPurchases.filter(p => p.date <= dateTo);
+                allPurchases.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                let tableHTML = `<table class="report-table"><thead><tr><th>الصنف</th><th>المورد</th><th>تاريخ الشراء</th><th>سعر الشراء</th><th>الكمية</th><th>الوحدة</th><th>رقم الفاتورة</th></tr></thead><tbody>`;
+                allPurchases.forEach(p => {
+                    tableHTML += `<tr><td>${p.productName}</td><td>${p.supplierName}</td><td>${formatDate(p.date)}</td><td class="amount">${p.price.toFixed(3)}</td><td>${p.quantity}</td><td>${p.unit}</td><td>${p.invoiceNumber}</td></tr>`;
+                });
+                tableHTML += `</tbody></table>`;
+                reportContainer.innerHTML = tableHTML;
+            } else if(reportType === 'suppliersReport') {
+                document.getElementById('reportTitle').textContent = "تقرير الموردين - 2026";
+                let allPurchases = [];
+                appData.invoices.forEach(invoice => {
+                    const supplier = appData.suppliers.find(s => s.id == invoice.supplierId);
+                    invoice.items.forEach(item => {
+                        const product = appData.products.find(p => p.id == item.productId);
+                        if(supplier) {
+                            allPurchases.push({
+                                supplierName: supplier.name,
+                                productName: product ? product.name : 'غير معروف',
+                                date: invoice.date,
+                                price: item.price,
+                                quantity: item.quantity,
+                                unit: item.unit,
+                                total: item.total,
+                                supplierId: supplier.id
+                            });
+                        }
+                    });
+                });
+                if(filterValue !== 'all') allPurchases = allPurchases.filter(p => p.supplierId == filterValue);
+                if(dateFrom) allPurchases = allPurchases.filter(p => p.date >= dateFrom);
+                if(dateTo) allPurchases = allPurchases.filter(p => p.date <= dateTo);
+                allPurchases.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                let tableHTML = `<table class="report-table"><thead><tr><th>المورد</th><th>الصنف</th><th>تاريخ الشراء</th><th>سعر الشراء</th><th>الكمية</th><th>الوحدة</th><th>المجموع</th></tr></thead><tbody>`;
+                allPurchases.forEach(p => {
+                    tableHTML += `<tr><td>${p.supplierName}</td><td>${p.productName}</td><td>${formatDate(p.date)}</td><td class="amount">${p.price.toFixed(3)}</td><td>${p.quantity}</td><td>${p.unit}</td><td class="amount">${p.total.toFixed(3)}</td></tr>`;
+                });
+                tableHTML += `</tbody></table>`;
+                reportContainer.innerHTML = tableHTML;
+            } else if(reportType === 'priceChanges') {
+                document.getElementById('reportTitle').textContent = "تقرير تغيرات الأسعار - 2026";
+                let analysisHTML = `<table class="report-table"><thead><tr><th>الصنف</th><th>المورد</th><th>آخر سعر</th><th>أعلى سعر</th><th>أقل سعر</th><th>متوسط السعر</th><th>نسبة التغير</th></tr></thead><tbody>`;
+                appData.products.forEach(product => {
+                    const purchases = getPreviousPurchases(product.id);
+                    const supplier = appData.suppliers.find(s => s.id == product.supplierId);
+                    if(purchases.length > 0) {
+                        const lastPrice = purchases[0].price;
+                        let highestPrice = purchases[0].price;
+                        let lowestPrice = purchases[0].price;
+                        let totalPrice = 0;
+                        purchases.forEach(p => {
+                            if(p.price > highestPrice) highestPrice = p.price;
+                            if(p.price < lowestPrice) lowestPrice = p.price;
+                            totalPrice += p.price;
+                        });
+                        const avgPrice = totalPrice / purchases.length;
+                        const firstPrice = purchases[purchases.length - 1].price;
+                        const changePercent = ((lastPrice - firstPrice) / firstPrice) * 100;
+                        analysisHTML += `<tr><td>${product.name}</td><td>${supplier ? supplier.name : 'غير معروف'}</td><td class="amount">${lastPrice.toFixed(3)}</td><td class="amount">${highestPrice.toFixed(3)}</td><td class="amount">${lowestPrice.toFixed(3)}</td><td class="amount">${avgPrice.toFixed(3)}</td><td>${changePercent.toFixed(1)}%</td></tr>`;
+                    }
+                });
+                analysisHTML += `</tbody></table>`;
+                reportContainer.innerHTML = analysisHTML;
+            } else if(reportType === 'purchaseHistory') {
+                document.getElementById('reportTitle').textContent = "سجل المشتريات - 2026";
+                let invoices = [...appData.invoices];
+                if(dateFrom) invoices = invoices.filter(inv => inv.date >= dateFrom);
+                if(dateTo) invoices = invoices.filter(inv => inv.date <= dateTo);
+                invoices.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                let tableHTML = `<table class="report-table"><thead><tr><th>رقم الفاتورة</th><th>المورد</th><th>التاريخ</th><th>عدد الأصناف</th><th>المجموع</th></tr></thead><tbody>`;
+                invoices.forEach(invoice => {
+                    const supplier = appData.suppliers.find(s => s.id == invoice.supplierId);
+                    tableHTML += `<tr><td>${invoice.invoiceNumber}</td><td>${supplier ? supplier.name : 'غير معروف'}</td><td>${formatDate(invoice.date)}</td><td>${invoice.items.length}</td><td class="amount">${invoice.total.toFixed(3)}</td></tr>`;
+                });
+                tableHTML += `</tbody></table>`;
+                reportContainer.innerHTML = tableHTML;
+            } else if(reportType === 'invoiceDetails') {
+                document.getElementById('reportTitle').textContent = "تفاصيل الفواتير - 2026";
+                let invoices = [...appData.invoices];
+                if(dateFrom) invoices = invoices.filter(inv => inv.date >= dateFrom);
+                if(dateTo) invoices = invoices.filter(inv => inv.date <= dateTo);
+                invoices.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                invoices.forEach(invoice => {
+                    const supplier = appData.suppliers.find(s => s.id == invoice.supplierId);
+                    let invoiceHTML = `<div class="card" style="margin-bottom: 30px;"><div class="card-header"><h3 class="card-title">فاتورة رقم: ${invoice.invoiceNumber}</h3><span class="invoice-badge">${formatDate(invoice.date)}</span></div><div class="card" style="background-color: #F9F9F9; padding: 15px; margin-bottom: 15px;"><div style="display: flex; justify-content: space-between; margin-bottom: 10px;"><div><strong>المورد:</strong> ${supplier ? supplier.name : 'غير معروف'}</div><div><strong>التاريخ:</strong> ${formatDate(invoice.date)}</div></div></div><table class="invoice-details-table"><thead><tr><th>#</th><th>الصنف</th><th>الوحدة</th><th>الكمية</th><th>سعر الوحدة</th><th>المجموع</th></tr></thead><tbody>`;
+                    invoice.items.forEach((item, index) => {
+                        invoiceHTML += `<tr><td>${index + 1}</td><td>${item.productName}</td><td>${item.unit}</td><td>${item.quantity}</td><td class="amount">${item.price.toFixed(3)}</td><td class="amount">${item.total.toFixed(3)}</td></tr>`;
+                    });
+                    invoiceHTML += `</tbody><tfoot><tr class="total-row"><td colspan="5" style="text-align: left; font-weight: bold;">الإجمالي:</td><td class="amount" style="font-weight: bold;">${invoice.total.toFixed(3)}</td></tr></tfoot></table></div>`;
+                    reportContainer.innerHTML += invoiceHTML;
+                });
+            }
         }
-        
+
         function printReport() { window.print(); }
-        
+
         async function saveReportAsPDF() {
             if (!window.jspdf) { alert('مكتبة PDF غير محملة.'); return; }
             try {
+                const reportType = document.getElementById('reportType').value;
+                const dateFrom = document.getElementById('reportDate').value;
+                const dateTo = document.getElementById('reportDateTo').value;
+                const pdfContent = document.getElementById('pdf-content');
+                pdfContent.innerHTML = '';
+                
+                document.getElementById('pdf-report-title').textContent = document.getElementById('reportTitle').textContent;
+                document.getElementById('pdf-start-date').textContent = dateFrom ? dateFrom : 'البداية';
+                document.getElementById('pdf-end-date').textContent = dateTo ? dateTo : 'النهاية';
+                document.getElementById('pdf-print-date').textContent = new Date().toLocaleString();
+                
+                pdfContent.innerHTML = document.getElementById('reportContent').innerHTML;
+                const element = document.getElementById('pdf-template');
+                
+                element.style.display = 'block';
+                element.style.position = 'fixed';
+                element.style.left = '0';
+                element.style.top = '0';
+                element.style.zIndex = '10000';
+                
+                const canvas = await html2canvas(element, { scale: 2, useCORS: true, backgroundColor: '#FFFFFF' });
+                element.style.display = 'none';
+                
+                const imgData = canvas.toDataURL('image/jpeg', 0.95);
                 const pdf = new window.jspdf.jsPDF('p', 'pt', 'a4');
-                pdf.text("شركة نايف للأغذية - تقرير نظام مراقبة الأسعار", 40, 40);
-                pdf.save("report.pdf");
+                const imgWidth = pdf.internal.pageSize.getWidth();
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
+                pdf.save(`تقرير_${reportType}.pdf`);
+                logActivity('تصدير PDF', `تم تصدير تقرير ${reportType} إلى ملف PDF`);
             } catch (error) {
-                alert('خطأ في إنشاء PDF: ' + error.message);
+                console.error('Error generating PDF:', error);
             }
         }
-        
+
         function formatDate(dateString) {
             if(!dateString) return '';
             const date = new Date(dateString);
-            return `${date.getDate()} ${date.toLocaleString('ar-SA', { month: 'long' })} ${date.getFullYear()}`;
-        }
-        
-        function createBackup() {
-            ensureAppDataStructure();
-            const dataStr = JSON.stringify(appData, null, 2);
-            const blob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `naif_backup_${new Date().toISOString().split('T')[0]}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-            
-            localStorage.setItem('lastBackupTime', new Date().toISOString());
-            logAction('نسخ احتياطي', 'تم إنشاء نسخة احتياطية يدوية وتنزيلها.');
-            updateBackupInfo();
-            hideBackupWarning();
-            showBackupStatus('تم إنشاء النسخة الاحتياطية بنجاح.', 'success');
-        }
-        
-        function restoreBackup() {
-            const fileInput = document.getElementById('restoreFileInput');
-            if (!fileInput || !fileInput.files.length) { alert('الرجاء اختيار ملف JSON.'); return; }
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    if (!data.suppliers || !data.products || !data.invoices) throw new Error('ملف غير صالح.');
-                    if (!confirm('سيتم استبدال البيانات الحالية بالبيانات المستعادة. هل أنت متأكد؟')) return;
-                    appData = data;
-                    ensureAppDataStructure();
-                    saveData();
-                    logAction('استعادة نسخة', 'تم استعادة النظام من ملف نسخة احتياطية.');
-                    showBackupStatus('تمت الاستعادة بنجاح.', 'success');
-                } catch (err) { alert('خطأ في الملف: ' + err.message); }
-            };
-            reader.readAsText(fileInput.files[0]);
-        }
-        
-        function updateBackupInfo() {
-            const lastTime = localStorage.getItem('lastBackupTime');
-            const span = document.getElementById('lastBackupTime');
-            const statusSpan = document.getElementById('backupStatusText');
-            if(!span || !statusSpan) return;
-            
-            if (lastTime) {
-                const date = new Date(lastTime);
-                span.textContent = date.toLocaleString('ar-SA');
-                const hours = (new Date() - date) / (1000 * 60 * 60);
-                if (hours < 3) {
-                    statusSpan.textContent = '✔ النسخة حديثة (أقل من 3 ساعات)';
-                    statusSpan.style.color = 'green';
-                } else {
-                    statusSpan.textContent = '⚠️ تنبيه: تجاوزت مدة الـ 3 ساعات';
-                    statusSpan.style.color = 'orange';
-                }
-            } else {
-                span.textContent = 'لم يتم عمل نسخة احتياطية بعد';
-                statusSpan.textContent = '❌ غير متاح';
-                statusSpan.style.color = 'red';
-            }
-        }
-        
-        function showBackupStatus(msg, type) {
-            const div = document.getElementById('backupStatus');
-            if(div) div.innerHTML = `<div class="${type === 'success' ? 'success-message' : 'warning-message'}">${msg}</div>`;
-        }
-        
-        function checkBackupStatus() {
-            const lastTime = localStorage.getItem('lastBackupTime');
-            if (!lastTime) {
-                showBackupWarning();
-                return;
-            }
-            const now = new Date();
-            const last = new Date(lastTime);
-            const hoursDiff = (now - last) / (1000 * 60 * 60);
-            if (hoursDiff >= 3) {
-                showBackupWarning();
-            } else {
-                hideBackupWarning();
-            }
-            updateBackupInfo();
-        }
-        
-        function showBackupWarning() {
-            const banner = document.getElementById('backupWarningBanner');
-            if(banner) banner.classList.remove('hidden');
-        }
-        
-        function hideBackupWarning() {
-            const banner = document.getElementById('backupWarningBanner');
-            if(banner) banner.classList.add('hidden');
+            const day = date.getDate();
+            const month = date.toLocaleString('ar-SA', { month: 'long' });
+            const year = date.getFullYear();
+            return `${day} ${month} ${year}`;
         }
     </script>
 </body>
