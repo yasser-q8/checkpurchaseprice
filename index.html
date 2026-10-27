@@ -146,17 +146,20 @@
         
         .header-info {
             text-align: left;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 6px;
         }
         
         .date-display {
-            font-size: 1.2rem;
-            margin-bottom: 5px;
+            font-size: 1.1rem;
             font-weight: 600;
             font-family: 'Segoe UI', Arial, sans-serif;
         }
         
         .system-title {
-            font-size: 1.1rem;
+            font-size: 1rem;
             opacity: 0.9;
         }
         
@@ -177,18 +180,19 @@
         
         .nav-tabs li {
             flex: 1;
-            min-width: 150px;
+            min-width: 140px;
         }
         
         .nav-tabs li a {
             display: block;
-            padding: 15px 20px;
+            padding: 15px 15px;
             text-decoration: none;
             color: var(--text-color);
             text-align: center;
             font-weight: 600;
             transition: all 0.3s ease;
             border-bottom: 3px solid transparent;
+            font-size: 0.95rem;
         }
         
         .nav-tabs li a:hover, .nav-tabs li a.active {
@@ -887,6 +891,7 @@
             <div class="header-info">
                 <div class="date-display" id="currentDate"></div>
                 <div class="system-title">نظام مراقبة أسعار الشراء - 2026</div>
+                <button class="btn btn-secondary btn-small" onclick="logoutSystem()" style="background: #dc3545; padding: 5px 12px; font-size: 0.85rem;"><i class="fas fa-sign-out-alt"></i> خروج من النظام</button>
             </div>
         </header>
         
@@ -895,10 +900,11 @@
             <ul class="nav-tabs">
                 <li><a href="#" class="nav-link active" data-target="dashboard">لوحة التحكم</a></li>
                 <li><a href="#" class="nav-link" data-target="purchase-invoice">فاتورة شراء</a></li>
+                <li><a href="#" class="nav-link" data-target="manage-invoices" onclick="populateOldInvoicesTable()">إدارة وفواتير سابقة</a></li>
                 <li><a href="#" class="nav-link" data-target="suppliers">الموردين</a></li>
                 <li><a href="#" class="nav-link" data-target="products">الأصناف</a></li>
                 <li><a href="#" class="nav-link" data-target="reports">التقارير التحليلية</a></li>
-                <li><a href="#" class="nav-link" data-target="backup">سجل الحركات والنسخ الاحتياطي</a></li>
+                <li><a href="#" class="nav-link" data-target="backup">سجل وحفظ البيانات</a></li>
             </ul>
         </nav>
         
@@ -953,10 +959,11 @@
         
         <!-- Purchase Invoice -->
         <section id="purchase-invoice" class="main-content">
-            <h2 class="page-title">فاتورة شراء جديدة</h2>
+            <h2 class="page-title" id="invoiceSectionTitle">فاتورة شراء جديدة</h2>
             
             <div class="card">
                 <form id="purchaseForm">
+                    <input type="hidden" id="editingInvoiceDbId">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="invoiceNumber">رقم الفاتورة *</label>
@@ -1007,10 +1014,39 @@
                     </div>
                     
                     <div class="form-group" style="margin-top: 20px;">
-                        <button type="submit" class="btn" style="padding: 12px 30px;">حفظ الفاتورة</button>
+                        <button type="submit" class="btn" id="saveInvoiceBtn" style="padding: 12px 30px;">حفظ الفاتورة</button>
                         <button type="button" class="btn btn-secondary" onclick="resetInvoiceForm()">إلغاء</button>
                     </div>
                 </form>
+            </div>
+        </section>
+
+        <!-- Manage Old Invoices Section -->
+        <section id="manage-invoices" class="main-content">
+            <h2 class="page-title">إدارة والبحث في الفواتير السابقة</h2>
+            
+            <div class="card">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="searchOldInvoicesInput"><i class="fas fa-search"></i> بحث برقم الفاتورة أو اسم المورد:</label>
+                        <input type="text" id="searchOldInvoicesInput" placeholder="اكتب للبحث السريع..." oninput="filterOldInvoicesTable()">
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="report-table" id="oldInvoicesTable">
+                        <thead>
+                            <tr>
+                                <th>رقم الفاتورة</th>
+                                <th>المورد</th>
+                                <th>التاريخ</th>
+                                <th>عدد الأصناف</th>
+                                <th>المجموع</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="oldInvoicesBody"></tbody>
+                    </table>
+                </div>
             </div>
         </section>
         
@@ -1325,8 +1361,9 @@
             nextInvoiceId: 1
         };
 
-        // تعيين النطاق العام للوظائف
+        // النطاق العام للوظائف
         window.checkLogin = checkLogin;
+        window.logoutSystem = logoutSystem;
         window.showPage = showPage;
         window.addInvoiceRow = addInvoiceRow;
         window.removeInvoiceRow = removeInvoiceRow;
@@ -1351,8 +1388,11 @@
         window.saveQuickSupplier = saveQuickSupplier;
         window.saveQuickProduct = saveQuickProduct;
         window.closeModal = closeModal;
+        window.filterOldInvoicesTable = filterOldInvoicesTable;
+        window.editOldInvoice = editOldInvoice;
+        window.deleteOldInvoice = deleteOldInvoice;
+        window.populateOldInvoicesTable = populateOldInvoicesTable;
 
-        // تحويل أي تاريخ إلى صيغة إنجليزية 123
         function formatEnglishDate(dateObj) {
             const y = dateObj.getFullYear();
             const m = String(dateObj.getMonth() + 1).padStart(2, '0');
@@ -1360,9 +1400,20 @@
             return `${y}-${m}-${d}`;
         }
 
-        // تحويل التاريخ والوقت إلى أرقام إنجليزية
         function formatEnglishDateTime(dateObj) {
             return dateObj.toLocaleString('en-GB', { hour12: true });
+        }
+
+        // تسجيل الخروج التلقائي عند تحديث الصفحة
+        window.addEventListener('beforeunload', () => {
+            sessionStorage.removeItem('naifLoggedIn');
+        });
+
+        function logoutSystem() {
+            sessionStorage.removeItem('naifLoggedIn');
+            document.getElementById('loginPasswordInput').value = '';
+            document.getElementById('loginModal').style.display = 'flex';
+            logActivity('تسجيل خروج', 'تم خروج المستخدم من النظام يدوياً');
         }
 
         function checkLogin() {
@@ -1511,6 +1562,7 @@
             updateStatistics();
             renderActivityLogsTable();
             setupProductSupplierSearch();
+            populateOldInvoicesTable();
         }
 
         async function saveCountersToFirebase() {
@@ -1577,12 +1629,109 @@
             if(pageId === 'backup') {
                 renderActivityLogsTable();
             }
+            if(pageId === 'manage-invoices') {
+                populateOldInvoicesTable();
+            }
+        }
+
+        // إدارة الفواتير السابقة (بحث، تعديل، حذف)
+        function populateOldInvoicesTable(invoicesToRender = null) {
+            const tbody = document.getElementById('oldInvoicesBody');
+            if(!tbody) return;
+            tbody.innerHTML = "";
+            const list = invoicesToRender || appData.invoices;
+            
+            if(list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6">لا توجد فواتير مسجلة</td></tr>`;
+                return;
+            }
+
+            const sorted = [...list].sort((a,b) => new Date(b.date) - new Date(a.date));
+
+            sorted.forEach(inv => {
+                const sup = appData.suppliers.find(s => s.id === inv.supplierId);
+                const supName = sup ? sup.name : 'غير معروف';
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${inv.invoiceNumber}</td>
+                    <td>${supName}</td>
+                    <td style="font-family: Arial;">${inv.date}</td>
+                    <td>${inv.items.length}</td>
+                    <td class="amount">${inv.total.toFixed(3)}</td>
+                    <td>
+                        <button class="btn btn-small" onclick="editOldInvoice(${inv.id})"><i class="fas fa-edit"></i> تعديل</button>
+                        <button class="btn btn-small btn-secondary" onclick="deleteOldInvoice(${inv.id})" style="background: #dc3545;"><i class="fas fa-trash"></i> حذف</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function filterOldInvoicesTable() {
+            const query = document.getElementById('searchOldInvoicesInput').value.toLowerCase().trim();
+            if(!query) {
+                populateOldInvoicesTable();
+                return;
+            }
+            const filtered = appData.invoices.filter(inv => {
+                const sup = appData.suppliers.find(s => s.id === inv.supplierId);
+                const supName = sup ? sup.name.toLowerCase() : '';
+                return inv.invoiceNumber.toLowerCase().includes(query) || supName.includes(query);
+            });
+            populateOldInvoicesTable(filtered);
+        }
+
+        function editOldInvoice(invoiceId) {
+            const inv = appData.invoices.find(i => i.id == invoiceId);
+            if(!inv) return;
+
+            const sup = appData.suppliers.find(s => s.id === inv.supplierId);
+
+            document.getElementById('editingInvoiceDbId').value = inv.id;
+            document.getElementById('invoiceNumber').value = inv.invoiceNumber;
+            document.getElementById('invoiceDate').value = inv.date;
+            document.getElementById('supplierSearch').value = sup ? sup.name : '';
+            document.getElementById('invoiceSectionTitle').textContent = `تعديل الفاتورة رقم: ${inv.invoiceNumber}`;
+            document.getElementById('saveInvoiceBtn').textContent = "تحديث الفاتورة";
+
+            const tbody = document.getElementById('invoiceItemsBody');
+            tbody.innerHTML = '';
+
+            inv.items.forEach((item, index) => {
+                addInvoiceRow(item.productId);
+                const row = document.getElementById(`invoiceRow-${index}`);
+                if(row) {
+                    row.querySelector('.product-search').value = item.productName;
+                    document.getElementById(`productId-${index}`).value = item.productId;
+                    document.getElementById(`productUnit-${index}`).value = item.unit;
+                    document.getElementById(`productQuantity-${index}`).value = item.quantity;
+                    document.getElementById(`productPrice-${index}`).value = item.price;
+                    document.getElementById(`productTotal-${index}`).textContent = item.total.toFixed(3);
+                }
+            });
+
+            updateInvoiceTotal();
+            showPage('purchase-invoice');
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.querySelector('[data-target="purchase-invoice"]').classList.add('active');
+        }
+
+        async function deleteOldInvoice(invoiceId) {
+            if(confirm("هل أنت متأكد من حذف هذه الفاتورة نهائياً؟")) {
+                const inv = appData.invoices.find(i => i.id == invoiceId);
+                appData.invoices = appData.invoices.filter(i => i.id != invoiceId);
+                try {
+                    await deleteDoc(doc(db, "invoices", String(invoiceId)));
+                    logActivity('حذف فاتورة', `تم حذف الفاتورة رقم ${inv ? inv.invoiceNumber : invoiceId}`);
+                } catch(e) { console.error(e); }
+                
+                populateOldInvoicesTable();
+                updateStatistics();
+                updateRecentPurchases();
+            }
         }
 
         // البحث السريع عن المورد في الفاتورة مع إمكانية إضافة جديد مباشرة
-        let currentTargetRowForQuickAdd = null;
-        let pendingNewProductName = "";
-
         function setupSupplierInvoiceSearch() {
             const input = document.getElementById('supplierSearch');
             const suggestionsList = document.getElementById('supplierSuggestions');
@@ -1643,7 +1792,6 @@
             document.getElementById(id).style.display = 'none';
         }
 
-        // البحث بالحرف عن المورد داخل شاشة الأصناف
         function setupProductSupplierSearch() {
             const input = document.getElementById('productSupplierSearch');
             const suggestionsList = document.getElementById('productSupplierSuggestions');
@@ -1674,6 +1822,8 @@
                 });
             });
         }
+
+        let currentTargetRowForQuickAdd = null;
 
         function addInvoiceRow(productId = null) {
             const tbody = document.getElementById('invoiceItemsBody');
@@ -1742,7 +1892,6 @@
                 const filtered = appData.products.filter(p => p.name.toLowerCase().includes(query.toLowerCase()));
                 
                 let html = filtered.map(p => {
-                    const supplier = appData.suppliers.find(s => s.id === p.supplierId);
                     return `<div class="suggestion-item" data-id="${p.id}" data-name="${p.name}" data-unit="${p.unit}">${p.name} (${p.unit})</div>`;
                 }).join('');
 
@@ -1757,7 +1906,6 @@
                     item.addEventListener('click', function() {
                         if(this.id === `addQuickProdBtn-${rowIndex}`) {
                             currentTargetRowForQuickAdd = rowIndex;
-                            pendingNewProductName = query;
                             document.getElementById('quickProductName').value = query;
                             document.getElementById('quickProductModal').style.display = 'flex';
                         } else {
@@ -1920,11 +2068,12 @@
             }
         }
 
-        // حفظ الفاتورة بدون رسالة تنبيه منبثقة
+        // حفظ أو تحديث الفاتورة بدون رسالة منبثقة
         async function saveInvoice() {
             const invoiceNumber = document.getElementById('invoiceNumber').value.trim();
             const invoiceDate = document.getElementById('invoiceDate').value;
             const supplierName = document.getElementById('supplierSearch').value.trim();
+            const editingDbId = document.getElementById('editingInvoiceDbId').value;
             
             if(!invoiceNumber) return;
             
@@ -1951,22 +2100,24 @@
             });
             
             if(invoiceItems.length === 0) return;
-            
-            const invoice = {
-                id: appData.nextInvoiceId++,
-                invoiceNumber,
-                date: invoiceDate,
-                supplierId: supplier.id,
-                items: invoiceItems,
-                total: invoiceTotal
-            };
-            
-            appData.invoices.push(invoice);
+
+            let invoiceId;
+            if(editingDbId) {
+                invoiceId = parseInt(editingDbId);
+                const idx = appData.invoices.findIndex(i => i.id === invoiceId);
+                if(idx !== -1) {
+                    appData.invoices[idx] = { id: invoiceId, invoiceNumber, date: invoiceDate, supplierId: supplier.id, items: invoiceItems, total: invoiceTotal };
+                }
+            } else {
+                invoiceId = appData.nextInvoiceId++;
+                const invoice = { id: invoiceId, invoiceNumber, date: invoiceDate, supplierId: supplier.id, items: invoiceItems, total: invoiceTotal };
+                appData.invoices.push(invoice);
+            }
             
             try {
-                await setDoc(doc(db, "invoices", String(invoice.id)), invoice);
+                await setDoc(doc(db, "invoices", String(invoiceId)), { id: invoiceId, invoiceNumber, date: invoiceDate, supplierId: supplier.id, items: invoiceItems, total: invoiceTotal });
                 await saveCountersToFirebase();
-                logActivity('حفظ فاتورة', `رقم الفاتورة: ${invoiceNumber} - المورد: ${supplierName} - المبلغ: ${invoiceTotal.toFixed(3)}`);
+                logActivity(editingDbId ? 'تعديل فاتورة' : 'حفظ فاتورة', `رقم الفاتورة: ${invoiceNumber} - المبلغ: ${invoiceTotal.toFixed(3)}`);
             } catch (e) {
                 console.error(e);
             }
@@ -1977,15 +2128,17 @@
 
         function resetInvoiceForm() {
             document.getElementById('purchaseForm').reset();
+            document.getElementById('editingInvoiceDbId').value = '';
             document.getElementById('invoiceDate').value = formatEnglishDate(new Date());
             document.getElementById('supplierSearch').value = "";
             document.getElementById('supplierSuggestions').classList.remove('active');
             document.getElementById('invoiceItemsBody').innerHTML = "";
             document.getElementById('invoiceTotal').textContent = "0.000";
+            document.getElementById('invoiceSectionTitle').textContent = "فاتورة شراء جديدة";
+            document.getElementById('saveInvoiceBtn').textContent = "حفظ الفاتورة";
             for(let i = 0; i < 5; i++) { addInvoiceRow(); }
         }
 
-        // حفظ المورد بدون رسالة منبثقة
         async function saveSupplier() {
             const name = document.getElementById('supplierName').value.trim();
             const phone = document.getElementById('supplierPhone').value.trim();
@@ -2089,7 +2242,6 @@
             }
         }
 
-        // حفظ الصنف بدون رسالة منبثقة
         async function saveProduct() {
             const name = document.getElementById('productName').value.trim();
             const supplierId = parseInt(document.getElementById('productSupplierId').value);
@@ -2543,6 +2695,7 @@
                         updateReportFilters();
                         updateStatistics();
                         renderActivityLogsTable();
+                        populateOldInvoicesTable();
                         logActivity('استعادة نسخة', 'تم استعادة البيانات من ملف JSON');
                     }
                 } catch (err) { console.error(err); }
